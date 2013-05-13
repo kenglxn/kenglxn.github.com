@@ -1,0 +1,122 @@
+---
+layout: post
+title: Simple CDI/WELD login example
+tags:
+- cdi
+- JavaEE
+- weld
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+---
+#gliffydiagram(2016929)#
+
+<strong>View</strong>
+[code lang="html"]
+&lt;h:form id=&quot;spotifylogin&quot; class=&quot;loginform spotifyform&quot;&gt;
+    &lt;h2&gt;Spotify login&lt;/h2&gt;
+    &lt;p&gt;Please log in to your spotify account&lt;/p&gt;
+    
+    &lt;h:outputLabel for=&quot;spotifyusername&quot; value=&quot;Username:&quot;&gt;&lt;/h:outputLabel&gt;
+    &lt;h:inputText id=&quot;spotifyusername&quot; value=&quot;#{spotiWelder.username}&quot;&gt;&lt;/h:inputText&gt;
+    &lt;h:message for=&quot;spotifyusername&quot; errorClass=&quot;invalid&quot;&gt;&lt;/h:message&gt;
+    
+    &lt;h:outputLabel for=&quot;spotifypassword&quot; value=&quot;Password:&quot;&gt;&lt;/h:outputLabel&gt;
+    &lt;h:inputSecret id=&quot;spotifypassword&quot; value=&quot;#{spotiWelder.password}&quot;&gt;&lt;/h:inputSecret&gt;
+    &lt;h:message for=&quot;spotifypassword&quot; errorClass=&quot;invalid&quot;&gt;&lt;/h:message&gt;
+    
+    &lt;h:commandButton id=&quot;login&quot; action=&quot;#{spotifyWeb.login}&quot; value=&quot;Log in!&quot;&gt;&lt;/h:commandButton&gt;
+&lt;/h:form&gt;
+[/code]
+<strong>Entity</strong>
+[code lang="java"]
+@Entity
+public class SpotiWelder implements Serializable {
+
+    private static final long serialVersionUID = -6625241632523446019L;
+
+    private Long id;
+
+    private String username;
+
+    private String password;
+
+    public SpotiWelder() {
+    }
+
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @NotNull
+    @NotEmpty
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @NotNull
+    @NotEmpty
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+[/code]
+<strong>Action Bean</strong>
+[code lang="java"]
+@SessionScoped
+@Named
+public class SpotifyWeb implements Serializable {
+
+    private static final long serialVersionUID = -352191768337315102L;
+
+    private Logger log;
+
+    SpotiWelder spotiWelder = new SpotiWelder();
+
+    @Inject
+    FacesContext facesContext;
+
+    public SpotifyWeb() {
+        this.log = Logger.getLogger(this.getClass().getSimpleName());
+        connection = new SpotiWeldConnection();
+    }
+
+    @PostConstruct
+    public void initialize() {
+        log.info(this.getClass().getSimpleName() + &quot; was constructed&quot;);
+    }
+
+    public void login() {
+        connection.login(spotiWelder.getUsername(), spotiWelder.getPassword());
+
+        log.info(&quot;succesful login for &quot; + loggedInUser);
+        facesContext.addMessage(null, new FacesMessage(&quot;Welcome &quot; + loggedInUser.getName()));
+    }
+
+    @Produces @Named
+    public SpotiWelder getSpotiWelder() {
+        return spotiWelder;
+    }
+}
+[/code]
+<ul> <li>Remember to add an empty constructor to your entity when using via @Producer methods. If not you might get the dreaded "java.lang.IllegalArgumentException: Object: foo is not a known entity type."</li> <li>Remeber to add @GeneratedValue to @Id field on Entity.</li> </ul> 
+<strong>related:</strong>
+<a href="http://seamframework.org/Community/JPAEntityIsUnknownWhenUsingTheModelAnnotation">http://seamframework.org/Community/JPAEntityIsUnknownWhenUsingTheModelAnnotation</a>
+<a href="http://www.seamframework.org/Community/ErrorWhenUsingSessionScopedAndEntityAnnotation">http://www.seamframework.org/Community/ErrorWhenUsingSessionScopedAndEntityAnnotation</a>

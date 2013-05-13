@@ -1,0 +1,39 @@
+---
+layout: post
+title: My Bash PS1 with git branch info
+tags:
+- bash
+- git
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+  _jd_tweet_this: 'no'
+  _jd_twitter: ''
+  _wp_jd_clig: ''
+  _wp_jd_bitly: ''
+  _wp_jd_wp: ''
+  _wp_jd_yourls: ''
+  _wp_jd_url: ''
+  _wp_jd_target: ''
+  _jd_wp_twitter: ''
+  _jd_post_meta_fixed: 'true'
+---
+I spent an hour playing around with my bash PS1 setting.
+I wanted some useful information about which git branch I am on, and some colors. 
+
+After reading a couple of articles on it like <a href="http://www.wiredrevolution.com/bash-programming/customize-the-bash-ps1-command-prompt" title="this one">this one</a> and <a href="http://www.thegeekstuff.com/2008/09/bash-shell-ps1-10-examples-to-make-your-linux-prompt-like-angelina-jolie/" title="this one">this one</a> I tried it a bit myself and ended up with this:
+
+<a href="http://www.glxn.net/wp-content/uploads/2012/01/ps11.png"><img src="http://www.glxn.net/wp-content/uploads/2012/01/ps11-300x99.png" alt="" title="ps1" width="300" height="99" class="size-medium wp-image-430" /></a>
+
+Here is the PS1 code:
+[code lang="bash"]
+PS1_END_SIGN=
+
+export PS1='\[\e[1;33m\] \w\[\e[1;36m\]$(git branch &amp;&gt;/dev/null; if [ $? -eq 0 ]; then echo &quot; ($(git branch | grep '^*' |sed s/\*\ //))&quot;; fi) \[\e[1;37m\]$PS1_END_SIGN\[\e[00m\] '
+[/code]
+
+The PS1_END_SIGN can be set to anything you want. I chose lambda.
+The PS1 setting includes some coloring and output of the current branch if you are in a git repository.

@@ -1,0 +1,55 @@
+---
+layout: post
+title: Setting a timeout in a JAX WS Client
+tags:
+- Java
+- JavaEE
+status: draft
+type: post
+published: false
+meta:
+  _edit_last: '1'
+---
+Having a JAX WS Client without timeout can be quite dangerous. There are two important timeout settings that should be implemented by the client. JAXWSProperties.REQUEST_TIMEOUT and JAXWSProperties.CONNECT_TIMEOUT. Without these, you will quickly run into a potential deadlock on the server using the client. There may be a network failure that causes the client to either fail to connect or wait for response that may never arrive. Say the timeout defaults to 10 minutes. This means every WS request or connection will hold the thread for 10 minutes. You will unquestionably run out of threads very quickly, unless your server has almost no load.
+
+<strong>Enough chit-chat, show me the loot!</strong>
+
+What you want to do is get a hold of the service and cast it to BindingProvider. This will enable you to get the request context and add some properties to it. Like so:
+<pre name="code" class="java">import com.sun.xml.ws.developer.JAXWSProperties;
+import javax.xml.ws.BindingProvider;
+...
+public class MyWSClientAPI {
+
+ private final MyServiceImpl service;
+ private final int defaultRequestTimeout = 5000;
+ private final int defaultConnectTimeout = 5000;
+
+ public MyWSClientAPI(MyServiceImpl service) {
+   this.service = service;
+   try {
+     BindingProvider bindingProvider = (BindingProvider) this.service;
+     Map&lt;String, Object&gt; context = bindingProvider.getRequestContext();
+     String requestTimeout = System.getProperty("wsclient.request.timeout", String.valueOf(defaultRequestTimeout));
+     String connectTimeout = System.getProperty("wsclient.connect.timeout", String.valueOf(defaultConnectTimeout));
+     context.put(JAXWSProperties.REQUEST_TIMEOUT, Integer.valueOf(requestTimeout));
+     context.put(JAXWSProperties.CONNECT_TIMEOUT, Integer.valueOf(connectTimeout));
+   } catch (RuntimeException e) {
+     Logger.getLogger(this.getClass()).fatal("Could not configure MyWSClientAPI with timeout values.", e);
+     throw e;
+   }
+  }
+}</pre>
+We now have a Webservice client with a default timeout of 5 seconds for request, and connect. These timeout values can be overridden by setting the SystemProperties wsclient.request.timeout and wsclient.connect.timeout on the jvm running the client. We can create two tests that confirm the expected behavior:
+<pre name="code" class="java">@Test(expected = TimeoutException.class)
+public void callShouldFailOnLowRequestTimeout() {
+ System.setProperty("wsclient.request.timeout", "1");
+ MyWSClientAPI myWSClientAPI = new MyWSClientAPI(port);
+ myWSClientAPI.performSomeAction();
+}
+
+@Test(expected = ConnectionException.class)
+public void callShouldFailOnLowConnectTimeout() throws MalformedURLException {
+ System.setProperty("wsclient.connect.timeout", "1");
+ MyWSClientAPI myWSClientAPI = new MyWSClientAPI(new MyServiceImplService(new URL("http://bogusurl"), qnam).getServiceImplPort());
+ myWSClientAPI.performSomeAction();
+}</pre>
