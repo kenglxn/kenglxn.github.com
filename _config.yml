@@ -5,3 +5,5 @@ description: random stuff
 safe: true
 lsi: false
 pygments: true
+markdown: rdiscount
+exclude: ['tmp']
