@@ -1,17 +1,6 @@
 ---
 layout: post
 title: Seam Maven Refimpl
-tags:
-- EJB3
-- Java
-- JavaEE
-- Seam
-status: publish
-type: post
-published: true
-meta:
-  _edit_last: '1'
-  _liked: '1'
 ---
 h2. {{ page.title }}
 
