@@ -2,8 +2,8 @@ url: http://www.glxn.net
 name: forty-two cents
 description: random stuff
 
+permalink: pretty
 safe: true
 lsi: false
 pygments: true
 markdown: rdiscount
-exclude: ['tmp']

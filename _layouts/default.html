@@ -5,16 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/bootstrap.min.css " rel="stylesheet" media="screen">
-    <link rel="stylesheet/less" type="text/css" href="/css/stress.less" />
+    <!--link rel="stylesheet/less" type="text/css" href="/css/stress.less" /-->
   </head>
   <body>
 
+    <div class="container"><!-- TODO navbar -->
+      <h1><a class="brand" href="/">glxn.net</a> 42&#162;</h1>
+    </div>
     <div class="container">
-     <div class="content">
-     {{content}}
-     </div>
+      <div class="content">
+        {{content}}
+      </div>
 
-     <h2>Moar</h2>
+      <h2>Moar stuffs</h2>
       <table>
         {% for post in site.posts %}
           <tr>
