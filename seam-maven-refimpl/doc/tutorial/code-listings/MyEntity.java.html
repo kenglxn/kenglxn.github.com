@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="../../styles/base/base.css" type="text/css" media="screen" />
+</head>
+<body style="background-color:#eeeeee;">
+<pre>
+<span style="color:#000000">   1 </span><span style="color:#7f0055; font-weight:bold">package</span> org<span style="color:#000000">.</span>domain<span style="color:#000000">.</span>seamtutorial<span style="color:#000000">.</span>entity<span style="color:#000000">;</span>
+<span style="color:#000000">   2 </span>
+<span style="color:#000000">   3 </span><span style="color:#7f0055; font-weight:bold">import</span> java<span style="color:#000000">.</span>io<span style="color:#000000">.</span><span style="color:#7f0055; font-weight:bold">Serializable</span><span style="color:#000000">;</span>
+<span style="color:#000000">   4 </span><span style="color:#7f0055; font-weight:bold">import</span> javax<span style="color:#000000">.</span>persistence<span style="color:#000000">.</span><span style="color:#7f0055; font-weight:bold">Entity</span><span style="color:#000000">;</span>
+<span style="color:#000000">   5 </span><span style="color:#7f0055; font-weight:bold">import</span> javax<span style="color:#000000">.</span>persistence<span style="color:#000000">.</span>Id<span style="color:#000000">;</span>
+<span style="color:#000000">   6 </span><span style="color:#7f0055; font-weight:bold">import</span> javax<span style="color:#000000">.</span>persistence<span style="color:#000000">.</span>GeneratedValue<span style="color:#000000">;</span>
+<span style="color:#000000">   7 </span><span style="color:#7f0055; font-weight:bold">import</span> javax<span style="color:#000000">.</span>persistence<span style="color:#000000">.</span><span style="color:#7f0055; font-weight:bold">Version</span><span style="color:#000000">;</span>
+<span style="color:#000000">   8 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>hibernate<span style="color:#000000">.</span>validator<span style="color:#000000">.</span>Length<span style="color:#000000">;</span>
+<span style="color:#000000">   9 </span>
+<span style="color:#000000">  10 </span>&#64;<span style="color:#7f0055; font-weight:bold">Entity</span>
+<span style="color:#000000">  11 </span><span style="color:#7f0055; font-weight:bold">public class</span> MyEntity <span style="color:#7f0055; font-weight:bold">implements</span> <span style="color:#7f0055; font-weight:bold">Serializable</span>
+<span style="color:#000000">  12 </span><span style="color:#000000">{</span>
+<span style="color:#000000">  13 </span>    <span style="color:#2f9956">// seam-gen attributes (you should probably edit these)</span>
+<span style="color:#000000">  14 </span>    <span style="color:#7f0055; font-weight:bold">private</span> <span style="color:#7f0055; font-weight:bold">Long</span> id<span style="color:#000000">;</span>
+<span style="color:#000000">  15 </span>    <span style="color:#7f0055; font-weight:bold">private</span> <span style="color:#7f0055; font-weight:bold">Integer</span> version<span style="color:#000000">;</span>
+<span style="color:#000000">  16 </span>    <span style="color:#7f0055; font-weight:bold">private</span> <span style="color:#7f0055; font-weight:bold">String</span> name<span style="color:#000000">;</span>
+<span style="color:#000000">  17 </span>
+<span style="color:#000000">  18 </span>    <span style="color:#2f9956">// add additional entity attributes</span>
+<span style="color:#000000">  19 </span>
+<span style="color:#000000">  20 </span>    <span style="color:#2f9956">// seam-gen attribute getters/setters with annotations (you probably should edit)</span>
+<span style="color:#000000">  21 </span>
+<span style="color:#000000">  22 </span>    &#64;Id &#64;GeneratedValue
+<span style="color:#000000">  23 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">Long</span> <span style="color:#000000">getId</span><span style="color:#000000">() {</span>
+<span style="color:#000000">  24 </span>        <span style="color:#7f0055; font-weight:bold">return</span> id<span style="color:#000000">;</span>
+<span style="color:#000000">  25 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  26 </span>
+<span style="color:#000000">  27 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">void</span> <span style="color:#000000">setId</span><span style="color:#000000">(</span><span style="color:#7f0055; font-weight:bold">Long</span> id<span style="color:#000000">) {</span>
+<span style="color:#000000">  28 </span>        <span style="color:#7f0055; font-weight:bold">this</span><span style="color:#000000">.</span>id <span style="color:#000000">=</span> id<span style="color:#000000">;</span>
+<span style="color:#000000">  29 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  30 </span>
+<span style="color:#000000">  31 </span>    &#64;<span style="color:#7f0055; font-weight:bold">Version</span>
+<span style="color:#000000">  32 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">Integer</span> <span style="color:#000000">getVersion</span><span style="color:#000000">() {</span>
+<span style="color:#000000">  33 </span>        <span style="color:#7f0055; font-weight:bold">return</span> version<span style="color:#000000">;</span>
+<span style="color:#000000">  34 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  35 </span>
+<span style="color:#000000">  36 </span>    <span style="color:#7f0055; font-weight:bold">private</span> <span style="color:#7f0055; font-weight:bold">void</span> <span style="color:#000000">setVersion</span><span style="color:#000000">(</span><span style="color:#7f0055; font-weight:bold">Integer</span> version<span style="color:#000000">) {</span>
+<span style="color:#000000">  37 </span>        <span style="color:#7f0055; font-weight:bold">this</span><span style="color:#000000">.</span>version <span style="color:#000000">=</span> version<span style="color:#000000">;</span>
+<span style="color:#000000">  38 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  39 </span>
+<span style="color:#000000">  40 </span>    &#64;<span style="color:#000000">Length</span><span style="color:#000000">(</span>max <span style="color:#000000">=</span> <span style="color:#000000">20</span><span style="color:#000000">)</span>
+<span style="color:#000000">  41 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">String</span> <span style="color:#000000">getName</span><span style="color:#000000">() {</span>
+<span style="color:#000000">  42 </span>        <span style="color:#7f0055; font-weight:bold">return</span> name<span style="color:#000000">;</span>
+<span style="color:#000000">  43 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  44 </span>
+<span style="color:#000000">  45 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">void</span> <span style="color:#000000">setName</span><span style="color:#000000">(</span><span style="color:#7f0055; font-weight:bold">String</span> name<span style="color:#000000">) {</span>
+<span style="color:#000000">  46 </span>        <span style="color:#7f0055; font-weight:bold">this</span><span style="color:#000000">.</span>name <span style="color:#000000">=</span> name<span style="color:#000000">;</span>
+<span style="color:#000000">  47 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  48 </span>
+<span style="color:#000000">  49 </span><span style="color:#000000">}</span>
+</pre>
+</body>
+</html>

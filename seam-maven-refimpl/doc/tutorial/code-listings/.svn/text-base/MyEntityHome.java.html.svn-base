@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="../../styles/base/base.css" type="text/css" media="screen" />
+</head>
+<body style="background-color:#eeeeee;">
+<pre>
+<span style="color:#000000">   1 </span><span style="color:#7f0055; font-weight:bold">package</span> org<span style="color:#000000">.</span>domain<span style="color:#000000">.</span>seamtutorial<span style="color:#000000">.</span>session<span style="color:#000000">;</span>
+<span style="color:#000000">   2 </span>
+<span style="color:#000000">   3 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>jboss<span style="color:#000000">.</span>seam<span style="color:#000000">.</span>annotations<span style="color:#000000">.</span><span style="color:#7f0055; font-weight:bold">Name</span><span style="color:#000000">;</span>
+<span style="color:#000000">   4 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>jboss<span style="color:#000000">.</span>seam<span style="color:#000000">.</span>annotations<span style="color:#000000">.</span>Begin<span style="color:#000000">;</span>
+<span style="color:#000000">   5 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>jboss<span style="color:#000000">.</span>seam<span style="color:#000000">.</span>annotations<span style="color:#000000">.</span>web<span style="color:#000000">.</span>RequestParameter<span style="color:#000000">;</span>
+<span style="color:#000000">   6 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>jboss<span style="color:#000000">.</span>seam<span style="color:#000000">.</span>framework<span style="color:#000000">.</span>EntityHome<span style="color:#000000">;</span>
+<span style="color:#000000">   7 </span>
+<span style="color:#000000">   8 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>domain<span style="color:#000000">.</span>seamtutorial<span style="color:#000000">.</span>entity<span style="color:#000000">.</span>MyEntity<span style="color:#000000">;</span>
+<span style="color:#000000">   9 </span>
+<span style="color:#000000">  10 </span>&#64;<span style="color:#7f0055; font-weight:bold">Name</span><span style="color:#000000">(</span><span style="color:#0000ff">&quot;myEntityHome&quot;</span><span style="color:#000000">)</span>
+<span style="color:#000000">  11 </span><span style="color:#7f0055; font-weight:bold">public class</span> MyEntityHome <span style="color:#7f0055; font-weight:bold">extends</span> EntityHome<span style="color:#000000">&lt;</span>MyEntity<span style="color:#000000">&gt;</span>
+<span style="color:#000000">  12 </span><span style="color:#000000">{</span>
+<span style="color:#000000">  13 </span>    &#64;RequestParameter <span style="color:#7f0055; font-weight:bold">Long</span> myEntityId<span style="color:#000000">;</span>
+<span style="color:#000000">  14 </span>
+<span style="color:#000000">  15 </span>    &#64;Override
+<span style="color:#000000">  16 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">Object</span> <span style="color:#000000">getId</span><span style="color:#000000">()</span>
+<span style="color:#000000">  17 </span>    <span style="color:#000000">{</span>
+<span style="color:#000000">  18 </span>        <span style="color:#7f0055; font-weight:bold">if</span> <span style="color:#000000">(</span>myEntityId <span style="color:#000000">==</span> null<span style="color:#000000">)</span>
+<span style="color:#000000">  19 </span>        <span style="color:#000000">{</span>
+<span style="color:#000000">  20 </span>            <span style="color:#7f0055; font-weight:bold">return super</span><span style="color:#000000">.</span><span style="color:#000000">getId</span><span style="color:#000000">();</span>
+<span style="color:#000000">  21 </span>        <span style="color:#000000">}</span>
+<span style="color:#000000">  22 </span>        <span style="color:#7f0055; font-weight:bold">else</span>
+<span style="color:#000000">  23 </span>        <span style="color:#000000">{</span>
+<span style="color:#000000">  24 </span>            <span style="color:#7f0055; font-weight:bold">return</span> myEntityId<span style="color:#000000">;</span>
+<span style="color:#000000">  25 </span>        <span style="color:#000000">}</span>
+<span style="color:#000000">  26 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  27 </span>
+<span style="color:#000000">  28 </span>    &#64;Override &#64;Begin
+<span style="color:#000000">  29 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#7f0055; font-weight:bold">void</span> <span style="color:#000000">create</span><span style="color:#000000">() {</span>
+<span style="color:#000000">  30 </span>        <span style="color:#7f0055; font-weight:bold">super</span><span style="color:#000000">.</span><span style="color:#000000">create</span><span style="color:#000000">();</span>
+<span style="color:#000000">  31 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  32 </span>
+<span style="color:#000000">  33 </span><span style="color:#000000">}</span>
+</pre>
+</body>
+</html>

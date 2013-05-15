@@ -1,0 +1,1641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" href="../styles/base/base.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../styles/page-layout/page-layout.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../styles/site/site.css" type="text/css" media="screen" />
+
+<link href="../js/fullsize/fullsize.css" media="screen" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../js/jquery-min.js"></script>
+<script type="text/javascript" src="../js/fullsize/jquery.fullsize.minified.js"></script>
+
+<script type="text/javascript" src="../js/site.js"></script>
+
+<script type="text/javascript">/* <![CDATA[ */
+  $(document).ready(function() {
+    $(".code-frame a").click(function( event ) {
+      event.preventDefault(); 
+      IframeHelper.toggle(this);
+    });
+    
+    $('img').fullsize();
+  });
+/* ]]> */</script>
+
+<title>Seam Maven reference Implentation - Eclipse 3.5 and JBoss Tools Tutorial</title>
+</head>
+<body>
+
+<div id="sizer">
+<div id="expander">
+<div id="page-wrapper">
+<div id="header">
+<div class="header">
+  <h1>Eclipse 3.5 and JBoss Tools Tutorial</h1>
+</div>
+</div> 
+<div id="page">
+
+<div class="inline-block" style="width:59%;">
+  <p>This tutorial explains how to use the Eclipse IDE and JBoss Tools with a Mavenized Seam project.</p>
+
+  <h2>Shortcuts</h2>
+  <p>The shortcuts are listed here so we don't have to type the tedious file 
+    paths over and over again in this document.
+  </p>
+  <ul class="vspace">
+  <li><code>${JBOSS_HOME}</code>  - refers to Jboss installation directory, e.g. 
+    <nobr>C:\servers\jboss-4.2.3.GA</nobr>
+  </li>
+  <li>
+    <code>${JBOSS_CONFIG}</code> - refers to the configuration directory e.g. 
+    <nobr>C:\servers\jboss-4.2.3.GA\default</nobr>
+  </li>
+  <li>
+    <code>${JBOSS_DEPLOY}</code> - refers to the JBoss deploy directory, e.g. 
+    <nobr>C:\servers\jboss-4.2.3.GA\default\deploy</nobr>
+  </li>
+  <li>
+    <code>${TRUNK}</code> - the project root directory, i.e. seam-maven-refimpl
+  </li>
+  <li>
+    <code>${SEAM_REFIMPL}</code> - the directory where the reference project, i.e. seam-refimpl, 
+    is installed on your computer
+  </li>
+  <li>
+    <code>${SEAM_TUTORIAL}</code> - the directory where the tutorial project, i.e. seam-tutorial, 
+    is installed on your computer
+  </li>
+  </ul>
+</div>
+<div class="inline-block" style="width:32%;padding-left:2%;">
+  <img src="img/maven-project-structure.png" style="width:100%; margin-left:1.5em;" />
+</div>
+
+<h2>Download and install software:</h2>
+<ul class="vspace">
+  <li>
+    <a href="http://java.sun.com/javase/downloads/index.jsp">jdk-6</a>.<br/>
+    <strong>Note:</strong> OpenEJB-3.1.2 and jdk-1.6.0 update18 or later has a known bug: 
+    <a href="http://issues.apache.org/jira/browse/OPENEJB-1131">JDK 1.6.0 u18 has a 
+      ClassCastException in ClassLoaderUtil.clearSunJarFileFactoryCache
+    </a>. But according to this answer, 
+    <a href="http://apache-geronimo.328035.n3.nabble.com/G2-2-Unable-to-clear-Sun-JarFileFactory-cache-td340698.html#a340698">
+      G2.2 Unable to clear Sun JarFileFactory cache
+    </a>, you should not see any functional problems connected to this bug.
+  </li>
+  <li>
+    <a href="http://maven.apache.org/download.html">Maven 2.2.1</a> or later 2.x.<br/>
+    <strong>Note:</strong> You can not use Maven 3! The project externalizes some properties that is 
+    used to generate the correct <code>jboss-app.xml</code> dependent on the targeted JBoss 
+    Application Server. This works fine with Maven 2.2.1, but fails in Maven 3. The latest 
+    Maven3.0-beta1 does not evaluate external properties during the 
+    <code>ear:generate-application-xml</code> goal and you will get the following error message:<br/>
+    <pre style="margin-top:.5em; margin-bottom:.5em; color:red">
+    [ERROR] Failed to execute goal org.apache.maven.plugins:maven-ear-plugin:2.4.2:generate-application-xml 
+    (default-generate-application-xml) on project mvn3-problem-ear: Failed to initialize JBoss configuration: 
+    Invalid JBoss configuration, version[${as.version}] is not supported. -&gt; [Help 1]</pre>
+    The bug is reported in JIRA: <a href="http://jira.codehaus.org/browse/MNG-2971">http://jira.codehaus.org/browse/MNG-2971</a>.
+  </li>
+  <li>
+    <a href="http://www.eclipse.org/downloads/">
+    Eclipse 3.5 Galileo</a> 
+    (<a href="http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/galileor">Eclipse 
+    IDE for Java EE Developers with WTP</a>).
+  </li>
+  <li>
+    <a href="http://subclipse.tigris.org/">
+    SubClipse-1.6.x, Team Provider plug-in providing support for Subversion within the Eclipse IDE.
+    </a>
+  </li>
+  <li>
+    <a href="http://m2eclipse.sonatype.org/installing-m2eclipse.html">m2eclipse 0.10 core</a> (this require you to uninstall 
+    m2eclipse 0.9.x). Also make shure that you are familiar with the 
+    <a href="http://maven.apache.org/plugins/maven-eclipse-plugin/">Apache Maven Eclipse</a> plugin.
+  </li>
+  <li>
+    <a href="http://m2eclipse.sonatype.org/installing-m2eclipse.html">m2eclipse extras</a>.
+  </li>
+  <li>
+    <a href="http://www.seamframework.org/Download">JBoss Seam 2.2.0.GA</a> source code (for JBoss Tools).
+  </li>
+  <li>
+    <a href="http://www.jboss.org/tools">JBoss Tools 3.1</a>.
+  </li>
+  <li>
+    <a href="http://testng.org/doc/eclipse.html">TestNG Eclipse plug-in</a>.
+  </li>
+  <li>
+    <a href="http://www.jboss.org/jbossas/">Jboss 4.2.3.GA Application Server</a> or later.<br/>
+    <strong>Note:</strong> Download a build that corresponds with your installed jdk, 
+    <code><strong>jboss-4.2.3.GA.jdk6.zip</strong></code> is the correct build for jdk-6.<br/>
+  </li>
+</ul>
+
+<h2 id="configure-eclipse">Configure Eclipse and Create Workspace</h2>
+
+<ol class="vspace">
+  <li>
+  Specify JVM in <code>eclipse.ini</code>, see <a href="http://wiki.eclipse.org/Eclipse.ini">Eclipsepedia: Eclipse.ini</a>.
+  Your <code>eclipse.ini</code> should look something like this:
+  <pre>
+-vm
+C:/Program Files (x86)/Java/jdk1.6.0_17/bin/javaw.exe
+--launcher.library
+plugins/org.eclipse.equinox.launcher.win32.win32.x86_1.0.200.v20090519
+-startup
+plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar
+-product
+org.eclipse.epp.package.reporting.product
+--launcher.XXMaxPermSize
+256M
+-showsplash
+org.eclipse.platform
+--launcher.XXMaxPermSize
+256m
+-vmargs
+-Dosgi.requiredJavaVersion=1.5
+-Xms128m
+-Xmx512m</pre>
+  </li>
+  <li>
+    Create an empty workspace directory, e.g. 
+    <code style="white-space:nowrap">C:/dev/workspaces/seam</code><br/>
+    <font color="red"><strong>Note:</strong> Do not add Maven projects under your workspace 
+    directory.</font> There are some issues regarding use of the m2eclipse plugin when projects are 
+    placed under the workspace directory, e.g. <code style="white-space:nowrap;">
+    C:/dev/workspaces/seam/myproject</code>: You will not be able to run Maven Eclipse 
+    goals from a command shell if your project is placed under the workspace directory; the 
+    <code>mvn eclipse:eclipse and mvn eclipse:clean</code> goals will fail to 
+    execute. The issues are reported here: <a href="http://jira.codehaus.org/browse/MECLIPSE-571">
+    http://jira.codehaus.org/browse/MECLIPSE-571</a>, and here:	
+    <a href="http://jira.codehaus.org/browse/MNG-2057">http://jira.codehaus.org/browse/MNG-2057</a>.
+    So, be kind to yourself and create a project directory that is not on the same file path as your 
+    workspace directory.<br/> 
+    Your directory structure should look something like this:
+    <img src="img/eclipse-workspace-launcher2.png" class="screenshot" style="width:223px;" />
+  </li>
+  <li>
+    Start Eclipse and select the newly created workspace directory.
+    <img src="img/eclipse-workspace-launcher.png" longdesc="img/eclipse-workspace-launcher.png"  
+      class="screenshot" style="width:500px;" />
+  </li>
+</ol>
+
+<h2  id="configure-workspace">Install Plugins and Configure Workspace</h2>
+<ol class="vspace">  
+  <li><strong>JDK:</strong><br/>
+    Make sure that Eclipse is running on a JDK and not a JRE.<br/>
+    Select <code><strong>Window&gt;Preferences</strong></code> and browse to the 
+    <code><strong>Java&gt;Installed JREs</strong></code> section. 
+    <div style="width:102%;overflow:hidden;margin-bottom:0.5em;">
+      <img src="img/eclipse-installed-jres.png" longdesc="img/eclipse-installed-jres.png" 
+        class="inline-block" style="width:49%;" />
+      <img src="img/eclipse-compiler.png" longdesc="img/eclipse-compiler.png" 
+        class="inline-block" style="width:49%;" />
+    </div>
+  </li>
+  <li id="subclipse"><strong>SubClipse:</strong>
+    <ul class="vspace">
+    <li>
+      Install <a href="http://subclipse.tigris.org/">
+      SubClipse-1.6.x, Team Provider plug-in providing support for Subversion within the Eclipse IDE
+      </a>.
+    </li>
+    </ul>
+  </li>
+  <li id="m2eclipse"><strong>m2eclipse:</strong>
+    <ul class="vspace">
+      <li>
+        Install the <a href="http://m2eclipse.sonatype.org/installing-m2eclipse.html">
+        m2eclipse Core and m2eclipse Extas plugins</a>.
+      </li>
+      <li>
+        Configure the Maven Eclipse plugin.
+        <img src="img/eclipse-maven-plugin.png" longdesc="img/eclipse-maven-plugin.png" 
+          class="screenshot" style="width:500px;" />
+      </li>
+      <li>
+        Configure Eclipse to use an <strong>external</strong> Maven-2.2.1 installation.<br/>
+        In Preferences, navigate to <code><strong>Maven&gt;Installations</strong></code>. 
+        Click <code><strong>Add...</strong></code> and select your Maven-2.2.1 home directory.
+        <img src="img/eclipse-maven-installations.png" longdesc="img/eclipse-maven-installations.png"
+          class="screenshot" style="width:500px;" />
+      </li>
+    </ul>
+  </li>
+  <li><strong>TestNG:</strong>
+    <ul class="vspace">
+      <li>
+        Install the <a href="http://testng.org/doc/eclipse.html">TestNG Eclipse plug-in</a>.
+      </li>
+      <li>
+        Configure the TestNG Eclipse plug-in. 
+        <img src="img/eclipse-testng-plugin.png" longdesc="img/eclipse-testng-plugin.png"
+          class="screenshot" style="width:500px;" />
+      </li>
+    </ul>
+  </li>
+  <li id="as-and-tools"><strong>JBoss Application Server and JBoss Tools 3:</strong>
+    <ul class="vspace">	
+      <li>
+        Install the <a href="http://www.jboss.org/jbossas/">Jboss Application Server</a>
+      </li>
+      <li>
+        Install <a href="http://www.jboss.org/tools">Eclipse Plugins for JBoss and related Technology</a>. 
+      </li>
+      <li>
+        The <a href="http://seamframework.org/Documentation">JBoss Seam documentation</a> and 
+		the <a href="http://docs.jboss.org/tools/">JBoss Tools documentation</a> explains these steps in detail.
+      </li>
+    </ul>
+  </li>
+  <li id="create-a-wtp-server-reference"><strong>WTP Server Reference:</strong><br/>
+    After the Server and the tools are installed you need to define a WTP server reference. The 
+    screenshots below outlines the steps needed to configure a WTP server reference for JBoss 4.2.3.
+    <ul class="vspace">	
+      <li>
+        In Preferences, navigate to <strong>Server&gt;Runtime Environments</strong>. Click 
+        <strong>Add...</strong>. Browse to the directory named <strong>JBoss Community</strong> 
+        and select <strong>JBoss 4.2 Runtime</strong>.
+        <img src="img/eclipse-server-runtime-01.png" longdesc="img/eclipse-server-runtime-01.png"
+          class="screenshot" style="width:500px;" />
+      </li>
+      <li>
+        Click <strong>Next</strong> and point the <strong>Home Directory</strong> to the directory 
+        where you installed the	server. Select the <strong>default</strong> configuration. 
+        <img src="img/eclipse-server-runtime-02.png" longdesc="img/eclipse-server-runtime-02.png" 
+          class="screenshot" style="width:300px;" />
+      </li>
+      <li>
+        Click <strong>Next</strong>, verify configuration, and click <strong>Finish</strong>.
+        <img src="img/eclipse-server-runtime-03.png" longdesc="img/eclipse-server-runtime-03.png"
+          class="screenshot" style="width:300px;" />
+      </li>
+      <li>
+        Exit preferences.
+        <img src="img/eclipse-server-runtime-04.png" longdesc="img/eclipse-server-runtime-04.png"
+          class="screenshot" style="width:500px;" />
+      </li>
+      <li>
+        Open the JBoss AS perspective.
+        <img src="img/eclipse-jboss-perspective.png" longdesc="img/eclipse-jboss-perspective.png" 
+          class="screenshot" style="width:250px;" />
+      </li>
+      <li>
+        Doubleclick on the newly created server, JBoss 4.2.3-jdk6 Server, to open the Server Overview 
+        editor.
+        <img src="img/eclipse-jboss-server-view.png" longdesc="img/eclipse-jboss-server-view.png"
+          class="screenshot" style="width:250px;" />
+      </li>
+      <li>
+        Verify that the <code><strong>Use the JBoss deploy directory</strong></code> radio button is checked.
+        <div style="width:102%; overflow:hidden">
+          <img src="img/eclipse-jboss-server-overview-02.png" longdesc="img/eclipse-jboss-server-overview-02.png"
+            class="inline--block" style="width:49%;" />
+          <img src="img/eclipse-jboss-server-overview.png" longdesc="img/eclipse-jboss-server-overview.png"
+            class="inline-block" style="width:49%;" />
+        </div>
+      </li>
+      <li>
+        Start the server to check that everyting is configured correctly.
+        <img src="img/eclipse-server-view-start-server-01.png" longdesc="img/eclipse-server-view-start-server-01.png"
+          class="screenshot" style="width:300px;" />
+      </li>
+      <li>
+        The console output should look something like the screeshot below.
+        <img src="img/eclipse-jboss-server-view-started.png" longdesc="img/eclipse-jboss-server-view-started.png"
+          class="screenshot " style="width:700px;" />
+      </li>
+      <li>
+        Stop the server.
+      </li>
+    </ul>
+  </li>
+  <li><strong>Encoding:</strong><br/>
+    Set encoding to UTF-8 (optional).<br/>
+    Make shure that all files are saved with UTF-8 encoding. This is only essential if you're working	
+    with i18n.
+    <div style="width:103%;overflow:hidden;">
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-02.png" longdesc="img/eclipse-utf8-02.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-01.png" longdesc="img/eclipse-utf8-01.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-03.png" longdesc="img/eclipse-utf8-03.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-04.png" longdesc="img/eclipse-utf8-04.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-05.png" longdesc="img/eclipse-utf8-05.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-06.png" longdesc="img/eclipse-utf8-06.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-07.png" longdesc="img/eclipse-utf8-07.png" class="screenshot" style="width:100%;" />
+      </div>
+      <div class="inline-block" style="width:24%;">
+        <img src="img/eclipse-utf8-08.png" longdesc="img/eclipse-utf8-08.png" class="screenshot" style="width:100%;" />
+      </div>
+    </div>
+  </li>
+</ol>
+
+<p>This ends the steps needed to prepare the Eclipse workspace for Maven and JBoss Tools. You need to 
+go trough this steps every time you create a new workspace.
+</p>
+
+<h2 id="import-project-into-eclipse">Import a Mavenized Seam Project into Eclipse</h2>
+<p>m2eclipse provides three options for importing a Maven project into Eclipse including:</p>
+<ul>
+  <li>Import an existing Maven project from the local file system</li>
+  <li>Check out a Maven project from SCM</li>
+  <li>Materialize a Maven project</li>
+</ul>
+<p>The options are described in detail in 
+<a href="http://www.sonatype.com/products/maven/documentation/book-defguide">
+Maven: The Definitive Guide</a>. In this tutorial we'll show how to use the first option.</p>
+
+<h3 id="import-an-existing-maven-project">
+  Import An Existing Maven Project From the Local File System Into Eclipse
+</h3>
+<p>m2eclipse can import a Maven project with an existing pom.xml. By pointing at the
+directory where a Maven project is located, m2eclipse detects all the Maven POMs
+in the project and provides a hierarchical list of them.</p>
+
+<ol class="vspace">
+  <li>
+    <a href="01-gettingstarted.html#use-as-template">Export</a> the <code>seam-refimpl</code> project 
+    from svn to a directory of your choice, the <code>${SEAM_TUTORIAL}</code> directory. <br/>
+  </li>
+  <li>
+    <a href="01-gettingstarted.html#modfy-the-poms">Modify the POMs</a> as needed.
+  </li>
+  <li>
+    <a href="01-gettingstarted.html#activate-development-mode">Activate development mode</a>.<br/>
+    Remember to copy <code>src/main/filters/filter-prod.properties</code> to 
+    <code>filter-dev.properties</code> and point the server to the correct deploy directory 
+    (the <code>as.deploy</code> property value should correspond with the <code>configuration</code> 
+    directory you selected for the WTP server).
+  </li>
+  <li>
+    Open a command shell, navigate to your project directory and run: 
+    <code><strong>mvn install eclipse:eclipse</strong></code><br/>
+    If you omit this step you will from time to time get a lot of null pointer exceptions while 
+    importing the project into Eclipse! You can also delete the modules that caused the null pointer 
+    exceptions and import them again.
+  </li>
+  <li>
+    Import the project: In Eclipse select <code><strong>File&gt;Import</strong></code> to import the project:
+    <img class="screenshot" src="img/eclipse-import.png" longdesc="img/eclipse-import.png" 
+      style="width:300px" />
+  </li>
+  <li>
+    Select <code><strong>Maven&gt;Existing Maven Projects</strong></code> and click <strong>Next</strong>.
+    <img class="screenshot" src="img/eclipse-import-maven-01.png" longdesc="img/eclipse-import-maven-01.png" 
+      style="width:500px;" />
+  </li>
+  <li>
+    Browse to the directory where the project is located, select it, verify that all modules are checked,
+    add <code><strong>env-dev</strong></code> to the <strong>Profiles</strong> field
+    and click <strong>Finish</strong>.
+    <img src="img/eclipse-import-maven-02.png" longdesc="img/eclipse-import-maven-02.png" 
+      class="screenshot" style="width:500px" />
+  </li>
+  <li>
+    You will notice a build error in the Maven console after the import:
+    <img src="img/eclipse-import-maven-08.png" longdesc="img/eclipse-import-maven-08.png" 
+      class="screenshot" style="width:700px;" />
+    <code><font color="red">
+    Build errors for seam-tutorial-ear; org.apache.maven.lifecycle.LifecycleExecutionException: 
+    Failed to execute goal org.apache.maven.plugins:maven-ear-plugin:2.4.1:generate-application-xml 
+    (default-generate-application-xml) on project seam-tutorial-ear: Failed to initialize JBoss 
+    configuration</font></code><br/><br/>
+    m2eclipse uses Maven3 internally even if we have configured Eclipse to use en external Maven 2.2.x  installation,
+    so this the same build error as we will get running <code>mvn install</code> from a command shell using Maven 3.
+     The bug is reported in JIRA: <a href="http://jira.codehaus.org/browse/MNG-2971">http://jira.codehaus.org/browse/MNG-2971</a>.
+  </li>
+  <li>
+    Fix annoyances.<br/>
+    <div class="inline-block" style="width:30.3%;">
+      <img src="img/eclipse-annoyance-01.png" longdesc="img/eclipse-annoyance-01.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Incorrect JRE, see: <a href="https://issues.sonatype.org/browse/MNGECLIPSE-1752">MNGECLIPSE-1752</a>
+    </div>
+    <div class="inline-block" style="width:39.4%;">
+      <img src="img/eclipse-annoyance-02.png" longdesc="img/eclipse-annoyance-02.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Select Workspace default JRE
+    </div>
+    <div class="inline-block" style="width:27%;">
+      <img src="img/eclipse-annoyance-03.png" longdesc="img/eclipse-annoyance-03.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Delete Eclipse generated <code>application.xml</code>, see:
+      <a href="https://issues.sonatype.org/browse/MNGECLIPSE-1541">MNGECLIPSE-1541</a>, 
+      <a href="https://issues.sonatype.org/browse/MNGECLIPSE-2145">MNGECLIPSE-2145</a>
+    </div>
+    <div class="inline-block" style="width:30.2%;">
+      <img src="img/eclipse-annoyance-04.png" longdesc="img/eclipse-annoyance-04.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      <code>ear/src/main/application</code> should be source folder.
+    </div>
+    <div class="inline-block" style="width:67.1%;">
+      <img src="img/eclipse-annoyance-05.png" longdesc="img/eclipse-annoyance-05.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Schema validation for some resource files fails due to use of Maven property placeholders. The 
+      target resource files should be correct, so you can safely delete cvc and duplicate component 
+	  	erros.
+    </div>
+  </li>
+  <li>EAR Module Assembly<br/>
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/eclipse-annoyance-06_1.png" longdesc="img/eclipse-annoyance-06_1.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      <ul>
+      <li>Rename seam-tutorial-ejb.<strong>ejb</strong> to seam-tutorial-ejb.<strong>jar</strong></li>
+      <li>Delete <code>src/main/application</code></li>
+      <li>Add folder <code>target/seam-tutorial-ear-0.1-SNAPSHOT/META-INF</code></li>
+      </ul>
+    </div>
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/eclipse-annoyance-07_1.png" longdesc="img/eclipse-annoyance-07_1.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      <ul>
+      <li>Corrected Module Assembly</li>
+      </ul>
+    </div>
+  </li>
+  <li>Web Module Assembly<br/>
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/eclipse-annoyance-09.png" longdesc="img/eclipse-annoyance-09.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      <ul>
+      <li>Add folder <code>target/seam-tutorial-war-0.1-SNAPSHOT/WEB-INF</code></li>
+      </ul>
+    </div>
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/eclipse-annoyance-10.png" longdesc="img/eclipse-annoyance-10.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      <ul>
+      <li>Corrected Module Assembly</li>
+      </ul>
+    </div>
+  </li>
+  <li>
+    Run Maven install.
+      <img src="img/eclipse-import-maven-09.png" longdesc="img/eclipse-import-maven-09.png" 
+      class="screenshot" style="width:500px;" /> 
+    This will fix the build error mentioned earlier. 
+  </li>
+</ol>
+
+<h3>Project Facets for EAR, EJB and WAR Modules</h3>
+<p>It should not be necessary to make any changes to the Project Facets, just verify that the 
+facets are selected <strong>excactly</strong> as shown in the screenshots below. If they are not,
+then you should delete the project from Eclipse,  
+<a href="#remove-eclipse-settings">Completly Remove Eclipse Spesific Settings From the Project</a>
+and then import the project all over again.
+</p>
+
+<div style="width:101%;overflow:hidden;">
+  <div class="inline-block" style="width:24%;">
+    <img class="screenshot" style="width:100%; margin-bottom:0;"
+      src="img/eclipse-parent-facets.png" longdesc="img/eclipse-parent-facets.png" />
+    <p>Parent Project</p>
+  </div>
+  <div class="inline-block" style="width:24%;">
+    <img class="screenshot" style="width:100%; margin-bottom:0;"
+      src="img/eclipse-ear-facets.png" longdesc="img/eclipse-ear-facets.png" />
+    <p>EAR Project</p>
+  </div>
+  <div class="inline-block" style="width:24%;">
+    <img class="screenshot" style="width:100%; margin-bottom:0;"
+      src="img/eclipse-ejb-facets.png" longdesc="img/eclipse-ejb-facets.png" />
+    <p>EJB Project</p>
+  </div>
+  <div class="inline-block" style="width:24%;">
+    <img class="screenshot" style="width:100%; margin-bottom:0;"
+      src="img/eclipse-war-facets.png" longdesc="img/eclipse-war-facets.png" />
+    <p>WAR Project</p>
+  </div>
+</div>
+
+<h3>Create Maven Run Configurations</h3>
+<ol class="vspace">
+  <li>
+    Create Maven <code>install -Pexplode</code> and a Maven <code>clean -Punexplode</code> 
+    run configurations:<br/>
+    The <code>install</code> goal with the <code>explode</code> profile is needed to do an initial 
+    deploy to	the server and also to fix some WTP issues (more on that later).
+    Below is the screenshot for the Maven <code>install -Pexplode</code> run configuration. Also 
+    create a run configuration for the Maven <code>clean -Punexplode</code> goal. Remenber to use the
+    external Maven Runtime you configured for the workspace.<br/>
+    
+    <div class="inline-block" style="width:48%;margin-right:4%;">
+      <img class="screenshot" style="width:100%;" 
+        src="img/eclipse-run-configurations-01.png" longdesc="img/eclipse-run-configurations-01.png" />
+    </div>
+    <div class="inline-block" style="width:45%;">
+      <img class="screenshot" style="width:100%;" 
+        src="img/eclipse-run-configurations-02.png" longdesc="img/eclipse-run-configurations-02.png" />
+    </div>
+    <br/>  
+    Running the goal should give the following output:<br/><br/>
+    
+    <div style="width:100%; overflow:hidden;">
+    <pre style="font-size:9px">
+[INFO] Executing tasks
+     [echo] Exploding to C:/ide/server/jboss-4.2.3.GA/server/default/deploy/seam-tutorial-ear.ear
+   [delete] Directory C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear cannot be removed using the file attribute.  Use dir instead.
+     [sync] Copying 16 files to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear
+     [sync] Copying C:\ide\projects\seam-tutorial\ear\target\seam-tutorial-ear-0.1-SNAPSHOT\seam-tutorial-war-0.1-SNAPSHOT.war\WEB-INF\jboss-web.xml to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\seam-tutorial-war-0.1-SNAPSHOT.war\WEB-INF\jboss-web.xml
+     ....
+     [sync] Copying C:\ide\projects\seam-tutorial\ear\target\seam-tutorial-ear-0.1-SNAPSHOT\seam-tutorial-war-0.1-SNAPSHOT.war\META-INF\maven\no.knowit.seam\seam-tutorial-war\pom.properties to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\seam-tutorial-war-0.1-SNAPSHOT.war\META-INF\maven\no.knowit.seam\seam-tutorial-war\pom.properties
+     [sync] Copying C:\ide\projects\seam-tutorial\ear\target\seam-tutorial-ear-0.1-SNAPSHOT\META-INF\jboss-app.xml to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\META-INF\jboss-app.xml
+[INFO] Executed tasks
+[INFO] [install:install]
+[INFO] Installing C:\ide\projects\seam-tutorial\ear\target\seam-tutorial-ear.ear to C:\Documents and Settings\Leif\.m2\repository\no\knowit\seam\seam-tutorial-ear\0.1-SNAPSHOT\seam-tutorial-ear-0.1-SNAPSHOT.ear
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] ------------------------------------------------------------------------
+[INFO] seam-tutorial-parent .................................. SUCCESS [2.875s]
+[INFO] seam-tutorial-ejb 0.1-SNAPSHOT ........................ SUCCESS [3.031s]
+[INFO] seam-tutorial-war 0.1-SNAPSHOT ........................ SUCCESS [2.016s]
+[INFO] seam-tutorial-ear 0.1-SNAPSHOT ........................ SUCCESS [7.703s]
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+
+    </pre>
+    </div>
+    You can run the goal(s) as needed by right clicking on the <strong>parent</strong> project and 
+    select <code><strong>Run As &gt; Maven build</strong> </code> from the menu.
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-run-configurations-03.png" longdesc="img/eclipse-run-configurations-03.png" />
+  </li>
+  <li>
+    Start the server and verify that the deployment works:
+    <img class="screenshot" style="width:300px;" 
+      src="img/eclipse-server-view-start-server-01.png" longdesc="img/eclipse-server-view-start-server-01.png"/>
+    A successful deploy should look like this in the Console log:
+    <img class="screenshot" style="width:700px;" 
+      src="img/eclipse-server-view-start-server-02.png" longdesc="img/eclipse-server-view-start-server-02.png" />
+  </li>
+  <li>
+    Open a browser and point the URL to <a href="http://localhost:8080/seam-tutorial">
+    http://localhost:8080/seam-tutorial</a>
+  </li>
+  <li>
+    Stop the server.
+  </li>
+</ol>
+
+<h2 id="running-tests">Running Tests</h2>
+<p>Running tests are trivial. Open a test class, right click in the editor and select 
+<code><strong>Run As &gt; TestNG Test</strong></code>.
+</p>
+<img class="inline-block" style="width:49%;" 
+  src="img/eclipse-testng-01.png" longdesc="img/eclipse-testng-01.png" />
+<img class="inline-block" style="width:49%;" 
+  src="img/eclipse-testng-02.png" longdesc="img/eclipse-testng-02.png" />
+<p>The tests should go &quot;green&quot;.
+</p>
+
+<h2 id="edit-compile-deploy-cycle">The Edit Compile Deploy Cycle</h2>
+<p>To have an effective development environment we need to automate the edit compile deploy cycle.
+You can either use WTP to deploy your project or you can define a Maven builder that 
+hooks in to the <code>process-classes</code> goal. For the latter, the seam-refimpl POMs has alredy
+defined an <code>explode</code> profile for the Maven process-classes goal. All you need to do is to
+define a Maven builder that utilizes this profile on the <code>process-classes</code> goal.
+</p>
+<h3>WTP</h3>
+<p>This section explains how to use WTP  <span style="display:none;">a.k.a. WTF</span> to 
+deploy your project.</p>
+<ol>
+  <li>
+    Open the <strong>JBoss Server View</strong> and add project to server.<br/>
+    <img class="screenshot" style="width:280px;" 
+      src="img/eclipse-wtp-01.png" longdesc="img/eclipse-wtp-01.png" />
+   </li>
+   <li>
+    Add the <code>seam-tutorial-ear</code> project and click <strong>Finish</strong>.
+    <img class="screenshot" style="width:400px;" 
+      src="img/eclipse-wtp-02.png" longdesc="img/eclipse-wtp-02.png" />
+  </li>
+  <li>
+    Publish.<br/>
+    <img class="screenshot" style="width:280px;" 
+      src="img/eclipse-wtp-03.png" longdesc="img/eclipse-wtp-03.png" />
+  </li>
+  <li>
+    Start the server and check the console output. 
+    <img class="screenshot" style="width:300px;" 
+      src="img/eclipse-wtp-07.png" longdesc="img/eclipse-wtp-07.png" />
+      
+    <font color="red">You will notice that the application failed to deploy</font>:
+    <div style="width:100%; overflow:hidden;">
+    <pre style="font-size:10px;">
+
+00:21:28,504 INFO  [EARDeployer] Init J2EE application: file:/C:/dev/server/jboss-4.2.3.GA-jdk6/server/default/deploy/seam-tutorial-ear.ear/
+00:21:28,506 ERROR [MainDeployer] Could not initialise deployment: file:/C:/dev/server/jboss-4.2.3.GA-jdk6/server/default/deploy/seam-tutorial-ear.ear/
+org.jboss.deployment.DeploymentException: No META-INF/application.xml found
+	at org.jboss.deployment.EARDeployer.init(EARDeployer.java:146)
+	at org.jboss.deployment.MainDeployer.init(MainDeployer.java:872)
+  ...
+	at $Proxy5.deploy(Unknown Source)
+	at org.jboss.system.server.ServerImpl.doStart(ServerImpl.java:482)
+	at org.jboss.system.server.ServerImpl.start(ServerImpl.java:362)
+	at org.jboss.Main.boot(Main.java:200)
+	at org.jboss.Main$1.run(Main.java:508)
+	at java.lang.Thread.run(Thread.java:619)
+00:21:28,508 ERROR [URLDeploymentScanner] Incomplete Deployment listing:
+
+--- Incompletely deployed packages ---
+org.jboss.deployment.DeploymentInfo@716583c1 { url=file:/C:/dev/server/jboss-4.2.3.GA-jdk6/server/default/deploy/seam-tutorial-ear.ear/ }
+  deployer: org.jboss.deployment.EARDeployer@1cefde4
+  status: null
+  state: FAILED
+  watch: file:/C:/dev/server/jboss-4.2.3.GA-jdk6/server/default/deploy/seam-tutorial-ear.ear/
+  altDD: null
+  lastDeployed: 1269127288505
+  lastModified: 1269127256769
+  mbeans:
+
+    </pre>
+    </div>
+  </li>
+  <li>
+    Stop the server and inspect the deploy directory. As you can see, the deploy directory contains 
+    3 lib directories and the META-INF directory is empty! The deployed <code>seam-tutorial-ds.xml</code> 
+    file is the unfiltered version - not the one from <code>ear/target/seam-tutorial-ear-0.1-SNAPSHOT</code>.
+    The problem is caused by this Eclipse bug: 
+    <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=247090">Bug 247090 -  Userlibraries 
+    incorrectly deployed within EARs</a> (and probably some m2eclipse/wtp/JBossTools bugs as well :)
+    <img class="screenshot" style="width:600px;" 
+      src="img/eclipse-wtp-04.png" longdesc="img/eclipse-wtp-04.png" />
+  </li>
+  <li>
+    Select the parent project and run <code>mvn install -Pexplode</code> to fix the incorrect deploy.<br/>
+    <img class="screenshot" style="width:550px;" 
+      src="img/eclipse-run-configurations-03.png" longdesc="img/eclipse-run-configurations-03.png" />
+    <img class="screenshot" style="width:330px;" 
+      src="img/eclipse-wtp-05.png" longdesc="img/eclipse-wtp-05.png" />
+  </li>
+  <li>
+    Inspect the deploy directory and verify the the incorrectly deployed files are gone and that 
+    <code>seam-tutorial-ds.xml the filtered version), META-INF/application.xml, META-INF/jboss-app.xml 
+    and META-INF/MANIFEST.MF</code> are present.
+    <img class="screenshot" style="width:600px;" 
+      src="img/eclipse-wtp-06.png" longdesc="img/eclipse-wtp-06.png" />
+  </li>
+  <li>
+    Start the server in <strong>debug</strong> mode and check the console output.
+    <img class="screenshot" style="width:350px; display:block;" 
+      src="img/eclipse-wtp-08.png" longdesc="img/eclipse-wtp-08.png" />
+      
+    <div style="width:100%; overflow:hidden;">
+    <pre style="font-size:10px;">
+....
+04:00:17,120 INFO  [EARDeployer] Started J2EE application: file:/C:/dev/server/jboss-4.2.3.GA-jdk6/server/default/deploy/seam-tutorial-ear.ear/
+04:00:17,215 INFO  [Http11Protocol] Starting Coyote HTTP/1.1 on http-localhost%2F127.0.0.1-8080
+04:00:17,237 INFO  [Http11Protocol] Starting Coyote HTTP/1.1 on http-localhost%2F127.0.0.1-8443
+04:00:17,262 INFO  [AjpProtocol] Starting Coyote AJP/1.3 on ajp-localhost%2F127.0.0.1-8009
+04:00:17,276 INFO  [Server] JBoss (MX MicroKernel) [4.2.3.GA (build: SVNTag=JBoss_4_2_3_GA date=200807181439)] Started in 26s:622ms
+    </pre>
+    </div>
+  </li>
+  <li>
+    You can check that the WTP works by changing some xhtml and java files. The changes should be 
+    reflected immediately on the server (after WTP has done a publish). But as you probably 
+    know; not all changes to Java code are hot deployable even in debug mode. If hot code replacement 
+    is important to you (and it	should be) then get a copy of <strong>JRebel</strong> from 
+    <a href="http://www.zeroturnaround.com/jrebel/">ZERO TURNAROUND</a>.
+  </li>
+  <li><strong>Important:</strong><br/>
+    You need to keep an eye on the deploy directory as WTP will do a full (and incorrect) deploy 
+    from time to time, in particular when you start Eclipse and then starts the server the first
+    time (or selecting Publish from ther server menu). The fix is to stop the server and run 
+    <code>mvn install -Pexplode</code> again. 
+  </li>
+</ol>
+
+<h3>Maven Builder</h3>
+<p>As an alternative to WTP you can create a Maven builder that hooks into the 
+<code>process-classes</code> goal. The Maven builder will then take care of the incremental 
+deployment. In combination with the <code style="white-space:nowrap">mvn install -Pexplode</code>
+goal you will have a complete <strong>compile- build- deploy</strong> environment without WTP.</p>
+<ol>
+  <li>
+    Configure the Maven Builder.<br/>
+    The Maven builder executes the <code>explode</code> profile on the <code>process-classes</code> 
+    goal. The child poms will &quot;inherit&quot; this builder, so you only need to define the builder on the
+    parent project.
+    <img class="screenshot" style="width:350px;" 
+      src="img/eclipse-import-maven-07.png" longdesc="img/eclipse-import-maven-07.png" />
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-maven-builder-01.png" longdesc="img/eclipse-maven-builder-01.png" />
+    <img class="screenshot" style="width:400px;" 
+      src="img/eclipse-maven-builder-02.png" longdesc="img/eclipse-maven-builder-02.png" />
+      
+    <strong>Note</strong>: Experiment with the <code>Base directory</code> variable. If you use the 
+    <code>${project_loc}</code> variable then the builder will run only on the sub project that 
+    contains the modified file - resulting in a faster build cycle.
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-maven-builder-03.png" longdesc="img/eclipse-maven-builder-03.png" />
+  </li>
+  <li>
+    Select the parent project and run <code>mvn install -Pexplode</code> to do an initial deploy.<br/>
+    <img class="screenshot" style="width:350px;" 
+      src="img/eclipse-run-configurations-04.png" longdesc="img/eclipse-run-configurations-04.png" />
+  </li>
+  <li>
+    Start server i debug mode an test the Builder:<br/>
+    Open a java class, e.g. <code>Authenticator.java</code>. Modify the source, save and check
+    the console output:
+    <div style="width:100%;overflow:hidden;">
+    <pre style="font-size:9px">
+...
+[INFO] [antrun:run {execution: ejb-process-classes}]
+[INFO] Executing tasks
+     [copy] Copying 1 file to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\seam-tutorial-ejb-0.1-SNAPSHOT.jar
+     [copy] Copying C:\ide\projects\seam-tutorial\ejb\target\classes\org\jboss\seam\example\session\<font color="blue">Authenticator.class</font> to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\seam-tutorial-ejb-0.1-SNAPSHOT.jar\org\jboss\seam\example\session\Authenticator.class
+[INFO] Executed tasks
+...</pre>
+    Open a xhtml file, e.g. <code>home.xhtml</code>. Modify the source, save and check
+    the console output:
+    <pre style="font-size:9px">
+...
+[INFO] [antrun:run {execution: war-process-classes}]
+[INFO] Executing tasks
+     [copy] Copying 1 file to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\seam-tutorial-war-0.1-SNAPSHOT.war
+     [copy] Copying C:\ide\projects\seam-tutorial\war\src\main\webapp\<font color="blue">home.xhtml</font> to C:\ide\server\jboss-4.2.3.GA\server\default\deploy\seam-tutorial-ear.ear\seam-tutorial-war-0.1-SNAPSHOT.war\home.xhtml
+[INFO] Executed tasks
+...</pre>
+    Check the Maven console as well:
+    <pre style="font-size:9px; color:blue;">
+... Maven Builder: AUTO_BUILD 
+... C:\ide\projects\seam-tutorial
+... Build type auto : process-classes
+...  mvn -Pexplode -B -Dmaven.test.skip=true -s &quot;C:\Documents and Settings\Leif\.m2\settings.xml&quot; process-classes
+... Build type auto : process-classes
+... Maven Builder: AUTO_BUILD 
+... Maven Builder: AUTO_BUILD 
+... C:\ide\projects\seam-tutorial
+... Build type auto : process-classes
+...  mvn -Pexplode -B -Dmaven.test.skip=true -s &quot;C:\Documents and Settings\Leif\.m2\settings.xml&quot; process-classes
+... Build type auto : process-classes</pre>
+    </div>
+  </li>
+  <li>
+    The changes should be reflected immediately on the server, but as you probably know; not all 
+    changes to Java code are hot deployable even in debug mode. If hot code replacement is important 
+    to you (and it	should be) then get a copy of <strong>JRebel</strong> 
+    from <a href="http://www.zeroturnaround.com/jrebel/">ZERO TURNAROUND</a>.
+  </li>	
+</ol>
+
+<h3>Don't Kill One Bird with Two Stones</h3>
+<p>Choose either to add the project to the WTP server or define a Maven builder.</p>
+
+<h2>JBoss Tools</h2>
+<p>JBoss Tools is a perfect match for Seam devolpers using Maven and the Elipse IDE. It helps you 
+with a a lot of tasks you otherwise would have used hours and days to complete.
+The Tools is not essential for developing a Mavenized Seam application, but it provides a collection 
+of tools that help you generate code and develop in an incremental manner. The JBossTools project 
+hosts a variety of standalone Eclipse plug-ins that support Java EE development. You can use the 
+tools to do reverse engineering : If you have an existing database then the Tools can generate a full 
+CRUD application with entities, Seam framework classes (home- and list classes) and a user interface 
+with navigation and drilldown. If you use the Tools to create an entity class then the Tools will 
+automatically generate the corresponding Seam framework classes and userinterface (list and a detail 
+page). 
+</p>
+<p>JBoss tools is a Eclipse feature, that can be enabled on a project by adding some configuration 
+(JSF and Seam facets, the SeamBuilder and SeamNature) to the Eclipse project. JBoss Tools will 
+manage two projects: the WAR and the EJB project, but the WAR project will be the main source of 
+configuration. By adding the necessary items to the maven-eclipse-plugin configuration for this 
+project and also adding a special Seam configuration file to the .settings directory, JBoss tools 
+will recognize the project correctly. For some reason, JBoss tools also stores some configuration in 
+the workspace configuration. This can not be configured from the Maven Archetype and thus the JBoss 
+Tools configuration is not complete. Because of this, the link between the WAR and EJB project will 
+not be found by JBoss Tools from the EJB project. When a new Seam Artifact (Action, Entity, Form or 
+Conversation) is added from the EJB project context menu, the configurations made in the WAR project 
+are not picked up. When adding from the WAR project they are picked up and some sources will also be 
+written in the EJB projects, as required (source: 
+<a href="http://blog.xebia.com/2009/06/06/configuring-a-seam-ejb-project-for-development-with-maven-and-jboss-tools/">
+  Configuring a Seam EJB project for development with Maven and JBoss Tools
+</a>).
+</p>
+<p>If you really want to learn the mecanisms behind Seam, then it is definitively worth the effort 
+setting up the tools. Play with the tools and study the code that the various tools generates.
+</p>
+
+<h3>Configure Workspace</h3>
+<p>Unpack <a href="http://www.seamframework.org/Download">JBoss Seam</a> to a directory of your 
+choice, e.g. <code>C:/ide/libs/jboss-seam-2.2.0.GA</code>. Select <code><strong>Window &gt; Prefereneces
+</strong></code> and follow the screenshots.
+</p>
+<div style="width:99%;overflow:hidden;">
+  <div class="inline-block" style="width:49.5%;">
+    <img class="screenshot" style="width:100%; margin-bottom:.1em;" 
+      src="img/eclipse-jboss-tools-02.png" longdesc="img/eclipse-jboss-tools-02.png" />
+    <p>Seam runtime</p>
+  </div>
+  <div class="inline-block" style="width:49.5%;">
+    <img class="screenshot" style="width:100%; margin-bottom:.1em;" 
+      src="img/eclipse-jboss-tools-03.png" longdesc="img/eclipse-jboss-tools-03.png" />
+    <p>Seam runtime</p>
+  </div>
+</div>
+
+<h3 id="configure-jboss-tools-for-a-project">Configure JBoss Tools For a Project</h3>
+<p>JBoss Tools will manage two projects: the WAR and the EJB project. The WAR project will be 
+the main source of configuration, so we'll start with the WAR.</p>
+<p><strong>Keep a copy of your project, preferably in svn, before you start configuring the tools.
+</strong></p>
+<ol class="vspace">
+  <li>
+    The WAR module:
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-war-properties-07.png" longdesc="img/eclipse-war-properties-07.png" />
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-war-properties-08.png" longdesc="img/eclipse-war-properties-08.png" />
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-war-properties-09.png" longdesc="img/eclipse-war-properties-09.png" />
+  </li>
+  <li>
+    The EJB module:
+    <img class="screenshot" style="width:500px;" 
+      src="img/eclipse-ejb-properties-01.png" longdesc="img/eclipse-ejb-properties-01.png" />
+  </li>
+  <li>
+    The EAR module:<br/>
+    Should not be necessary to do anything here in connection with the Tools. Use default values.
+  </li>
+  <li>
+    The parent module:<br/>
+    Should not be necessary to do anything here in connection with the Tools. Use default values.
+  </li>
+  <li>
+    The Missing Natures dialog:<br/> 
+    Open a view file, e.g. <code>war/src/main/webapp/home.xhtml</code> and ignore the waring about 
+    Missing Natures. Do not use the Add JSF Capabilities wizard as suggested in the dialog - it 
+    generates code and a lot of jar files in WEB-INF/lib which is not needed by a Maven project. 
+    <img class="screenshot"  style="width:400px;" 
+      src="img/eclipse-vpe-missing-natures.png" longdesc="img/eclipse-vpe-missing-natures.png" />
+  </li>
+  <li>
+    Verify that none of the original source files has changed during configuring the tools. If you 
+    find any changes then revert these files to it's origianl state. Hint: Add your project to svn 
+    before configuring JBoss tools, then a svn:commit will list any touched and unversioned files.
+  </li>
+</ol>
+
+<h2 id="play-with-jboss-tools">Play With JBoss Tools</h2>
+<p>In this section we'll play with the tools.</p>
+
+<h3 id="entity-bean-the-seam-way">Create an Entity Bean the Seam Way</h3>
+<ol class="vspace">
+<li>
+  Open Seam perspective.
+  <img class="screenshot" style="width:250px;" 
+    src="img/eclipse-perspective-seam.png" longdesc="img/eclipse-perspective-seam.png" />
+</li>
+<li>
+  In Package Explorer, right click on the <strong>war</strong> or <strong>ejb</strong> project and 
+  select <code><strong>New&gt;Seam Entity</strong></code>
+  <img class="screenshot" style="width:500px;" 
+    src="img/eclipse-seam-entity-01.png" longdesc="img/eclipse-seam-entity-01.png" />
+</li>
+<li>
+  Fill in the <strong>Seam entity class name</strong>, e.g. <code>MyEntity</code>, and click 
+  <strong>Finish</strong>.<br/>
+  <img style="width:40%;" class="inline-block" 
+    src="img/eclipse-seam-entity-02.png" longdesc="img/eclipse-seam-entity-02.png" />
+  <img style="width:40%;" class="inline-block" 
+    src="img/eclipse-seam-entity-03.png" longdesc="img/eclipse-seam-entity-03.png" />
+</li>
+<li>
+  Generated code:
+  <img class="screenshot" style="width:550px;" 
+    src="img/eclipse-seam-entity-04.png" longdesc="img/eclipse-seam-entity-04.png" />
+
+  All this code in less than ten seconds! :-))<br/>
+
+  <div class="code-frame">
+    <code><strong>MyEntity.java</strong></code>
+    <iframe frameborder="0" src="./code-listings/MyEntity.java.html"></iframe>
+  </div>
+  
+  <div class="code-frame">
+    <code><strong>MyEntityHome.java</strong></code>
+    <iframe frameborder="0" src="./code-listings/MyEntityHome.java.html"></iframe>
+  </div>
+  
+  <div class="code-frame">
+    <code><strong>MyEntityList.java</strong></code>
+    <iframe frameborder="0" src="./code-listings/MyEntityList.java.html"></iframe>
+  </div>
+  
+  <div class="code-frame">
+    <code><strong>myEntityList.xhtml</strong></code>
+    <iframe frameborder="0" src="./code-listings/myEntityList.xhtml.html"></iframe>
+  </div>
+  
+  <div class="code-frame">
+    <code><strong>myEntity.xhtml</strong></code>
+    <iframe frameborder="0" src="./code-listings/myEntity.xhtml.html"></iframe>
+  </div>
+</li>
+<li>
+  We're almost there. We configured <strong>Seam Settings</strong> to generate <code>xhtml</code> 
+  files to the <code>webapp/view</code> directory, but the code generator does not take this into 
+  account. The links in the generated <code>xhtml</code> code &quot;assumes&quot; that the code is generated
+  to the <code>webapp</code> directory. So, to finish up, we fix this flaw by making some small changes 
+  to the genereated <code>xhtml</code> code. Also add a link to <code>myEntityList.xhtml</code> in 
+  <code>menu.xhtml</code> (<font color="blue">see the blue text</font>).
+  <ul>
+  <li>
+  <code><strong>myEntityList.xhtml</strong></code>
+  <pre style="font-size:10px;">
+&lt;!DOCTYPE composition PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
+    &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;ui:composition xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+    xmlns:s=&quot;http://jboss.com/products/seam/taglib&quot;
+    xmlns:ui=&quot;http://java.sun.com/jsf/facelets&quot;
+    xmlns:f=&quot;http://java.sun.com/jsf/core&quot;
+    xmlns:h=&quot;http://java.sun.com/jsf/html&quot;
+    xmlns:rich=&quot;http://richfaces.org/rich&quot;
+    <font color="blue">template=&quot;/layout/template.xhtml&quot;&gt;</font>
+
+&lt;ui:define name=&quot;body&quot;&gt;
+    &lt;rich:panel&gt;
+        &lt;f:facet name=&quot;header&quot;&gt;myEntityList&lt;/f:facet&gt;
+        &lt;div class=&quot;results&quot;&gt;
+            &lt;h:outputText value=&quot;No myEntity exists&quot;
+                       rendered=&quot;#{empty myEntityList.resultList}&quot;/&gt;
+            &lt;h:dataTable id=&quot;myEntityList&quot; var=&quot;myEntity&quot;
+                      value=&quot;#{myEntityList.resultList}&quot;
+                   rendered=&quot;#{not empty myEntityList.resultList}&quot;&gt;
+                &lt;h:column&gt;
+                    &lt;f:facet name=&quot;header&quot;&gt;Id&lt;/f:facet&gt;
+                    #{myEntity.id}
+                &lt;/h:column&gt;
+                &lt;h:column&gt;
+                    &lt;f:facet name=&quot;header&quot;&gt;Name&lt;/f:facet&gt;
+                    &lt;s:link id=&quot;myEntity&quot;
+                         value=&quot;#{myEntity.name}&quot;
+                   propagation=&quot;none&quot;
+                         <font color="blue">view=&quot;/view/myEntity.xhtml&quot;&gt;</font>
+                        &lt;f:param name=&quot;myEntityId&quot;
+                                value=&quot;#{myEntity.id}&quot;/&gt;
+                    &lt;/s:link&gt;
+                &lt;/h:column&gt;
+            &lt;/h:dataTable&gt;
+        &lt;/div&gt;
+    &lt;/rich:panel&gt;
+    &lt;div class=&quot;actionButtons&quot;&gt;
+        &lt;s:button id=&quot;done&quot;
+               value=&quot;Create myEntity&quot;
+                <font color="blue">view=&quot;/view/myEntity.xhtml&quot;/&gt;</font>
+    &lt;/div&gt;
+&lt;/ui:define&gt;
+&lt;/ui:composition&gt;
+  </pre>
+  </li>
+  <li>
+  <code><strong>myEntity.xhtml</strong></code>
+  <pre style="font-size:10px;">
+&lt;!DOCTYPE composition PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
+    &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;ui:composition xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+    xmlns:s=&quot;http://jboss.com/products/seam/taglib&quot;
+    xmlns:ui=&quot;http://java.sun.com/jsf/facelets&quot;
+    xmlns:f=&quot;http://java.sun.com/jsf/core&quot;
+    xmlns:h=&quot;http://java.sun.com/jsf/html&quot;
+    xmlns:rich=&quot;http://richfaces.org/rich&quot;
+    <font color="blue">template=&quot;/layout/template.xhtml&quot;&gt;</font>
+
+&lt;ui:define name=&quot;body&quot;&gt;
+    &lt;h:form id=&quot;myEntityForm&quot;&gt;
+        &lt;rich:panel&gt;
+            &lt;f:facet name=&quot;header&quot;&gt;myEntity&lt;/f:facet&gt;
+            <font color="blue">&lt;s:decorate id=&quot;nameField&quot; template=&quot;/layout/edit.xhtml&quot;&gt;</font>
+                &lt;ui:define name=&quot;label&quot;&gt;Name&lt;/ui:define&gt;
+                &lt;h:inputText id=&quot;name&quot; required=&quot;true&quot;
+                             value=&quot;#{myEntityHome.instance.name}&quot;/&gt;
+            &lt;/s:decorate&gt;
+            &lt;div style=&quot;clear:both&quot;/&gt;
+        &lt;/rich:panel&gt;
+        &lt;div class=&quot;actionButtons&quot;&gt;
+            &lt;h:commandButton id=&quot;save&quot;
+                          value=&quot;Save&quot;
+                         action=&quot;#{myEntityHome.persist}&quot;
+                       rendered=&quot;#{!myEntityHome.managed}&quot;/&gt;
+            &lt;h:commandButton id=&quot;update&quot;
+                          value=&quot;Save&quot;
+                         action=&quot;#{myEntityHome.update}&quot;
+                       rendered=&quot;#{myEntityHome.managed}&quot;/&gt;
+            &lt;h:commandButton id=&quot;delete&quot;
+                          value=&quot;Delete&quot;
+                         action=&quot;#{myEntityHome.remove}&quot;
+                      immediate=&quot;true&quot;
+                       rendered=&quot;#{myEntityHome.managed}&quot;/&gt;
+            &lt;s:button propagation=&quot;end&quot;
+                               id=&quot;cancel&quot;
+                            value=&quot;Cancel&quot;
+                             <font color="blue">view=&quot;/view/myEntityList.xhtml&quot;/&gt;</font>
+        &lt;/div&gt;
+    &lt;/h:form&gt;
+&lt;/ui:define&gt;
+&lt;/ui:composition&gt;
+  </pre>
+  </li>
+  <li>
+  <code><strong>menu.xhtml</strong></code>
+  <pre style="font-size:10px;">
+&lt;rich:toolBar
+    xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+    xmlns:ui=&quot;http://java.sun.com/jsf/facelets&quot;
+    xmlns:h=&quot;http://java.sun.com/jsf/html&quot;
+    xmlns:f=&quot;http://java.sun.com/jsf/core&quot;
+    xmlns:s=&quot;http://jboss.com/products/seam/taglib&quot;
+    xmlns:rich=&quot;http://richfaces.org/rich&quot;&gt;
+    &lt;rich:toolBarGroup&gt;
+      &lt;h:outputText value=&quot;#{projectName}:&quot;/&gt;
+      &lt;s:link view=&quot;/home.xhtml&quot; value=&quot;Home&quot; propagation=&quot;none&quot;/&gt;
+    &lt;/rich:toolBarGroup&gt;
+
+    &lt;!-- @newMenuItem@ --&gt;
+    &lt;s:link view=&quot;/view/example/userList.xhtml&quot;
+      value=&quot;User List&quot;
+      includePageParams=&quot;false&quot;
+      propagation=&quot;none&quot;/&gt;
+    
+    <font color="blue">&lt;s:link view=&quot;/view/myEntityList.xhtml&quot;
+      value=&quot;myEntity List&quot;
+      includePageParams=&quot;false&quot;
+      propagation=&quot;none&quot;/&gt;</font>
+    
+    &lt;rich:toolBarGroup location=&quot;right&quot;&gt;
+      &lt;h:outputText value=&quot;signed in as: #{identity.username}&quot; rendered=&quot;#{identity.loggedIn}&quot;/&gt;
+      &lt;s:link view=&quot;/login.xhtml&quot; 
+        value=&quot;Login&quot; 
+        rendered=&quot;#{not identity.loggedIn}&quot; 
+        propagation=&quot;none&quot;/&gt;
+      &lt;s:link view=&quot;/home.xhtml&quot; 
+        action=&quot;#{identity.logout}&quot; 
+        value=&quot;Logout&quot; 
+        rendered=&quot;#{identity.loggedIn}&quot; 
+        propagation=&quot;none&quot;/&gt;
+    &lt;/rich:toolBarGroup&gt;
+&lt;/rich:toolBar&gt;
+  </pre>
+  </li>
+  </ul>
+  </li>
+  <li>
+    That's it! Select the parent project and run <code>mvn install -Pexplode</code> to do an initial 
+    deploy. Start server and point your browser to 
+    <a href="http://localhost:8080/seam-tutorial/">http://localhost:8080/seam-tutorial/</a>
+
+    <img class="screenshot" style="width:350px;" 
+      src="img/eclipse-run-configurations-04.png" longdesc="img/eclipse-run-configurations-04.png" />
+    
+    <img class="screenshot" style="width:700px;" 
+      src="img/eclipse-seam-entity-05.png" longdesc="img/eclipse-seam-entity-05.png" />
+  </li>
+</ol>
+
+<h3 id="done-in-60-seconds">Reverse engineering - Done in 60 Seconds!</h3>
+<p>Well, the tutorial is not done in 60 seconds, but the revrese engineering is.</p>
+<p>We will re-use the project from the <a href="#entity-bean-the-seam-way">previous section</a>, so
+complete that tutorial first.</p>
+<h4>Configure Database</h4>
+<ol class="vspace">
+<li>
+  Checkout or export the sql scripts <code>open18-initial-schema-mysql.sql</code> and 
+  <code>open18-initial-seed-data-mysql.sql</code> from svn,  
+  <a href="http://seam-maven-refimpl.googlecode.com/svn/trunk/samples/seaminaction/etc/schema/">
+    http://seam-maven-refimpl.googlecode.com/svn/trunk/samples/seaminaction/etc/schema/</a>.
+</li>
+<li>
+  Open e.g. MySQL Query Browser and create schema <code><strong>open18initial_db</strong></code>.
+  <img class="screenshot" style="width:500px;" 
+    src="img/eclipse-seam-db-entity-01.png" longdesc="img/eclipse-seam-db-entity-01.png" />
+</li>
+<li>
+  Open script, <code>open18-initial-schema-mysql.sql</code> and click <strong>execute</strong>.
+  <img class="screenshot" style="width:500px;" 
+    src="img/eclipse-seam-db-entity-02.png" longdesc="img/eclipse-seam-db-entity-02.png" />
+  <img class="screenshot" style="width:500px;" 
+    src="img/eclipse-seam-db-entity-05.png" longdesc="img/eclipse-seam-db-entity-05.png" />
+  <img class="screenshot" style="width:500px;" 
+    src="img/eclipse-seam-db-entity-03.png" longdesc="img/eclipse-seam-db-entity-03.png" />
+</li>
+<li>
+  Open script, <code>open18-initial-seed-data-mysql.sql</code> and click <strong>execute</strong>.
+  <img class="screenshot" style="width:500px; display:block;" 
+    src="img/eclipse-seam-db-entity-04.png" longdesc="img/eclipse-seam-db-entity-04.png" />
+</li>
+</ol>
+
+<h4>Create and Configure Database Connection</h4>
+<ol class="vspace">
+<li>
+  Open the <strong>Database Development</strong> perspective.
+  <img class="screenshot" src="img/eclipse-seam-db-entity-07.png" style="width:300px; display:block;" />
+</li>
+<li>
+  Create a new Database Connection.
+  <img src="img/eclipse-seam-db-entity-16.png" style="width:300px; display:block;" />
+  <br/>
+  <img src="img/eclipse-seam-db-entity-09.png" longdesc="img/eclipse-seam-db-entity-09.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-10.png" longdesc="img/eclipse-seam-db-entity-10.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-11.png" longdesc="img/eclipse-seam-db-entity-11.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-12.png" longdesc="img/eclipse-seam-db-entity-12.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-13.png" longdesc="img/eclipse-seam-db-entity-13.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-14.png" longdesc="img/eclipse-seam-db-entity-14.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-15.png" longdesc="img/eclipse-seam-db-entity-15.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-17.png" longdesc="img/eclipse-seam-db-entity-17.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-19.png" longdesc="img/eclipse-seam-db-entity-19.png" style="width:33%;margin-bottom:.3em;" class="inline-block" />
+</li>
+</ol>
+
+<h4>Add Hibernate Configuration</h4>
+<ol class="vspace">
+<li>
+  Open the <strong>Hibernate</strong> perspective.
+  <img class="screenshot" style="width:300px;" src="img/eclipse-seam-db-entity-21.png" longdesc="img/eclipse-seam-db-entity-21.png" />
+</li>
+<li>
+  Right click inside explorer and select <code><strong>Add Configuration...</strong></code>
+  <img class="screenshot" style="width:300px;" src="img/eclipse-seam-db-entity-22.png" longdesc="img/eclipse-seam-db-entity-22.png" />
+</li>
+<li>
+  Add the newly created connection and define a Database dialect.<br/><br/>
+  <img src="img/eclipse-seam-db-entity-23.png" longdesc="img/eclipse-seam-db-entity-23.png" style="width:350px;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-24.png" longdesc="img/eclipse-seam-db-entity-24.png" style="width:350px;" class="inline-block" />
+  <br/>
+  <br/>
+  <img src="img/eclipse-seam-db-entity-25.png" longdesc="img/eclipse-seam-db-entity-25.png" style="width:300px;" class="screenshot" />
+</li>
+</ol>
+
+<h4>Modify project</h4>
+<ol class="vspace">
+<li>
+  Open the <strong>Seam</strong> perspective.
+  <img class="screenshot" style="width:300px;" src="img/eclipse-perspective-seam.png" longdesc="img/eclipse-perspective-seam.png" />
+</li>
+<li>
+  Modify <code>filter-dev.properties</code>.
+  <pre style="font-size:10px;">
+...
+# Datasource
+ds                  =<font color="blue">mysql</font>
+ds.jndi.name        =${app}Database
+ds.database.name    =<font color="blue">open18initial_db</font>
+ds.server.name      =<font color="blue">localhost:3306</font>
+ds.driver.class     =<font color="blue">com.mysql.jdbc.Driver</font>
+ds.connection.url   =<font color="blue">jdbc:mysql://${ds.server.name}/${ds.database.name}?characterEncoding=UTF-8</font>
+ds.user.name        =<font color="blue">root</font>
+ds.password         =
+ds.hibernate.dialect=<font color="blue">org.hibernate.dialect.MySQL5InnoDBDialect</font>
+ds.xml              =${app.context}-ds.xml
+
+# Persistence unit
+pu.name                                      =${app}-unit
+pu.jta.data.source                           =java:/${ds.jndi.name}
+pu.hibernate.dialect                         =${ds.hibernate.dialect}
+pu.hibernate.hbm2ddl.auto                    =<font color="blue">update</font>
+pu.hibernate.show_sql                        =false
+pu.hibernate.default_batch_fetch_size        =16
+pu.hibernate.transaction.manager_lookup_class=org.hibernate.transaction.JBossTransactionManagerLookup
+pu.jboss.entity.manager.factory.jndi.name    =java:/${app.context}EntityManagerFactory
+...
+</pre>  
+</li>
+<li>
+  Modify the <code>seam-tutorial</code> project.
+  <ul>
+  <li>
+    In <code>seam-tutorial-ejb/src/test/java</code>; delete package <code>no.knowit.seam.example.action</code>
+  </li>
+  <li>
+    In <code>seam-tutorial-ejb/src/main/java</code>; delete packages <code>org.domain.seamtutorial.session</code>,
+    <code>org.domain.seamtutorial.entity</code>, <code>no.knowit.seam.example.action</code> and 
+    <code>no.knowit.seam.example.model</code> 
+  </li>
+  <li>
+    In <code>seam-tutorial-war</code>; delete the <code>webapp/view</code> directory
+  </li>
+  <li>
+    Modify Shurefire plugin in ejb module:
+    <pre>
+        
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+  <font color="blue" style=""><strike>&lt;configuration&gt;</strike>
+    <strike>&lt;suiteXmlFiles&gt;</strike>
+      <strike>&lt;suiteXmlFile&gt;</strike>
+        <strike>src/test/resources/testng.xml</strike>
+      <strike>&lt;/suiteXmlFile&gt;</strike>
+    <strike>&lt;/suiteXmlFiles&gt;</strike>
+  <strike>&lt;/configuration&gt;</strike></font>
+&lt;/plugin&gt;</pre>
+  </li>
+  </ul>
+</li>
+<li>
+  Modify <code><strong>webapp/layout/menu.xhtml</strong></code> to:
+  <pre>
+&lt;rich:toolBar
+  xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+  xmlns:ui=&quot;http://java.sun.com/jsf/facelets&quot;
+  xmlns:h=&quot;http://java.sun.com/jsf/html&quot;
+  xmlns:f=&quot;http://java.sun.com/jsf/core&quot;
+  xmlns:s=&quot;http://jboss.com/products/seam/taglib&quot;
+  xmlns:rich=&quot;http://richfaces.org/rich&quot;&gt;
+  &lt;rich:toolBarGroup&gt;
+    &lt;h:outputText value=&quot;#{projectName}:&quot;/&gt;
+    &lt;s:link id=&quot;menuHomeId&quot; 
+      view=&quot;/home.xhtml&quot; 
+      value=&quot;Home&quot; 
+      propagation=&quot;none&quot;/&gt;
+  &lt;/rich:toolBarGroup&gt;
+
+  &lt;!-- @newMenuItem@ --&gt;
+  
+  &lt;rich:toolBarGroup location=&quot;right&quot;&gt;
+    &lt;h:outputText id=&quot;menuWelcomeId&quot;
+      value=&quot;signed in as: #{credentials.username}&quot;
+      rendered=&quot;#{identity.loggedIn}&quot; /&gt;
+    &lt;s:link id=&quot;menuLoginId&quot; 
+      view=&quot;/login.xhtml&quot; 
+      value=&quot;Login&quot;
+      rendered=&quot;#{not identity.loggedIn}&quot; 
+      propagation=&quot;none&quot; /&gt;
+    &lt;s:link id=&quot;menuLogoutId&quot; 
+      view=&quot;/home.xhtml&quot;
+      action=&quot;#{identity.logout}&quot; 
+      value=&quot;Logout&quot;
+      rendered=&quot;#{identity.loggedIn}&quot; 
+      propagation=&quot;none&quot; /&gt;
+  &lt;/rich:toolBarGroup&gt;
+&lt;/rich:toolBar&gt;
+  </pre>	
+</li>
+<li>
+  Modify Seam settings for WAR: Point the View directory to <code>/seam-tutorial-war/src/main/webapp</code> 
+  so that xhtml files are generated to the webapp directory (so we don't need to modify generated 
+  xhtml code as we did in the previous tutorial).
+  <img class="screenshot" style="width:500px;" src="img/eclipse-seam-db-entity-08.png" longdesc="img/eclipse-seam-db-entity-08.png" />
+</li>
+<li>
+  Modify Seam settings for EJB.
+  <img class="screenshot" style="width:500px;" src="img/eclipse-seam-db-entity-18.png" longdesc="img/eclipse-seam-db-entity-18.png" />
+</li>
+<li>
+  Run <code><strong>mvn clean</strong></code> and <code><strong>mvn install</strong></code> on the 
+  parent project.
+  <img class="screenshot" style="width:600px;" src="img/eclipse-seam-db-entity-20.png" longdesc="img/eclipse-seam-db-entity-20.png" />
+</li>
+</ol>
+
+<h4>Generate Entities From Existing Database</h4>
+<ol class="vspace">
+<li>
+  Open the <strong>Seam</strong> perspective.
+  <img class="screenshot" style="width:250px;" src="img/eclipse-perspective-seam.png" longdesc="img/eclipse-perspective-seam.png" />
+</li>
+<li>
+  In Package Explorer, right click on the <strong>war</strong> or <strong>ejb</strong> project and 
+  select <code><strong>New&gt;Seam Generate Entities</strong></code>
+  <img class="screenshot" style="width:650px;" src="img/eclipse-seam-db-entity-31.png" longdesc="img/eclipse-seam-db-entity-31.png" />
+  <br/>
+  <img src="img/eclipse-seam-db-entity-32.png" longdesc="img/eclipse-seam-db-entity-32.png" style="width:450px;" class="inline-block" />
+  <img src="img/eclipse-seam-db-entity-33.png" longdesc="img/eclipse-seam-db-entity-33.png" style="width:450px;" class="inline-block" />
+</li>
+<li>
+  Now, sit back and watch the magic happen.<br/>
+  <img src="img/eclipse-seam-db-entity-35.png" longdesc="img/eclipse-seam-db-entity-34.png" style="width:700px;" class="screenshot" />
+</li>
+<li>
+  Run <code>mvn install -Pexplode</code>, start server and point your browser to 
+  <a href="http://localhost:8080/seam-tutorial/">http://localhost:8080/seam-tutorial/</a>
+  <img class="screenshot" style="width:550px;" src="img/eclipse-run-configurations-03.png" longdesc="img/eclipse-run-configurations-03.png" />
+  <img class="screenshot" style="width:330px;" src="img/eclipse-wtp-05.png" longdesc="img/eclipse-wtp-05.png" />
+  <img class="screenshot" style="width:700px;" src="img/eclipse-seam-db-entity-36.png" longdesc="img/eclipse-seam-db-entity-36.png" />
+</li>
+<li>
+  A full enterprise CRUD application with basic security -  generated, deployed and up and running in 
+  about 60 seconds.	That's impressing! 
+</li>
+<li>
+  As you browse trough the pages you will find that that the <code><strong>TeeList</strong></code>
+  page fails to load. <br/><br/>
+  The <a href="http://code.google.com/p/seam-maven-refimpl/issues/detail?id=4">solution</a> is to
+  add the following override method to <code>org.domain.seamtutorial.session.TeeList</code>
+  <pre>
+     @Override
+     protected String getCountEjbql()
+     {
+        String before = super.getCountEjbql();
+        String after = before.replace("select count(tee) ", "select count(*) ");
+        return(after);
+     }
+  </pre>
+  
+  Also check comments i code 
+  <a href="http://seam-maven-refimpl.googlecode.com/svn/trunk/samples/seaminaction/stages/projects-ch06/action/src/main/java/org/open18/action/TeeList.java">
+  here</a>.
+</li>
+</ol>
+
+<h2>How To's</h2>
+<h3 id="checkout-trunk-from-eclipse">How To Checkout Trunk From Eclipse</h3>
+<ol>
+  <li>
+    In Eclipse select <code><strong>File&gt;Import</strong></code> to import the trunk:
+    <img class="screenshot" src="img/eclipse-import.png" style="width:250px; display:block;" />
+  </li>
+  <li>
+    Select <code><strong>Checkout Projects from SVN</strong></code> and click <strong>Next</strong>.
+    <img class="screenshot" src="img/eclipse-checkout-projects-from-svn.png" style="width:450px; display:block;" />
+  </li>
+  <li>
+    Select an existing repository location and click <strong>Next</strong>.
+    <img class="screenshot" src="img/eclipse-checkout-projects-from-svn-select-location.png" style="width:450px; display:block;" />
+  </li>
+  <li>
+    Select the directory to be checked out from SVN and click <strong>Next</strong>.
+    <img class="screenshot" src="img/eclipse-checkout-projects-from-svn-select-folder.png" style="width:450px; display:block;" />
+  </li>
+  <li>
+    Select <code><strong>Check out as a project in the workspace</strong></code>  and click 
+    <strong>Next</strong>.
+    <img class="screenshot" src="img/eclipse-checkout-projects-from-svn-check-out-as.png" style="width:450px; display:block;" />
+  </li>
+  <li>
+    Uncheck the <code><strong>Use default workspace location</strong></code> checkbox and
+    browse to the directory where you want to check out the trunk. <br/><strong>Note:</strong> 
+    <a href="#configure-eclipse">Do not add Maven projects under your workspace directory</a>.<br/><br/>
+    Click <strong>Finish</strong>.<br/>
+    <img class="screenshot" src="img/eclipse-checkout-projects-from-svn-checkout-as.png" style="width:450px; display:block;" />
+  </li>
+  <li>
+    You should now have access to the complete trunk from Eclipse.
+    <img class="screenshot" src="img/eclipse-checkout-projects-from-svn-completed.png		" style="width:250px; display:block;" />
+  </li>
+  <li>
+    You must of course import the project(s) into Eclipse as described 
+    <a href="#import-project-into-eclipse">earlier in the tutorial</a>.
+  </li>
+</ol>
+
+<h3>How To Download Sources and Javadocs for Maven Dependencies</h3>
+<p>
+The <code>m2eclipse</code> plugin seems to be a bit unpredictable when it comes to downloading 
+sourcecode and javadocs for the projects dependencies. If you find that source code and javadocs are 
+missing for some dependencies, then try this: 
+</p>
+<ul>
+  <li>
+    Navigate to the project directory, e.g. <code>${SEAM_TUTORIAL}</code>, using a command shell and 
+    execute:
+  </li>
+  <li>
+    <code style="white-space:nowrap">mvn eclipse:eclipse -DdownloadSources=true 
+    -DdownloadJavadocs=true</code>
+  </li>
+</ul>
+
+<h3 id="remove-eclipse-settings">How To Completly Remove Eclipse Spesific Settings From a Project</h3>
+<p>If you find yourself in a situation where your Eclipse project has reached a limbo, then you are 
+faced with two options: Delete the project from your local file system (and then svn:update), or you
+could try to clean up the mess caused by Eclipse (and you?).
+</p>
+<p>Steps required to clean up Eclipse mess:</p>
+<ol>
+  <li>
+    Delete the project from Eclipse. 
+    <img class="screenshot" src="img/eclipse-delete-project.png" style="width:450px; display:block;" />
+  </li>
+  <li>
+    Exit Eclipse, navigate to the projct directory, e.g. the <code>${SEAM_TUTORIAL}</code> directory using 
+    a command shell and execute maven commands:
+    <ul>
+      <li><code>mvn clean -Penv-dev,unexplode</code></li>
+      <li><code>mvn eclipse:clean</code></li>
+    </ul>
+  </li>
+  <li>
+    The <code>mvn eclipse:clean</code> goal delets most of the Eclipse spesific project files, but 
+    not all of them. We need to clean up the remaining <strong>dot</strong> files ourselves: 
+    Browse all project folders refered in the <code>&lt;modules&gt;</code> section of the parent pom
+    and delete all <strong>dot</strong> files that belongs to Eclipse, e.g. 
+    <ul>
+      <li>.classpath</li>
+      <li>.project</li>
+      <li>.settings/</li>
+      <li>appClientModule/</li>
+      <li>.externalToolBuilders/</li>
+      <li>*.launch</li> 
+      <li>.metadata/</li>
+    </ul>
+  </li>
+  <li>
+    Execute maven commands:
+    <ul>
+      <li><code>mvn install -Penv-dev</code></li>
+      <li><code>mvn eclipse:eclipse</code></li>
+    </ul>
+    The last Maven command will generate the Eclipse <code>.project</code>, <code>.classpath</code> 
+    and WTP files that now makes the project a valid Eclipse project. 
+  </li>
+  <li>
+    <a href="#import-project-into-eclipse">Open Eclipse and import the project</a>.
+  </li>
+</ol>
+
+<h3>
+  How To Solve: Access restriction: The type Xyz is not accessible due to restriction on required 
+  library rt.jar
+</h3>
+<p>See: 
+  <a href="http://forums.dzone.com/eclipse/384-access-restriction-problems.html">
+  access restriction problems 
+  </a>
+</p>
+
+<h3>
+  How To Solve: Build path contains duplicate entry: 'org.eclipse.jst.j2ee.internal.module.container' 
+  for project
+</h3>
+<p>See: 
+  <a href="http://www.nabble.com/Build-path-contains-duplicate-entry:-%27org.eclipse.jst.j2ee.internal.module.container%27-td23028022.html">
+  Build path contains duplicate entry: 'org.eclipse.jst.j2ee.internal.module.container'
+  </a>
+</p>
+<h3>
+  How To Solve: The Maven 2.0.2 XML parser fails to parse a UTF-8 POM that begins with the optional 
+  byte-order mark
+</h3>
+<p>
+Do not add Maven projects under your workspace directory. There are some issues regarding use of the 
+m2eclipse plugin when projects are placed under the workspace directory, e.g. 
+<code style="white-space:nowrap">C:/dev/ide/workspaces/eclipse-3.4/myproject</code>: You will not be 
+able to run Maven Eclipse goals from a command shell if your project is placed under the workspace 
+directory; the <code>mvn eclipse:eclipse and mvn eclipse:clean</code> goals will 
+fail to execute. The issues are reported here: <a href="http://jira.codehaus.org/browse/MECLIPSE-571">
+http://jira.codehaus.org/browse/MECLIPSE-571</a>, and here:	
+<a href="http://jira.codehaus.org/browse/MNG-2057">http://jira.codehaus.org/browse/MNG-2057</a>.
+So, be kind to yourself and create a project directory that is not on the same file path as the 
+workspace directory, e.g. <code style="white-space:nowrap">C:/dev/projects</code>
+</p>
+
+<h3>How To Browse (ctrl+clik) Into Java Code From a Visual Editor</h3>
+<p>The WAR pom must list all Java modules you want to browse into:</p>
+<pre>
+
+  &lt;dependencies&gt;
+
+    &lt;!-- project --&gt; 
+    &lt;!-- 
+      For Eclipse and JBoss Tools:
+      List all modules you are interested to browse (ctrl+click) into from xhtml pages 
+    --&gt;<font color="blue">
+    &lt;dependency&gt;
+      &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
+      &lt;artifactId&gt;${app.context}-ejb&lt;/artifactId&gt;
+      &lt;type&gt;ejb&lt;/type&gt;
+      &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;</font>
+
+    &lt;!-- seam --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.jboss.seam&lt;/groupId&gt;
+      &lt;artifactId&gt;jboss-seam-ui&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    .
+    .
+  &lt;/dependencies&gt;
+</pre>
+
+
+<h3>How To Get JBoss Tools To Work In Vista 64 bit</h3>
+<p>It only works partially! It seems that everything except for the visual editors (VPE) works fine. 
+You will see the following message in the visual editor: <strong>&quot;The VPE editor can't be run because 
+your system environment needs to be changed slightly. 
+<a href='http://www.jboss.org/community/wiki/JBosstoolsVisualEditorFAQ'>Find out more</a>&quot;</strong>.
+The link points to a page with no information regarding how to fix this for Vista64 with Jdk-6 64 bit 
+and Eclipse-3.4 64 bit. You will also find that you are not able to browse into java code from the 
+visual editor, which for me is the most essential feature of the VPE. The only workaround I have 
+found so far is to download and install 32 bit versions of Jdk-6 and Eclipse-3.4 and install the 
+required plugins in the Eclipse-3.5 32 bit environment. The visual editors works as expected with 
+the 32 bit configuration.</p>
+
+<p>After installation of Jdk-6 32 bit and Eclipse-3.4 32 bit, ensure that Eclipse uses the &quot;correct&quot; 
+jdk. Open the <code>eclipse.ini</code> file and add path to the 32 bit Jdk version as emphasized in 
+text below:
+</p>
+<pre>
+<strong><font color="blue">-vm
+C:/Program Files (x86)/Java/jdk1.6.0_16/bin</font></strong>
+-showsplash
+org.eclipse.platform
+--launcher.XXMaxPermSize
+512M
+-framework
+plugins\org.eclipse.osgi_3.4.3.R34x_v20081215-1030.jar
+-vmargs
+-Dosgi.requiredJavaVersion=1.5
+-Xms128m
+-Xmx512m
+</pre>
+
+<h2>Useful Links</h2>
+<ul>
+  <li>
+    <a href="http://m2eclipse.sonatype.org/">
+      m2eclipse home
+    </a>
+  </li>
+  <li>
+    <a href="http://community.jboss.org/wiki/JBosstoolsVisualEditorFAQ">
+      JBosstoolsVisualEditorFAQ
+    </a>
+  </li>
+  <li>
+    <a href="http://www.next-presso.fr/2009/06/wtp-m2eclipse-seam-cest-bien-maven/lang/en/">
+      WTP + M2eclipse + Seam : Maven works !
+    </a>
+  </li>
+  <li>
+    <a href="http://blog.xebia.com/2009/06/06/configuring-a-seam-ejb-project-for-development-with-maven-and-jboss-tools/">
+      Configuring a Seam EJB project for development with Maven and JBoss Tools
+    </a>
+  </li>
+  <li>
+    <a href="http://kasper.eobjects.dk/2009/04/seam-ejbs-and-ear-packaging-in-maven.html">
+      Seam, EJB's and EAR-packaging in Maven
+    </a>
+  </li>
+  <li>
+    <a href="http://www.innovationontherun.com/common-issues-and-workarounds-while-building-ear-files-in-eclipse/">
+      Common Issues and Workarounds While Building EAR files in Eclipse
+    </a>
+  </li>
+  <li>
+    <a href="http://docs.codehaus.org/display/M2ECLIPSE/Integration+with+WTP">
+      Integration with WTP
+    </a>
+  </li>
+  <li>
+    <a href="http://www.theserverside.com/tt/articles/article.tss?l=Introductiontom2eclipse">
+      Introduction to m2eclipse
+    </a>
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+</div> <!-- #page -->
+</div> <!-- #page-wrapper -->
+<div id="footer">  
+  <div class="footer">
+  <ul class="links" style="text-align: center;">
+    <li><a href="01-gettingstarted.html"><strong>Getting started</strong> tutorial</a></li>
+    <li><a href="02-eclipse.html"><strong>Eclipse 3.5</strong> tutorial</a></li>
+    <li><a href="03-intellij.html"><strong>IntelliJ</strong> tutorial</a></li>
+    <li><a href="04-netbeans.html"><strong>NetBeans</strong> tutorial</a></li>
+  </ul>
+  </div>
+</div> <!-- #footer -->
+</div> <!-- #expander -->
+</div> <!-- #sizer -->
+
+<script type="text/javascript">/* <![CDATA[ */
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+/* ]]> */</script>
+<script type="text/javascript">/* <![CDATA[ */
+		try {
+				var pageTracker = _gat._getTracker("UA-9570909-1");
+				pageTracker._trackPageview();
+		} catch(err) {
+		}
+/* ]]> */</script>
+</body>
+</html>

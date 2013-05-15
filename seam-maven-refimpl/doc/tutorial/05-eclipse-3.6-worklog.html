@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" href="../styles/base/base.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../styles/page-layout/page-layout.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../styles/site/site.css" type="text/css" media="screen" />
+
+<link href="../js/fullsize/fullsize.css" media="screen" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../js/jquery-min.js"></script>
+<script type="text/javascript" src="../js/fullsize/jquery.fullsize.minified.js"></script>
+
+<script type="text/javascript" src="../js/site.js"></script>
+
+<script type="text/javascript">/* <![CDATA[ */
+  $(document).ready(function() {
+    $(".code-frame a").click(function( event ) {
+      event.preventDefault(); 
+      IframeHelper.toggle(this);
+    });
+    
+    $('img').fullsize();
+  });
+/* ]]> */</script>
+
+<title>Maven 2, Seam 2.2, Eclipse 3.6 and JBoss Tools 3.2 Work Log</title>
+</head>
+
+<body>
+<div id="sizer">
+<div id="expander">
+<div id="page-wrapper">
+
+<div id="header">
+<div class="header">
+  <h1>Maven 2, Seam 2.2, Eclipse 3.6 and JBoss Tools 3.2 Work Log</h1>
+</div>
+</div> 
+
+<div id="page">
+
+<ol class="vspace">
+	<li>
+  	<a href="01-gettingstarted.html#checkout-install">Check Out and Build Trunk</a>
+  </li>
+	<li>
+  	Export <code>trunk/sandbox/seam-tutorial-jbt32</code>.
+    
+    <img src="img/jbt32-tutorial-export.png" longdesc="img/jbt32-tutorial-export.png"
+      class="screenshot" style="width:400px;" />
+  </li>
+	<li>
+  	<a href="01-gettingstarted.html#activate-development-mode">Activate Development Mode</a><br/>
+    In brief: Copy <code>src/main/filters/filter-prod.properties</code> to <code>src/main/filters/filter-dev.properties</code>.
+    Modify <code>filter-dev.properties</code>:
+    <ul>
+      <li>Set the property <code>jdk.debug</code> to <strong>true</strong>.</li>
+      <li>Set the property <code>jdk.optimize</code> to <strong>false</strong>.</li>
+      <li>Set the property <code>app.debug</code> to <strong>true</strong>.</li>
+      <li>Set the property <code>app.unpack.modules</code> to <strong>true</strong>.</li>
+      <li>Point the <code>as.home</code> property to the directory where you installed JBoss AS.</li>
+    </ul>
+    <pre>
+    jdk.debug         =<font color="blue"><strong>true</strong></font>
+    jdk.optimize      =<font color="blue"><strong>false</strong></font>
+    app.debug         =<font color="blue"><strong>true</strong></font>
+    app.unpack.modules=<font color="blue"><strong>true</strong></font>
+    as.home           =<font color="blue"><strong>C:/dev/server/jboss-4.2.3.GA-jdk6</strong></font></pre>
+  </li>
+  <li>
+    Open a command shell, navigate to your project directory and run: <br />
+    <code><strong>mvn install eclipse:eclipse</strong></code>
+  </li>
+  <li>
+  	<a href="02-eclipse.html#configure-eclipse">Configure Eclipse and Create Workspace</a>
+  </li>
+  <li>
+  	<a href="02-eclipse.html#configure-workspace">Install Plugins and Configure Workspace</a><br/>
+    <strong>Note:</strong> You can not use Maven 3, see Maven 3 issue later in this work log.
+    
+    <img src="img/eclipse-maven-installations.png" longdesc="img/eclipse-maven-installations.png"
+      class="screenshot" style="width:400px;" />
+  </li>
+  <li>
+  	<a href="02-eclipse.html#import-project-into-eclipse">Import a Mavenized Seam Project into Eclipse</a><br/>
+    <img src="img/jbt32-tutorial-import.png" longdesc="img/jbt32-tutorial-import.png"
+      class="screenshot" style="width:400px;" />
+
+		The following build error appears in the console after import:<br />      
+      
+    <pre style="margin-top:.5em; margin-bottom:.5em; color:red">
+    Build errors for seam-tutorial-jbt32-ear; org.apache.maven.lifecycle.LifecycleExecutionException: 
+    Failed to execute goal org.apache.maven.plugins:maven-ear-plugin:2.4.2:generate-application-xml 
+    (default-generate-application-xml) on project seam-tutorial-jbt32-ear: Failed to initialize JBoss configuration</pre>
+    
+    m2eclipse uses Maven3 internally even if we have configured Eclipse to use en external Maven 2.2.x  installation,
+    so this the same build error as we will get running <code>mvn install</code> from a command shell using Maven 3.
+    The bug is reported in JIRA: <a href="http://jira.codehaus.org/browse/MNG-2971">http://jira.codehaus.org/browse/MNG-2971</a>.
+  </li>
+  <li>
+  	<strong>Maven3 Issue:</strong><br />
+    Maven3 does not evaluate external properties during the &quot;ear:generate-application-xml&quot; goal. <br />
+    In a portable build we want Maven to generate the <code>application.xml</code> and <code>jboss.app.xml</code>
+    resource files based on property values stored in an external properties file. This works perfect i in 
+    Maven-2 but fails in Maven-3:
+    
+    <pre>
+    
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-ear-plugin&lt;/artifactId&gt;
+      &lt;version&gt;2.4.2&lt;/version&gt;
+      &lt;configuration&gt;
+        &lt;finalName&gt;${app.context}-ear&lt;/finalName&gt;
+        &lt;displayName&gt;${app.display.name}&lt;/displayName&gt;
+        &lt;description&gt;${app.description}&lt;/description&gt;
+        
+        &lt;!-- 
+          MNGECLIPSE-1541:
+          During the import of a mavenized ear project (File &gt; Import... &gt; General &gt; Maven Projects) 
+          an application.xml file is generated in src/main/application/META-INF/application.xml.
+          https://issues.sonatype.org/browse/MNGECLIPSE-1541
+          
+          MNGECLIPSE-2145: 
+          Generated application.xml doesn't contain final names
+          https://issues.sonatype.org/browse/MNGECLIPSE-2145
+          
+          To fix this we excludes the eclipse generated application.xml during mvn package
+        --&gt;
+        &lt;earSourceExcludes&gt;**/application.xml&lt;/earSourceExcludes&gt;
+        
+        &lt;!-- Use maven generated application.xml --&gt;
+        &lt;generateApplicationXml&gt;true&lt;/generateApplicationXml&gt;
+        
+        &lt;version&gt;5&lt;/version&gt;
+        &lt;defaultLibBundleDir&gt;lib&lt;/defaultLibBundleDir&gt;
+        &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+        
+        &lt;jboss&gt;
+          &lt;!--
+            To trigger the generation of the jboss-app.xml file you need to
+            configure the 'jboss' element. see:
+            http://maven.apache.org/plugins/maven-ear-plugin/usage.html and:
+            http://maven.apache.org/plugins/maven-ear-plugin/examples/generating-jboss-app.html
+          --&gt;
+          &lt;version&gt;${as.version}&lt;/version&gt;
+
+          &lt;loader-repository&gt;
+            &lt;!--
+              seam.jboss.org is a Seam-specific scoped classloader. It acts as
+              a way for Seam to disassociate artifacts bundled with the
+              application from those that exist within the JBoss application
+              server's shared artifacts or JARs (for example, those that
+              reside in the default server's lib directory or in JBoss's
+              general lib directory). 
+              The classloader is referenced in jboss-app.xml for EAR deployment and and in 
+              jboss-web.xml for WAR deployment (SiA-2.5.3-p63).
+              see: http://www.jboss.org/community/wiki/classloadingconfiguration
+              see: http://www.mastertheboss.com/en/jboss-application-server/141-jboss-classloader.html
+            --&gt;
+            seam.jboss.org:loader=${app.context}-ear
+          &lt;/loader-repository&gt;
+
+          &lt;data-sources&gt;
+            &lt;data-source&gt;META-INF/ds/${ds.xml}&lt;/data-source&gt;
+          &lt;/data-sources&gt;
+        &lt;/jboss&gt;
+        
+        &lt;archive&gt;
+          &lt;manifest&gt;
+            &lt;addClasspath&gt;true&lt;/addClasspath&gt;
+            &lt;addDefaultImplementationEntries&gt;true&lt;/addDefaultImplementationEntries&gt;
+          &lt;/manifest&gt;
+          &lt;manifestEntries&gt;
+            &lt;Build-Machine&gt;${env.COMPUTERNAME}&lt;/Build-Machine&gt;
+            &lt;Url&gt;${project.url}&lt;/Url&gt;
+          &lt;/manifestEntries&gt;
+        &lt;/archive&gt;
+
+      &lt;/configuration&gt;
+    &lt;/plugin&gt;   
+    </pre>
+    
+    Properties are externalized to filter-*.properties file and read into maven using  
+    <code><a href="http://mojo.codehaus.org/properties-maven-plugin/">org.codehaus.mojo:properties-maven-plugin</a></code>.<br />
+    
+    Running e.g. <code>mvn install</code> in Maven 3 gives the following error: <br />
+    <pre style="margin-top:.5em; margin-bottom:.5em; color:red">
+    [ERROR] Failed to execute goal org.apache.maven.plugins:maven-ear-plugin:2.4.2:generate-application-xml 
+    (default-generate-application-xml) on project mvn3-problem-ear: Failed to initialize JBoss configuration: 
+    Invalid JBoss configuration, version[${as.version}] is not supported. -&gt; [Help 1]</pre>
+     The bug is reported in JIRA: <a href="http://jira.codehaus.org/browse/MNG-2971">http://jira.codehaus.org/browse/MNG-2971</a>.
+  </li>
+  <li>
+  	<strong>JBoss Tools 3.2 Issue:</strong><br />
+   	<code>web.xml</code>: All comments are stripped after project import, must restore original <code>web.xml</code> 
+    from svn (not an issue with JBoss Tools 3.1).
+  </li>
+  <li>
+  	<strong>m2eclipse issues:</strong><br />
+    <div class="inline-block" style="width:30.3%;">
+      <img src="img/eclipse-annoyance-01.png" longdesc="img/eclipse-annoyance-01.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Incorrect JRE, see: <a href="https://issues.sonatype.org/browse/MNGECLIPSE-1752">MNGECLIPSE-1752</a>
+    </div>
+    <div class="inline-block" style="width:39.4%;">
+      <img src="img/eclipse-annoyance-02.png" longdesc="img/eclipse-annoyance-02.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Select Workspace default JRE
+    </div>
+    <div class="inline-block" style="width:27%;">
+      <img src="img/eclipse-annoyance-03.png" longdesc="img/eclipse-annoyance-03.png" 
+        class="screenshot" style="width:100%; margin-bottom:.3em;" />
+      Delete Eclipse generated <code>application.xml</code>, see:
+      <a href="https://issues.sonatype.org/browse/MNGECLIPSE-1541">MNGECLIPSE-1541</a>, 
+      <a href="https://issues.sonatype.org/browse/MNGECLIPSE-2145">MNGECLIPSE-2145</a>
+    </div>
+  </li>
+  <li>
+  	<strong>JBoss Tools (or m2eclipse?) issue:</strong><br />
+    The EAR module's <code>src/application</code> folder should be source folder.
+    <img src="img/eclipse-annoyance-04.png" longdesc="img/eclipse-annoyance-04.png" 
+      class="screenshot" style="width:400px; margin-bottom:.3em;" />
+  </li>
+  <li>
+  	<strong>JBoss Tools issue:</strong><br />
+    Schema validation for some resource files fails due to use of Maven property placeholders. The target resource 
+    files should be correct, so they are the files that should be validated.
+    <img src="img/jbt32-tutorial-validation-errors.png" longdesc="img/jbt32-tutorial-validation-errors.png" 
+      class="screenshot" style="width:98%; margin-bottom:.3em;" />
+  </li>
+  <li>
+    EAR Deployment assembly<br />
+  	<strong>JBoss Tools 3.2 Issues:</strong>
+    <ul>
+      <li>
+        <code>seam-tutorial-ejb</code> module has wrong naming: <code>seam-tutorial-ejb.<strong>ejb</strong></code>.
+        Should be named <code>seam-tutorial-ejb.<strong>jar</strong></code><br />
+      </li>
+      <li>
+        Resource files should be published from the EAR target folder due to filtering of resource 
+        files and generating of <code>application.xml</code> and  <code>jboss.app.xml</code> 
+        during the Maven <code>generate-sources</code> goal.<br />
+      </li>
+    </ul>
+    
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/jbt32-tutorial-ear-deployment-assembly.png" longdesc="img/jbt32-tutorial-ear-deployment-assembly.png" 
+        class="screenshot" style="width:100%;" />
+      Rename <code>seam-tutorial-ejb.<strong>ejb</strong></code> to <code>seam-tutorial-ejb.<strong>jar</strong></code><br />
+      Delete <code>src/main/application</code><br />
+      Add folder <code>target/seam-tutorial-jbt32-ear-0.1-SNAPSHOT/META-INF</code>
+    </div>
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/jbt32-tutorial-ear-module-assembly-2.png" longdesc="img/jbt32-tutorial-ear-module-assembly-2.png" 
+        class="screenshot" style="width:100%;" />
+      Corrected Deployment Assembly
+    </div>
+
+  </li>
+  <li>
+    Web Deployment assembly<br />
+  	<strong>JBoss Tools 3.2 Issue:</strong><br />
+    Resource files should be published from WAR target folder due to filtering of resource 
+    files during the Maven <code>generate-sources</code> goal.<br />
+    
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/jbt32-tutorial-web-deployment-assembly.png" longdesc="img/jbt32-tutorial-web-deployment-assembly.png" 
+        class="screenshot" style="width:100%;" />
+      Add folder <code>target/seam-tutorial-jbt32-war-0.1-SNAPSHOT/WEB-INF</code>
+    </div>
+    <div class="inline-block" style="width:48.5%;">
+      <img src="img/jbt32-tutorial-web-deployment-assembly-2.png" longdesc="img/jbt32-tutorial-web-deployment-assembly-2.png" 
+        class="screenshot" style="width:100%;" />
+      Corrected Deployment Assembly
+    </div>
+  </li>
+  <li>
+    EJB Deployment assembly<br />
+    Do we need to make any modifications here? Looks like resource files are published from target?
+  </li>
+  <li>
+  	Add EAR project to WTP server<br />
+    <img src="img/jbt32-tutorial-add-to-wtp.png" longdesc="img/jbt32-tutorial-add-to-wtp.png" 
+      class="screenshot" style="width:400px;" />
+  </li>
+  <li>
+  	Publish<br />
+    <img src="img/jbt32-tutorial-wtp-full-publish.png" longdesc="img/jbt32-tutorial-wtp-full-publish.png" 
+      class="screenshot" style="width:400px;" />
+
+  	<strong>JBoss Tools 3.2 Issue:</strong><br />
+    Seam jar is published to a separate folder but should be published to ear root folder.
+    <img src="img/jbt32-tutorial-wtp-incorrect-publish.png" longdesc="img/jbt32-tutorial-wtp-incorrect-publish.png" 
+      class="screenshot" style="width:400px;" />
+    
+    We must correct this before we can start the server.  
+    <img src="img/jbt32-tutorial-wtp-corrected-publish.png" longdesc="img/jbt32-tutorial-wtp-corrected-publish.png" 
+      class="screenshot" style="width:400px;" />
+
+		The server starts without erros.      
+    <img src="img/jbt32-tutorial-wtp-server-started.png" longdesc="img/jbt32-tutorial-wtp-server-started.png" 
+      class="screenshot" style="width:400px;" />
+
+		Browse the application at <a href="http://localhost:8080/jbt32tutorial/">http://localhost:8080/jbt32tutorial/</a>.
+    <img src="img/jbt32-tutorial-welcome.png" longdesc="img/jbt32-tutorial-welcome.png" 
+      class="screenshot" style="width:400px;" />
+  </li>
+</ol>
+
+</div> <!-- #page -->
+
+</div> <!-- #page-wrapper -->
+
+<div id="footer">  
+<div class="footer">
+  <ul class="links" style="text-align: center;">
+    <li><a href="01-gettingstarted.html"><strong>Getting started</strong> tutorial</a></li>
+    <li><a href="02-eclipse.html"><strong>Eclipse 3.5</strong> tutorial</a></li>
+    <li><a href="03-intellij.html"><strong>IntelliJ</strong> tutorial</a></li>
+    <li><a href="04-netbeans.html"><strong>NetBeans</strong> tutorial</a></li>
+  </ul>
+</div>
+</div> <!-- #footer -->
+</div> <!-- #expander -->
+</div> <!-- #sizer -->
+
+</body>
+</html>

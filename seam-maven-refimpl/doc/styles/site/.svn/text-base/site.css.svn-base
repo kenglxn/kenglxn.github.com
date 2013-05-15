@@ -1,0 +1,118 @@
+/** 
+ * File        : site.css
+ * Created     : 20090516
+ * Version     : 1.0
+ * Author      : loo@knowit.no
+ * Copyright   : LGPL
+ *
+ * Description : Site spesific CSS, also overriding css from other included css files.
+ * Notes       : 
+ * Tested in   : IE7                                    : OK,
+ *               IE8                                    : OK,
+ *               Firefox 3   win                        : OK, 
+ *               Firefox 3   linux                      : NT, 
+ *               Opera 9     win                        : OK, 
+ *               Opera 9     linux                      : NT, 
+ *               Safari 3.1 win                         : OK
+ *               Chrome 1.x win                         : OK
+ *
+ * Dependencies: base.css
+ * History     : 
+ */
+ 
+body {
+  line-height: 1.5; /* See: http://meyerweb.com/eric/thoughts/2006/02/08/unitless-line-heights/ */
+  /* font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* */
+  font-family: tahoma,arial,verdana,san-serif; /* */
+  color: #000; 
+  background-color: #002C5C; 
+}
+
+h4 {
+  font-weight: bold;
+}
+
+li pre {
+  font-size: 10px;
+}
+
+img.screenshot {
+  display: block;
+  margin-top:1em; 
+  margin-bottom:1em;
+}
+
+ol, ul {
+  padding-top: .3em;
+}
+li {
+  padding-top: .3em;
+}
+
+ul.vspace>li, ol.vspace>li {
+  padding-top: .8em;
+}
+ul.vspace li:last-child, ol.vspace li:last-child {
+  padding-bottom: .8em;
+}
+/**
+ * Override page-layout.css
+ */
+#page {                     /* page content goes here */
+  padding-top: 1em;         /* space between header and page */
+  padding-bottom: 5em;      /* must be less or equal the #footer height+padding value */
+                            /* a smaller value makes the footer shadow blend into the page */
+  padding-left: 1em;        /* horisontal spacing for page content */
+  padding-right: 1em;       /* horisontal spacing for page content */
+  background-image: none;
+} 
+#header {
+  padding: 1.5em 1em 0 1em; /* vertical top spacing + hosisontal spacing equal #page padding*/
+  background-color: transparent
+  height: 4em;              /* does not need a fixed height */
+}
+#header>*:first-child {  /* this is where you put the header content */
+}
+#footer {
+  height: 3em;             /* footer must have a fixed height */
+  padding-top: 3em;        /* space for bg image */
+  padding-bottom: .5em;    /* vertical bottom spacing */
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-top: -6.5em;      /* negative value of footer height+padding */
+}
+
+/*
+ * link list
+ */
+ul.links {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.links li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: inline;
+}
+.links li a {
+  padding: 0 .5em;
+}
+
+/*
+ * i-frame for code listing
+ */
+div.code-frame {
+	margin: 1em 0 0 0;
+}
+.code-frame>iframe {
+  height: 0;
+  min-height: 10em;
+  max-height: 1000em;
+	width: 100%;
+  margin:  0;
+  padding: 0;
+	border: 1px #cccccc solid; /*1px #99B4D1 solid;*/
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="../../styles/base/base.css" type="text/css" media="screen" />
+</head>
+<body style="background-color:#eeeeee;">
+<pre style="color:#000000; background-color:#eeeeee; font-size:8pt; font-family:'Courier New';">
+  <font color="green"># OpenEJB jndi properties</font>
+  <font color="green"># see: http://openejb.apache.org/3.0/embedded-configuration.html</font>
+
+  <font color="green"># set the initial context factory</font>
+  java.naming.factory.initial=org.apache.openejb.client.LocalInitialContextFactory
+
+  <font color="green"># Corresponds to JBoss JNDI lookup format in ${app.jndi.pattern.test} property</font>
+  openejb.jndiname.format={deploymentId}/{interfaceType.annotationName}
+
+  <font color="green"># Multiple ejb's in classpath, </font>
+  <font color="green"># see: http://openejb.apache.org/3.0/system-properties.html</font>
+  openejb.deployments.classpath.ear=true
+
+  <font color="green"># Prefixing configuration files, e.g. persistence.xml ==> openejb.persistence.xml,</font>
+  <font color="green"># see: http://openejb.apache.org/3.0/alternate-descriptors.html</font>
+  openejb.altdd.prefix=openejb
+
+  <font color="green"># Database connection (same as *-ds.xml in JBoss), filtered using properties from POM during build</font>
+  ${ds.jndi.name} = new://Resource?type=DataSource
+  ${ds.jndi.name}.JdbcDriver=${ds.driver.class.test}
+  ${ds.jndi.name}.JdbcUrl=${ds.connection.url.test}
+  ${ds.jndi.name}.username=${ds.user.name.test}
+  ${ds.jndi.name}.password=${ds.password.test}
+  ${ds.jndi.name}.JtaManaged=true
+
+  ${ds.jndi.name}Unmanaged = new://Resource?type=DataSource
+  ${ds.jndi.name}Unmanaged.JdbcDriver=${ds.driver.class.test}
+  ${ds.jndi.name}Unmanaged.JdbcUrl=${ds.connection.url.test}
+  ${ds.jndi.name}Unmanaged.username=${ds.user.name.test}
+  ${ds.jndi.name}Unmanaged.password=${ds.password.test}
+  ${ds.jndi.name}Unmanaged.JtaManaged=false
+
+  <font color="green"># Overriding Persistence Unit (as an alternative to maintaining two persistence units)</font>
+  <font color="green"># see: http://cwiki.apache.org/OPENEJBx30/configuring-persistenceunits-in-tests.html </font>
+  ${pu.name}.hibernate.dialect=${ds.hibernate.dialect.test}
+  ${pu.name}.hibernate.hbm2ddl.auto=${pu.hibernate.hbm2ddl.auto.test}
+  ${pu.name}.hibernate.default_batch_fetch_size=${pu.hibernate.default_batch_fetch_size.test}
+  ${pu.name}.hibernate.show_sql=${pu.hibernate.show_sql.test}
+  ${pu.name}.hibernate.transaction.manager_lookup_class=${pu.hibernate.transaction.manager_lookup_class.test}</pre>
+</body>
+</html>

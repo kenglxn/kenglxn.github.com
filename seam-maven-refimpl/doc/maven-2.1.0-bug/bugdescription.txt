@@ -1,0 +1,63 @@
+profiles.xml settings are not propagated using Maven 2.1.0
+NOTE: The bug is fixed in 2.2.0; 2.2.0 outcome == 2.0.9 outcome
+
+maven 2.0.9
+C:\dev>mvn -version
+Maven version: 2.0.9
+Java version: 1.5.0_13
+OS name: "windows xp" version: "5.1" arch: "x86" Family: "windows"
+
+run: mvn help:effective-pom
+
+result (ok):
+  <properties>
+    <env>dev</env>
+    <foo>baz</foo>
+  </properties>
+  
+  
+maven 2.1.0
+C:\dev>mvn -version
+Apache Maven 2.1.0 (r755702; 2009-03-18 20:10:27+0100)
+Java version: 1.5.0_13
+Java home: C:\Program Files\Java\jdk1.5.0\jre
+Default locale: no_NO, platform encoding: Cp1252
+OS name: "windows xp" version: "5.1" arch: "x86" Family: "windows"
+
+run: mvn help:effective-pom
+
+result (wrong):
+  <properties>
+    <env>prod</env>
+    <foo>foo</foo>
+  </properties>
+
+
+  
+Next, remove the <modules> tag inn the parent pom.
+
+maven 2.0.9
+run: mvn help:effective-pom
+
+result (ok):
+  <properties>
+    <env>dev</env>
+    <foo>baz</foo>
+  </properties>
+  
+  
+maven 2.1.0
+run: mvn help:effective-pom
+
+result (ok):
+  <properties>
+    <env>dev</env>
+    <foo>baz</foo>
+  </properties>
+
+  
+Expected outcome for all runs are: 
+  <properties>
+    <env>dev</env>
+    <foo>baz</foo>
+  </properties>

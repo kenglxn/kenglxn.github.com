@@ -1,0 +1,103 @@
+/* 
+ * File        : page-layout.css
+ * Created     : 20080503
+ * Version     : 1.0
+ * Author      : leif.olsen@communityr.com, loo@knowit.no
+ * Copyright   : LGPL
+ *
+ * Description : x-browser semi liquid layout with Sticky Footer.
+ *               The footer will stick to the bottom of the browser window until the 
+ *               content get too long, then the content will push the footer down. The 
+ *               footer must have a fixed height.
+ *               The page is centered in the browser window and is by default liquid 
+ *               between 800px and 1024px. 
+ *               Liquid and centering is easy to chage; refer to the CSS
+ * Notes       : Inspirations for this css: 
+ *               The Man in Blue: http://www.themaninblue.com/writing/perspective/2005/08/29/
+ *               Stu Nichols    : http://www.cssplay.co.uk/layouts/layout.html
+ *               lwis.net       : http://www.lwis.net/journal/2008/02/08/pure-css-sticky-footer/
+ *               cssstickyfooter: http://www.cssstickyfooter.com/
+ *               ryanfait.com   : http://ryanfait.com/sticky-footer/
+ *
+ *               This css will no longer support ie6, hipp, hipp horray!
+ *
+ * Tested in   : IE7                                    : OK,
+ *               IE8                                    : OK,
+ *               Firefox 3   win                        : OK, 
+ *               Firefox 3   linux                      : NT, 
+ *               Opera 9     win                        : OK, 
+ *               Opera 9     linux                      : NT, 
+ *               Safari 3.1 win                         : OK
+ *               Chrome 1.x win                         : OK
+ *
+ * Dependencies: base.css
+ * History     : 20090303 - no more ie6 hacks
+ */
+html, body {
+  height: 100%;
+}
+body {
+  font-size: 62.5%;      /* This body font-size fixes an IE bug and maintains 
+                          * x-browser uniformity. By setting body.font-size:62.5%; 
+                          * we ensures that ems to pixel ratio = 10 */
+  text-align: center;    /* Centers the #sizer element in ie6+ie7   */
+}
+#sizer {                 /* defines the min and max width for the page */
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  min-width: 77.4em;     /* 77.4em~800px browser width (gives room for vertical scrollbar) */
+  max-width: 100.6em;    /* 100.6em~1024px browser width, 127.8em~1280px */
+  margin: 0 auto;        /* margin:0 auto; centers #sizer in standard browsers,
+                          * margin:0; left aligns */
+  text-align: left;      /* resets the default text alignment for the page */
+}
+#expander {              /* for horisontal spacing */
+  height: 100%;
+  min-height: 100%;
+  margin: 0 .5em;        /* horizontal spacing for #header #page-wrapper and #footer */
+  background-color: #ffffff;
+}
+#page-wrapper {
+  height: auto; 
+  min-height: 100%;
+}
+#page {                  /* page content goes here */
+  width: auto;           /* so we can use padding-left and padding-right values */
+  padding-top: 1em;      /* space between header and page */
+  padding-bottom: 1em;   /* must be less or equal the #footer height+padding value */
+                         /* a smaller value makes the footer shadow blend into the page */
+  padding-left: .3em;    /* horisontal spacing for page content */
+  padding-right: .3em;   /* horisontal spacing for page content */
+	                       /* overflow-x: hidden; */
+  background-image: url(page-layout.page.top-shadow.png);
+  background-repeat: repeat-x;
+  background-color: #ffffff;
+} 
+#header {
+  position: relative;
+  padding: .5em 0 0 0;   /* vertical top spacing */
+  background-color: transparent
+  height: 4em;           /* does not need a fixed height */
+}
+#header>*:first-child {  /* this is where you put the header content */
+  display: block;
+  height: 100%;
+  background-color: transparent;
+}
+#footer {
+  position: relative;
+  clear: both;
+  height: 3em;          /* footer must have a fixed height */
+  padding-top: 4em;     /* space for bg image */
+  padding-bottom: .5em; /* vertical bottom spacing */
+  margin-top: -7.5em;   /* negative value of footer height+padding */
+  background: url(page-layout.page.bottom-shadow.png) repeat-x top;
+  background-color: transparent;
+} 
+#footer>*:first-child { /* this is where you put the footer content */
+  display: block;
+  height: 100%;
+  overflow: hidden;     /* prevent content from exceedeing boundaries */
+  background-color: transparent;
+}

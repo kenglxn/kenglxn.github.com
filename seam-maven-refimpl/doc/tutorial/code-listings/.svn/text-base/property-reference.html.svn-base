@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="../../styles/base/base.css" type="text/css" media="screen" />
+</head>
+<body style="background-color:#eeeeee;">
+<pre style="color:#000000; background-color:#eeeeee;">
+  ----------------------------------------------------------------------------------------------------------------------------------------------------
+  ${property}                                      = example value                                [file]
+  ----------------------------------------------------------------------------------------------------------------------------------------------------
+  ${env}                                           = dev                                          [ear/pom.xml, ejb/pom.xml, war/pom.xml]
+
+  ${jdk}                                           =                                              []
+  ${jdk.debug}                                     = true                                         [super pom]
+  ${jdk.optimize}                                  = false                                        [super pom]
+  ${jdk.source}                                    = 1.6                                          [super pom]
+  ${jdk.target}                                    = 1.6                                          [super pom]
+
+  ${as}                                            = jboss423                                     []
+  ${as.version}                                    = 4.2                                          [ear/pom.xml]
+  ${as.home}                                       = ./target/jboss-4.2.3.GA-jdk6                 []
+  ${as.deploy}                                     = ${as.home}/server/default/deploy             [ear/pom.xml, ejb/pom.xml, war/pom.xml]
+
+  ${app}                                           = refimpl                                      []
+  ${app.debug}                                     = ${jdk.debug}                                 [components.xml, web.xml]
+  ${app.unpack.modules}                            = true                                         [ear/pom.xml]
+  ${app.context}                                   = seam-refimpl                                 [ear/pom.xml, ejb/pom.xml, war/pom.xml, jboss-web.xml]
+  ${app.web.context}                               = ${app.context}                               [ear/pom.xml]
+  ${app.display.name}                              = Seam Reference Implementation                [ear/pom.xml, web.xml]
+  ${app.description}                               = The Seam Refimpl lorem ipsum dolar est...    [ear/pom.xml]
+  ${app.distributable}                             = false                                        [components.xml, web.xml]
+  ${app.jndi.pattern}                              = ${app.context}-ear/#{ejbName}/local          [components.xml]
+
+  ${ds}                                            = mysql5                                       []
+  ${ds.jndi.name}                                  = ${app}Database                               [*-ds.xml, jndi.properties]
+  ${ds.database.name}                              = ${app}_db                                    []
+  ${ds.server.name}                                = localhost:3306                               []
+  ${ds.driver.class}                               = com.mysql.jdbc.Driver                        [*-ds.xml, jndi.properties]
+  ${ds.connection.url}                             = jdbc:mysql://${ds.server.name}/
+                                                     ${ds.database.name}?characterEncoding=UTF-8  [*-ds.xml, jndi.properties]
+  ${ds.user.name}                                  = root                                         [*-ds.xml, jndi.properties]
+  ${ds.password}                                   =                                              [*-ds.xml, jndi.properties]
+  ${ds.xml}                                        = ${app.context}-ds.xml                        [ear/pom.xml]
+  ${ds.hibernate.dialect}                          = org.hibernate.dialect.MySQL5InnoDBDialect    []
+
+  ${pu}                                            =                                              []
+  ${pu.name}                                       = ${app}-unit                                  [persistence.xml, components.xml, jndi.properties]
+  ${pu.jta.data.source}                            = java:/${ds.jndi.name}                        [persistence.xml, jndi.properties]
+  ${pu.hibernate.dialect}                          = ${ds.hibernate.dialect}                      [persistence.xml, jndi.properties]
+  ${pu.hibernate.hbm2ddl.auto}                     = create-drop                                  [persistence.xml, jndi.properties]
+  ${pu.hibernate.show_sql}                         = false                                        [persistence.xml, jndi.properties]
+  ${pu.hibernate.default_batch_fetch_size}         = 16                                           [persistence.xml, jndi.properties]
+  ${pu.jboss.entity.manager.factory.jndi.name}     = java:/${app.context}EntityManagerFactory     [persistence.xml, components.xml, jndi.properties]
+  ${pu.hibernate.transaction.manager_lookup_class} = org.hibernate.transaction.
+                                                     JBossTransactionManagerLookup                [persistence.xml, jndi.properties]
+  ----------------------------------------------------------------------------------------------------------------------------------------------------</pre>
+</body>
+</html>

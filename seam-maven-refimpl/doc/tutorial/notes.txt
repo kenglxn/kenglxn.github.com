@@ -1,0 +1,94 @@
+  <build>
+    <plugins>
+      <!-- The following will add a "source:jar" goal that will produce a jar of the source code when added to the project/build/plugins section of pom.xml -->
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <configuration>
+          <finalName>${project.build.finalName}</finalName>
+          <attach>false</attach>
+        </configuration>
+      </plugin>
+      -->
+      
+      <!-- Generates a project web site using the "site" goal -->
+      <!--
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+          <configuration>
+            <locales>en,fr</locales>
+          </configuration>
+      </plugin>
+      -->
+      
+    </plugins>
+  </build>
+
+  
+      <!-- AntRun plugin: "mvn antrun:run" -->
+      <!--
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <configuration>
+          <tasks>
+            <echo>as.deploy: ${as.deploy}</echo>
+         </tasks>
+        </configuration>
+      </plugin>
+      -->
+  
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>Codehaus Snapshots</id>
+      <url>http://snapshots.repository.codehaus.org/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>  <!-- Workaround for MNG-2974, see: http://mojo.codehaus.org/using-sandbox-plugins.html -->
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+  
+  
+  
+  
+  profiles.xml settings are not propagated using Maven 2.1.0
+  see: https://jira.jboss.org/jira/browse/JBWS-2617
+  
+  
+  husk å legge til screenshot ok\seam-refimpl\etc\tutorial\img\eclipse-maven-installations.png
+  i ok\seam-refimpl\etc\tutorial\02-eclipse.html
+  
+  
+<profiles>
+  <profile>
+    <id>dev</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <build>
+      <resources>
+        <resource>
+          <directory>src/main/resources/dev</directory>
+        </resource>
+      </resources>
+    </build>
+  </profile>
+  <profile>
+    <id>prod</id>
+    <build>
+      <resources>
+        <resource>
+          <directory>src/main/resources/prod</directory>
+        </resource>
+      </resources>
+    </build>
+  </profile>
+</profiles>
+
+    * Build using the desired profile via: mvn install -Pdev or mvn install -Pprod
+
+  

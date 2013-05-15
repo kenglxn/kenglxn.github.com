@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profilesXml>
+
+  <profiles>
+    <profile>
+      <id>env-dev</id>
+      <properties>
+        <env>dev</env>
+        <foo>baz</foo>
+      </properties>
+    </profile>
+  </profiles>
+
+	<activeProfiles>
+		<activeProfile>env-dev</activeProfile>
+	</activeProfiles>
+
+</profilesXml>

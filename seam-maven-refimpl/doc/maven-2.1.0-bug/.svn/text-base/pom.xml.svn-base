@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+	<modelVersion>4.0.0</modelVersion>
+  
+  <groupId>no.knowit.seam</groupId>
+  <artifactId>maven-bug</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>maven-bug</name>
+  <description>Maven 2.1.0 bug: profiles.xml settings are not propagated using Maven 2.1.0</description>
+  <url>http://maven.apache.org</url>
+  <packaging>pom</packaging>
+  
+  <modules>
+    <module>child</module>
+  </modules>
+  
+  <properties>
+    <env>prod</env>
+    <foo>foo</foo>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>env-prod</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>prod</value>
+        </property>
+      </activation>
+      <properties>
+        <env>prod</env>
+        <foo>foo</foo>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>env-dev</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>dev</value>
+        </property>
+      </activation>
+      <properties>
+        <env>dev</env>
+        <foo>bar</foo>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

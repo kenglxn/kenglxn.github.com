@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/20/trunk/doc/maven-2.1.0-bug
+END
+bugdescription.txt
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/20/trunk/doc/maven-2.1.0-bug/bugdescription.txt
+END
+profiles.xml
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/20/trunk/doc/maven-2.1.0-bug/profiles.xml
+END
+pom.xml
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/20/trunk/doc/maven-2.1.0-bug/pom.xml
+END

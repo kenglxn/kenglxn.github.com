@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="../../styles/base/base.css" type="text/css" media="screen" />
+</head>
+<body style="background-color:#eeeeee;">
+<pre>
+<span style="color:#000000">   1 </span><span style="color:#7f0055; font-weight:bold">&lt;!DOCTYPE</span> composition PUBLIC <span style="color:#0000ff">&quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
+<span style="color:#000000">   2 </span>    <span style="color:#0000ff">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;</span>&gt;
+<span style="color:#000000">   3 </span><span style="color:#7f0055; font-weight:bold">&lt;ui:composition</span> xmlns=<span style="color:#0000ff">&quot;http://www.w3.org/1999/xhtml&quot;</span>
+<span style="color:#000000">   4 </span>    xmlns:s=<span style="color:#0000ff">&quot;http://jboss.com/products/seam/taglib&quot;</span>
+<span style="color:#000000">   5 </span>    xmlns:ui=<span style="color:#0000ff">&quot;http://java.sun.com/jsf/facelets&quot;</span>
+<span style="color:#000000">   6 </span>    xmlns:f=<span style="color:#0000ff">&quot;http://java.sun.com/jsf/core&quot;</span>
+<span style="color:#000000">   7 </span>    xmlns:h=<span style="color:#0000ff">&quot;http://java.sun.com/jsf/html&quot;</span>
+<span style="color:#000000">   8 </span>    xmlns:rich=<span style="color:#0000ff">&quot;http://richfaces.org/rich&quot;</span>
+<span style="color:#000000">   9 </span>    template=<span style="color:#0000ff">&quot;layout/template.xhtml&quot;</span>&gt;
+<span style="color:#000000">  10 </span>
+<span style="color:#000000">  11 </span><span style="color:#7f0055; font-weight:bold">&lt;ui:define</span> name=<span style="color:#0000ff">&quot;body&quot;</span>&gt;
+<span style="color:#000000">  12 </span>
+<span style="color:#000000">  13 </span>    <span style="color:#7f0055; font-weight:bold">&lt;h:form</span> id=<span style="color:#0000ff">&quot;myEntityForm&quot;</span>&gt;
+<span style="color:#000000">  14 </span>
+<span style="color:#000000">  15 </span>        <span style="color:#7f0055; font-weight:bold">&lt;rich:panel&gt;</span>
+<span style="color:#000000">  16 </span>            <span style="color:#7f0055; font-weight:bold">&lt;f:facet</span> name=<span style="color:#0000ff">&quot;header&quot;</span>&gt;myEntity<span style="color:#7f0055; font-weight:bold">&lt;/f:facet&gt;</span>
+<span style="color:#000000">  17 </span>
+<span style="color:#000000">  18 </span>            <span style="color:#7f0055; font-weight:bold">&lt;s:decorate</span> id=<span style="color:#0000ff">&quot;nameField&quot;</span> template=<span style="color:#0000ff">&quot;layout/edit.xhtml&quot;</span>&gt;
+<span style="color:#000000">  19 </span>                <span style="color:#7f0055; font-weight:bold">&lt;ui:define</span> name=<span style="color:#0000ff">&quot;label&quot;</span>&gt;Name<span style="color:#7f0055; font-weight:bold">&lt;/ui:define&gt;</span>
+<span style="color:#000000">  20 </span>                <span style="color:#7f0055; font-weight:bold">&lt;h:inputText</span> id=<span style="color:#0000ff">&quot;name&quot;</span> required=<span style="color:#0000ff">&quot;true&quot;</span>
+<span style="color:#000000">  21 </span>                             value=<span style="color:#0000ff">&quot;#{myEntityHome.instance.name}&quot;</span>/&gt;
+<span style="color:#000000">  22 </span>            <span style="color:#7f0055; font-weight:bold">&lt;/s:decorate&gt;</span>
+<span style="color:#000000">  23 </span>
+<span style="color:#000000">  24 </span>            <span style="color:#7f0055; font-weight:bold">&lt;div</span> style=<span style="color:#0000ff">&quot;clear:both&quot;</span>/&gt;
+<span style="color:#000000">  25 </span>
+<span style="color:#000000">  26 </span>        <span style="color:#7f0055; font-weight:bold">&lt;/rich:panel&gt;</span>
+<span style="color:#000000">  27 </span>
+<span style="color:#000000">  28 </span>        <span style="color:#7f0055; font-weight:bold">&lt;div</span> class=<span style="color:#0000ff">&quot;actionButtons&quot;</span>&gt;
+<span style="color:#000000">  29 </span>            <span style="color:#7f0055; font-weight:bold">&lt;h:commandButton</span> id=<span style="color:#0000ff">&quot;save&quot;</span>
+<span style="color:#000000">  30 </span>                          value=<span style="color:#0000ff">&quot;Save&quot;</span>
+<span style="color:#000000">  31 </span>                         action=<span style="color:#0000ff">&quot;#{myEntityHome.persist}&quot;</span>
+<span style="color:#000000">  32 </span>                       rendered=<span style="color:#0000ff">&quot;#{!myEntityHome.managed}&quot;</span>/&gt;
+<span style="color:#000000">  33 </span>            <span style="color:#7f0055; font-weight:bold">&lt;h:commandButton</span> id=<span style="color:#0000ff">&quot;update&quot;</span>
+<span style="color:#000000">  34 </span>                          value=<span style="color:#0000ff">&quot;Save&quot;</span>
+<span style="color:#000000">  35 </span>                         action=<span style="color:#0000ff">&quot;#{myEntityHome.update}&quot;</span>
+<span style="color:#000000">  36 </span>                       rendered=<span style="color:#0000ff">&quot;#{myEntityHome.managed}&quot;</span>/&gt;
+<span style="color:#000000">  37 </span>            <span style="color:#7f0055; font-weight:bold">&lt;h:commandButton</span> id=<span style="color:#0000ff">&quot;delete&quot;</span>
+<span style="color:#000000">  38 </span>                          value=<span style="color:#0000ff">&quot;Delete&quot;</span>
+<span style="color:#000000">  39 </span>                         action=<span style="color:#0000ff">&quot;#{myEntityHome.remove}&quot;</span>
+<span style="color:#000000">  40 </span>                      immediate=<span style="color:#0000ff">&quot;true&quot;</span>
+<span style="color:#000000">  41 </span>                       rendered=<span style="color:#0000ff">&quot;#{myEntityHome.managed}&quot;</span>/&gt;
+<span style="color:#000000">  42 </span>            <span style="color:#7f0055; font-weight:bold">&lt;s:button</span> propagation=<span style="color:#0000ff">&quot;end&quot;</span>
+<span style="color:#000000">  43 </span>                               id=<span style="color:#0000ff">&quot;cancel&quot;</span>
+<span style="color:#000000">  44 </span>                            value=<span style="color:#0000ff">&quot;Cancel&quot;</span>
+<span style="color:#000000">  45 </span>                             view=<span style="color:#0000ff">&quot;/myEntityList.xhtml&quot;</span>/&gt;
+<span style="color:#000000">  46 </span>        <span style="color:#7f0055; font-weight:bold">&lt;/div&gt;</span>
+<span style="color:#000000">  47 </span>
+<span style="color:#000000">  48 </span>    <span style="color:#7f0055; font-weight:bold">&lt;/h:form&gt;</span>
+<span style="color:#000000">  49 </span>
+<span style="color:#000000">  50 </span><span style="color:#7f0055; font-weight:bold">&lt;/ui:define&gt;</span>
+<span style="color:#000000">  51 </span>
+<span style="color:#000000">  52 </span><span style="color:#7f0055; font-weight:bold">&lt;/ui:composition&gt;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,1468 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" href="../styles/base/base.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../styles/page-layout/page-layout.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../styles/site/site.css" type="text/css" media="screen" />
+
+<link href="../js/fullsize/fullsize.css" media="screen" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../js/jquery-min.js"></script>
+<script type="text/javascript" src="../js/fullsize/jquery.fullsize.minified.js"></script>
+
+<script type="text/javascript" src="../js/site.js"></script>
+
+<script type="text/javascript">/* <![CDATA[ */
+  $(document).ready(function() {
+    $(".code-frame a").click(function( event ) {
+      event.preventDefault(); 
+      IframeHelper.toggle(this);
+    });
+    
+    $('img').fullsize();
+  });
+/* ]]> */</script>
+
+<title>Seam Maven reference Implentation - Getting Started Tutorial</title>
+</head>
+<body>
+
+<div id="sizer">
+<div id="expander">
+<div id="page-wrapper">
+
+<div id="header">
+<div class="header">
+  <h1>Getting Started Tutorial</h1>
+</div>
+</div> 
+
+<div id="page">
+
+<div class="inline-block" style="width:59%;">
+  <p>The Seam Maven Refimpl project is a Maven multi-module multi-environment project template for 
+  Seam using EJB and JSF that is archived in an ear-archive. A 
+  <a href="http://code.google.com/p/seam-maven-refimpl/source/browse/trunk/root/2.2.0/pom.xml">
+  super-POM</a>, (which inherits from the Seam root POM) contains library dependencies and plugin 
+  management.  The parent project manages the EAR, EJB and WAR modules while the Codecaus 
+  <a href="http://mojo.codehaus.org/properties-maven-plugin/">Properties Maven 
+  Plugin</a> is used to manage a multi-environment setup.
+  </p>
+  <p>Due to problems booting the <a href="http://www.jboss.org/jbossmc">JBoss Micro Container</a> 
+  with Maven, we have choosen to use the <a href="http://openejb.apache.org/">
+  Apache OpenEJB</a> embedded container to run Seam (and EJB-3.x) integration tests. The seam-refimpl 
+  project template comes preconfigured with the Apache OpenEJB embedded container for running tests.
+  The main inspiration for using Apace OpenEJB is the post, 
+  <a href="http://seamframework.org/Community/UsingOpenEJBForIntegrationTesting">Using OpenEJB for 
+  integration testing</a>, on <a href="http://seamframework.org/">SeamFramework.org</a>. A lot of
+  code is copied from this post, so a zillion thanks to Stephan B and Oliver Thierry :-)
+  </p>
+  <p>This tutorial outlines the necessary steps to get a Mavenized Seam project up and 
+  running on a JBoss Application Server (JBoss-4.2.3.AS or Jboss-5.1.x.AS) and how to effectively  
+  test your Seam components using the Apache OpenEJB embedded container.</p>
+  <p>You should have a basic understanding of 
+    <a href="http://docs.jboss.com/seam/latest/reference/en-US/html/Book-Preface.html">
+      JBoss Seam</a> (EJB3, JPA, JSF, EL, SeamTest), <a href="http://testng.org/">TestNG</a>, the
+    <a href="http://www.jboss.org/jbossas/docs/index.html">JBoss application server</a>,
+    <a href="http://maven.apache.org/guides/getting-started/">Maven</a> and a DBMS of your choice, e.g. 
+    <a href="http://dev.mysql.com/">MySql5</a>, to follow this tutorial.
+  </p>
+
+  <h2>Shortcuts</h2>
+  <p>The shortcuts are listed here so we don't have to type the tedious file 
+    paths over and over again in this document.
+  </p>
+  <ul class="vspace">
+  <li><code>${JBOSS_HOME}</code>  - refers to Jboss installation directory, e.g. 
+    <nobr>C:\servers\jboss-4.2.3.GA</nobr>
+  </li>
+  <li>
+    <code>${JBOSS_CONFIG}</code> - refers to the configuration directory e.g. 
+    <nobr>C:\servers\jboss-4.2.3.GA\default</nobr>
+  </li>
+  <li>
+    <code>${JBOSS_DEPLOY}</code> - refers to the JBoss deploy directory, e.g. 
+    <nobr>C:\servers\jboss-4.2.3.GA\default\deploy</nobr>
+  </li>
+  <li>
+    <code>${TRUNK}</code> - the project root directory, i.e. seam-maven-refimpl
+  </li>
+  <li>
+    <code>${SEAM_REFIMPL}</code> - the directory where the reference project, i.e. seam-refimpl, 
+    is installed on your computer
+  </li>
+  <li>
+    <code>${SEAM_TUTORIAL}</code> - the directory where the tutorial project, i.e. seam-tutorial, 
+    is installed on your computer
+  </li>
+  </ul>
+</div>
+
+<div class="inline-block" style="width:32%;padding-left:2%;">
+  <img src="img/maven-project-structure.png" style="width:100%; margin-left:1.5em;" />
+</div>
+
+<h2>Download and Install Software</h2>
+<ul class="vspace">
+  <li>
+    <a href="http://java.sun.com/javase/downloads/index.jsp">jdk-6</a>.<br/>
+    <strong>Note:</strong> OpenEJB-3.1.2 and jdk-1.6.0 update18 or later has a known bug: 
+    <a href="http://issues.apache.org/jira/browse/OPENEJB-1131">JDK 1.6.0 u18 has a 
+      ClassCastException in ClassLoaderUtil.clearSunJarFileFactoryCache
+    </a>. But according to this answer, 
+    <a href="http://apache-geronimo.328035.n3.nabble.com/G2-2-Unable-to-clear-Sun-JarFileFactory-cache-td340698.html#a340698">
+      G2.2 Unable to clear Sun JarFileFactory cache
+    </a>, you should not see any functional problems connected to this bug.
+  </li>
+  <li>
+    <a href="http://maven.apache.org/download.html">Maven 2.2.1</a> or later 2.x.<br/>
+    <strong>Note:</strong> You can not use Maven 3! The project externalizes some properties that is 
+    used to generate the correct <code>jboss-app.xml</code> dependent on the targeted JBoss 
+    Application Server. This works fine with Maven 2.2.1, but fails in Maven 3. The latest 
+    Maven3.0-beta1 does not evaluate external properties during the 
+    <code>&quot;ear:generate-application-xml&quot;</code> goal and you will get the following error message:<br/>
+    <pre style="margin-top:.5em; margin-bottom:.5em; color:red">
+    [ERROR] Failed to execute goal org.apache.maven.plugins:maven-ear-plugin:2.4.2:generate-application-xml 
+    (default-generate-application-xml) on project mvn3-problem-ear: Failed to initialize JBoss configuration: 
+    Invalid JBoss configuration, version[${as.version}] is not supported. -&gt; [Help 1]</pre>
+     The bug is reported in JIRA: <a href="http://jira.codehaus.org/browse/MNG-2971">http://jira.codehaus.org/browse/MNG-2971</a>.
+  </li>
+  <li>
+    <a href="http://tortoisesvn.tigris.org/">Tortoise SVN</a> or a SVN client of your choice.<br/> 
+    <strong>Note:</strong> The svn client must be compatible with 
+    <a href="http://subclipse.tigris.org/">SubClipse-1.6.x</a> if you are using the Eclipse IDE.
+  </li>
+  <li>
+    <a href="http://www.jboss.org/jbossas/">Jboss 4.2.3.GA Application Server</a> or later.<br/>
+    <strong>Note:</strong> Download a build that corresponds with your installed jdk, 
+    <code><strong>jboss-4.2.3.GA.jdk6.zip</strong></code> is the correct build for jdk-6.<br/>
+  </li>
+</ul>
+<p>Install the required software.</p>
+
+<h2 id="checkout-install">Check Out and Build Trunk</h2>
+<p>In the tutorial we'll use Tortoise SVN to check out the project.</p>
+<ol class="vspace">
+  <li>
+    Create a project directory, e.g. <code>C:/dev/projects/seam-maven-refimpl</code>
+  </li>
+  <li>
+    In file explorer right click on the project directory and select 
+    <code><strong style="white-space:nowrap;">TortoiseSVN &gt; Repo-browser</strong></code> from the 
+    menu.
+    <img src="img/tortoise-menu.png" longdesc="img/tortoise-menu.png" style="width:400px;" />
+  </li>
+  <li>
+    Check out the latest project source code from trunk.
+    <ul>
+    <li>
+      Project members authenticate over HTTPS to allow committing changes: 
+      <code>https://seam-maven-refimpl.googlecode.com/svn/trunk/</code><br/>
+      When prompted, enter your generated googlecode.com password.
+    </li>
+    <li>
+      Non-members may check out a read-only working copy anonymously over HTTP: 
+      <code>http://seam-maven-refimpl.googlecode.com/svn/trunk/</code>
+    </li>
+    </ul>
+    <img src="img/tortoise-repo-url.png" longdesc="img/tortoise-repo-url.png" class="screenshot" style="width:350px;" />
+    <img src="img/tortoise-checkout.png" longdesc="img/tortoise-checkout.png" class="screenshot" style="width:700px;" />
+    <ul>
+      <li>
+        In reposytory broser right click <code><strong>trunk</strong></code> and select 
+        <code><strong>checkout...</strong></code> from the menu.
+       </li>
+      <li>The checkout directory should point to the directory where you want to checkout the trunk.</li>
+      <li>Click the <strong>OK</strong> button to checkout.</li>
+    </ul>
+    <br/>
+    (Command-line access to svn is described here: 
+    <a href="http://code.google.com/p/seam-maven-refimpl/source/checkout">http://code.google.com/p/seam-maven-refimpl/source/checkout</a>)
+  </li>
+  <li>
+    Open a command shell and navigate to your checkout directory.
+    <img src="img/trunk-clean-install.png" longdesc="img/trunk-clean-install.png" 
+      class="screenshot" style="width:500px;" />
+    Run: <code>mvn clean install</code>
+    <ul>
+    <li>
+      Builds the <code>no.knowit.seam:root</code> pom which all projects in this trunk uses as its 
+      root pom.
+    </li>
+    <li>
+      Builds the <code>no.knowit.seam:seam-utils</code> modules.
+    </li>
+    </ul>
+    <img src="img/trunk-clean-install-success.png" longdesc="img/trunk-clean-install-success.png" 
+      class="screenshot" style="width:500px;" />
+  </li>
+</ol>
+<h2>Build the Seam Maven Refimpl Project</h2>
+<ol>  
+  <li>
+    Navigate to <code>${SEAM_REFIMPL}</code> and run: <code>mvn clean install</code> to build the 
+    seam-refimpl project.
+    <img src="img/refimpl-clean-install-success.png" longdesc="img/refimpl-clean-install-success.png" 
+      class="screenshot" style="width:500px;" />
+  </li>
+  <li>
+    Copy the <code>${SEAM_REFIMPL}/ear/target/seam-refimpl-ear.ear</code> file to the 
+    <code>${JBOSS_DEPLOY}</code> directory.
+    <img src="img/refimpl-ear-to-as.png" longdesc="img/refimpl-ear-to-as.png" 
+      class="screenshot" style="width:500px;" />
+  </li>
+  <li>Start JBossAS<br/>
+    JBoss AS runs on port 8080, so first ensure this port isn't already in use (be aware that Apache 
+    Tomcat also runs on port 8080 by default). In your command shell, navigate to 
+    <code>${JBOSS_HOME}/bin</code>. If you're using a Unix platform, execute the command:<br/>
+    <code><strong>./run.sh</strong></code><br/>
+    On Windows, execute the command:<br/>
+    <code><strong>run</strong></code>	
+    <img src="img/jboss-run.png" longdesc="img/jboss-run.png" class="screenshot" style="width:500px;" />
+  </li>
+  <li>Open a browser and point the URL to 
+    <a href="http://localhost:8080/seam-refimpl">http://localhost:8080/seam-refimpl/</a>.
+    <br/>
+    <div class="inline-block" style="width:33%;">
+      <img src="img/seam-refimpl-welcome.png" longdesc="img/seam-refimpl-welcome.png" 
+        class="screenshot" style="width:100%;" />
+      Click on the <code><strong>Movie List</strong></code> menu.
+    </div>
+    
+    <div class="inline-block" style="width:33%;">
+      <img src="img/seam-refimpl-list.png" longdesc="img/seam-refimpl-list.png" 
+        class="screenshot" style="width:100%;" />
+      Click the <code><strong>Create movie</strong></code> button to create a new movie.
+    </div>
+    
+    <div class="inline-block" style="width:33%;">
+    <img src="img/seam-refimpl-login.png" longdesc="img/seam-refimpl-login.png"
+      class="screenshot" style="width:100%;" />
+    Login and proceed to the registration form.
+    </div>
+    
+    <div class="inline-block" style="width:33%;">
+      <img src="img/seam-refimpl-register.png" longdesc="img/seam-refimpl-register.png" 
+        class="screenshot" style="width:100%;" />
+      Register and click <code><strong>Save</strong></code>.
+    </div>
+    
+    <div class="inline-block" style="width:33%;">
+      <img src="img/seam-refimpl-register-success.png" longdesc="img/seam-refimpl-register-success.png" 
+        class="screenshot" style="width:100%;" />
+      Click <code><strong>Done</strong></code> to return to the Movie List view.
+    </div>
+    
+    <div class="inline-block" style="width:33%;">
+      <img src="img/seam-refimpl-register-done.png" longdesc="img/seam-refimpl-register-done.png" 
+        class="screenshot" style="width:100%;" />
+    </div>
+  </li>
+  <li>
+    Shutdown JBossAS.<br/>
+    Navigate to <code>${JBOSS_HOME}/bin</code> using a command shell and type: <code>shutdown -S</code>
+    or press Ctrl+C from the command shell that started the server.
+  </li>
+  <li>
+    Delete the <code>seam-refimpl-ear.ear</code> file from the <code>${JBOSS_DEPLOY}</code> directory.
+  </li>
+</ol>
+
+<h2 id="use-as-template">Use the <code>seam-refimpl</code> Project as a Template for Your Own Project</h2>
+<p>This section explains how to use the <strong>seam-refimpl</strong> project as a template for your
+own project.
+</p>
+
+<ol class="vspace">
+  <li>
+    <strong>Export From SVN</strong><br />
+    <ul>
+      <li>
+        In file manager right click the <code>${TRUNK}/seam-refimpl</code> directory and select 
+        <strong style="white-space:nowrap;">TortoiseSVN&nbsp;&gt;&nbsp;Repo-browser</strong> 
+        from the menu.
+       </li>
+      <li>
+        In repo browser right click the <code>seam-refimpl</code> directory and select 
+        <code>export...</code> from the popup menu.
+      </li>
+      <li>From the <code><strong>Export</strong></code> dialog window select <code>Export directory</code> 
+        and click <code><strong>OK</strong></code>
+        <img src="img/tortoise-export.png"  longdesc="img/tortoise-export.png" 
+          class="screenshot" style="width:500px;" />
+      </li>
+    </ul>
+  </li>
+  <li><strong><a name="modfy-the-poms">Modify POMs</a></strong><br />
+    Modify the poms by changing text emphasized in <font color="blue"><strong>blue</strong></font>:
+    <ul>
+    <li>
+    The parent pom:
+    <pre>
+&lt;project
+  xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;parent&gt;
+    &lt;groupId&gt;no.knowit.seam&lt;/groupId&gt;
+    &lt;artifactId&gt;root&lt;/artifactId&gt;
+    &lt;version&gt;2.2.0-SNAPSHOT&lt;/version&gt;
+  &lt;/parent&gt;
+  
+  &lt;groupId&gt;<font color="blue"><strong>com.yourcompany.seam</strong></font>&lt;/groupId&gt;
+  &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial</strong></font>&lt;/artifactId&gt;
+  &lt;version&gt;<font color="blue"><strong>0.1-SNAPSHOT</strong></font>&lt;/version&gt;
+  &lt;name&gt;${project.artifactId} : ${project.version}&lt;/name&gt;
+  &lt;description&gt;<font color="blue"><strong>The Seam Tutorial parent POM</strong></font>&lt;/description&gt;
+  <font color="blue">&lt;!--
+  &lt;url&gt;http://code.google.com/p/seam-maven-refimpl/&lt;/url&gt;
+  --&gt;</font>
+  &lt;packaging&gt;pom&lt;/packaging&gt;
+  &lt;modules&gt;
+    &lt;module&gt;ejb&lt;/module&gt;
+    &lt;module&gt;war&lt;/module&gt;
+    &lt;module&gt;ear&lt;/module&gt;
+  &lt;/modules&gt;
+  &lt;properties&gt;
+    &lt;env&gt;dev&lt;/env&gt; &lt;!-- The default setting if no profile is specified --&gt;
+    &lt;app&gt;<font color="blue"><strong>tutorial</strong></font>&lt;/app&gt;
+    &lt;app.context&gt;<font color="blue"><strong>seam-tutorial</strong></font>&lt;/app.context&gt; <font color="green">&lt;!-- hint: same value as artifactId --&gt;</font>
+    &lt;app.web.context&gt;${app.context}&lt;/app.web.context&gt;
+    &lt;app.display.name&gt;<font color="blue"><strong>Seam Tutorial</strong></font>&lt;/app.display.name&gt;
+    &lt;app.description&gt;<font color="blue"><strong>The Seam Tutorial uses seam-refimpl as a project template</strong></font>&lt;/app.description&gt;
+    &lt;app.distributable&gt;false&lt;/app.distributable&gt;
+    &lt;app.jndi.pattern&gt;${app.context}-ear/#{ejbName}/local&lt;/app.jndi.pattern&gt; &lt;!-- JBoss JNDI Pattern --&gt;
+    &lt;app.jndi.pattern.test&gt;/#{ejbName}/Local&lt;/app.jndi.pattern.test&gt;         &lt;!-- OpenEJB JNDI Pattern --&gt;
+    &lt;!-- 
+      Properties for production are located in src/main/filters/filter-prod.properties
+      Properties to be modified by developer are located in src/main/filters/filter-dev.properties
+      Copy filter-prod.properties to filter-dev.properties and add filter-dev.properties to svn:ignore
+      Type e.g &quot;mvn -Penv-dev&quot; to activate the development profile.  
+    --&gt;
+  &lt;/properties&gt;
+  .<font color="blue">  
+  &lt;!--
+  &lt;scm&gt;
+    &lt;connection&gt;scm:svn:http://seam-maven-refimpl.googlecode.com/svn/trunk&lt;/connection&gt;
+    &lt;developerConnection&gt;scm:svn:https://seam-maven-refimpl.googlecode.com/svn/trunk&lt;/developerConnection&gt;
+    &lt;url&gt;http://code.google.com/p/seam-maven-refimpl/source/browse/#svn/trunk&lt;/url&gt;
+  &lt;/scm&gt;
+  --&gt;</font>
+ .  
+&lt;/project&gt;
+  </pre>
+    </li>
+    <li>
+      The EAR pom:
+      <pre>
+&lt;project
+  .
+  &lt;parent&gt;
+    &lt;groupId&gt;<font color="blue"><strong>com.yourcompany.seam</strong></font>&lt;/groupId&gt;
+    &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial</strong></font>&lt;/artifactId&gt;
+    &lt;version&gt;<font color="blue"><strong>0.1-SNAPSHOT</strong></font>&lt;/version&gt;
+    &lt;relativePath&gt;../pom.xml&lt;/relativePath&gt;
+  &lt;/parent&gt;
+
+  &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial-ear</strong></font>&lt;/artifactId&gt;
+  &lt;name&gt;${project.artifactId} : ${project.version}&lt;/name&gt;
+  &lt;description&gt;<font color="blue"><strong>The Seam Tutorial EAR module</strong></font>&lt;/description&gt;
+  &lt;packaging&gt;ear&lt;/packaging&gt;
+  .
+&lt;/project&gt;
+      </pre>
+    </li>
+    <li>
+      The EJB pom:
+      <pre>
+&lt;project
+  .
+  &lt;parent&gt;
+    &lt;groupId&gt;<font color="blue"><strong>com.yourcompany.seam</strong></font>&lt;/groupId&gt;
+    &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial</strong></font>&lt;/artifactId&gt;
+    &lt;version&gt;<font color="blue"><strong>0.1-SNAPSHOT</strong></font>&lt;/version&gt;
+    &lt;relativePath&gt;../pom.xml&lt;/relativePath&gt;
+  &lt;/parent&gt;
+
+  &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial-ejb</strong></font>&lt;/artifactId&gt;
+  &lt;name&gt;${project.artifactId} : ${project.version}&lt;/name&gt;
+  &lt;description&gt;<font color="blue"><strong>The Seam Tutorial EJB module</strong></font>&lt;/description&gt;
+  &lt;packaging&gt;ejb&lt;/packaging&gt;
+  .
+&lt;/project&gt;
+      </pre>
+    </li>
+    <li>
+      The WAR pom:
+      <pre>
+&lt;project
+  .
+  &lt;parent&gt;
+    &lt;groupId&gt;<font color="blue"><strong>com.yourcompany.seam</strong></font>&lt;/groupId&gt;
+    &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial</strong></font>&lt;/artifactId&gt;
+    &lt;version&gt;<font color="blue"><strong>0.1-SNAPSHOT</strong></font>&lt;/version&gt;
+    &lt;relativePath&gt;../pom.xml&lt;/relativePath&gt;
+  &lt;/parent&gt;
+
+  &lt;artifactId&gt;<font color="blue"><strong>seam-tutorial-war</strong></font>&lt;/artifactId&gt;
+  &lt;name&gt;${project.artifactId} : ${project.version}&lt;/name&gt;
+  &lt;description&gt;<font color="blue"><strong>The Seam Tutorial WAR module</strong></font>&lt;/description&gt;
+  &lt;packaging&gt;war&lt;/packaging&gt;
+  .
+&lt;/project&gt;
+      </pre>
+    </li>
+    </ul>
+  </li>
+  <li>
+    Rename the datasource file <code>${SEAM_TUTORIAL}/ear/src/main/resources/seam-refimpl-ds.xml</code> 
+    to <code>seam-tutorial-ds.xml</code> (by default the datasource file name starts with the 
+    <code>${app.context}</code> property value).
+    <img src="img/seam-tutorial-rename-ds-xml.png" longdesc="img/seam-tutorial-rename-ds-xml.png" 
+      class="screenshot" style="width:350px;" />
+  </li>
+  <li>
+    Run <code>mvn clean install</code> to verify that the project builds.
+    <img src="img/seam-tutorial-clean-install-success.png" longdesc="img/seam-tutorial-clean-install-success.png" 
+      class="screenshot" style="width:500px;" />
+  </li>
+</ol>
+
+<h3 id="activate-development-mode">Activate Development Mode</h3>
+<p>A software development lifecycle consists of several phases that each requires its own project 
+configurations - which can make moving a project through all the different  phases a challenge. For 
+instance, your development phase may require you to connect to a local database, but your 
+integration test environment database won't be local. And your test database  will certainly differ 
+from your production database. Also, being able to deploy to multiple environments is a standard 
+requirement for business applications. It is also natural that each developer want to install
+the project and it's required utilities, like the application server, to directories of hers/his 
+personal taste. To achieve this we will use a combination of property files and profiles. 
+</p>
+
+<p>To activate development mode:</p>
+<ol class="vspace">
+  <li>Copy <code>filter-prod.properties</code> to <code>filter-dev.properties</code>:<br/>
+    The filter properties file has a variable portion <code>${env}</code>, which in our case will 
+    come from the activated profile or from the default <code>${env}</code> setting in the parent
+    POM if neither the <code>dev</code> nor the <code>prod</code> profile is activated. <br/>
+    The <code>${env}</code> property value is <code><strong>dev</strong></code> when we activate the 
+    development profile - so we'll name the property file <code>filter-dev.properties</code>.
+    <br />
+    Copy <code>${SEAM_TUTORIAL}/src/main/filters/filter-prod.properties</code> to 
+    <code>${SEAM_TUTORIAL}/src/main/filters/filter-dev.properties</code> (add the 
+    <code>filter-dev.properties</code> file to svn:ignore if your project is under version control).
+    <img src="img/filter-dev.png" longdesc="img/filter-dev.png" 
+      class="screenshot" style="width:350px;" />
+  </li>
+  <li>Modify <code>filter-dev.properties</code>:<br/>
+    To get some support for incremental hot deployment at development time, we want to deploy our 
+    application as an 
+    <a href="http://maven.apache.org/plugins/maven-ear-plugin/examples/unpacking-a-module.html">
+    exploded</a> archive. The project template has an <strong>explode</strong> profile which is 
+    used to copy the exploded EAR to the application server and to hot deploy code in EJB and WAR
+    modules during the Maven compile phase. Open the <code>filter-dev.properties</code> file in 
+    your favourite editor and make the following changes:
+    <ul>
+      <li>Set the property <code>jdk.debug</code> to <strong>true</strong>.</li>
+      <li>Set the property <code>jdk.optimize</code> to <strong>false</strong>.</li>
+      <li>Set the property <code>app.debug</code> to <strong>true</strong>.</li>
+      <li>Set the property <code>app.unpack.modules</code> to <strong>true</strong>.</li>
+      <li>Point the <code>as.home</code> property to the directory where you installed JBoss AS.</li>
+    </ul>
+    <pre>
+  jdk.debug         =<font color="blue"><strong>true</strong></font>
+  jdk.optimize      =<font color="blue"><strong>false</strong></font>
+  app.debug         =<font color="blue"><strong>true</strong></font>
+  app.unpack.modules=<font color="blue"><strong>true</strong></font>
+  as.home           =<font color="blue"><strong>C:/dev/server/jboss-4.2.3.GA-jdk6</strong></font></pre>
+  </li>
+  <li>
+    Remove the <code>activeByDefault</code> tag from the <code>env-prod</code> profile:<br/>
+    The <code>env-prod</code> profile is activated by default, unless another profile in the same 
+    pom is activated, when you execute a Maven command. To activate the <code>env-dev</code> profile 
+    you could type <code style="white-space:nowrap;">mvn install -Penv-dev</code> - but the most 
+    convenient is to remove the <code><strong>activeByDefault</strong></code> tag from the 
+    <code>env-prod</code> profile.<br/>
+    Open each POM in the project and remove the <code>activeByDefault</code> tag from the 
+    <code>env-prod</code> profile:
+    <pre>
+    
+  &lt;profile&gt;
+    &lt;id&gt;env-dev&lt;/id&gt;
+    &lt;properties&gt;
+      &lt;env&gt;dev&lt;/env&gt;
+    &lt;/properties&gt;
+  &lt;/profile&gt;
+
+  <font color="green">&lt;profile&gt;
+    &lt;id&gt;env-prod&lt;/id&gt;</font><font color="blue">    
+    <strike>&lt;activation&gt;</strike>
+      <strike>&lt;activeByDefault&gt;true&lt;/activeByDefault&gt;</strike>
+    <strike>&lt;/activation&gt;</strike></font><font color="green">
+    &lt;properties&gt;
+      &lt;env&gt;prod&lt;/env&gt;
+    &lt;/properties&gt;
+  &lt;/profile&gt;</font>
+  </pre>
+    With this profile configuration the <code>env</code> property value is set in the parent POM 
+    and will be used in cases where the <code>env-dev</code> or <code>env-prod</code> profile is not 
+    specified - which is more convenient since most of your build cycles are connected to coding, 
+    compiling, unit tests and deployment to your local app server.
+  </li>
+  <li>
+    Install and deploy the exploded EAR to the application server.
+    <ul>
+      <li>
+        Run: <code>mvn clean install -Pexplode</code>
+      </li>
+      <li>
+        It is <strong>important</strong> to <strong>clean</strong> the target when you switch from
+        <strong>prod</strong> to <strong>dev</strong> profile and vice versa.
+      </li>
+    </ul>
+    <br/>
+    Your <code>${JBOSS_DEPLOY}</code> directory should now contain the exploded EAR project:
+    <img src="img/exploded-ear.png"  longdesc="img/exploded-ear.png" 
+      class="screenshot" style="width:350px;" />
+  </li>
+  <li>
+    Start JBoss AS in debug mode, open a browser and point the URL to 
+    <a href="http://localhost:8080/seam-tutorial">http://localhost:8080/seam-tutorial/</a>. 
+  </li>
+  <li>
+    Make some changes to the code (the structure of a Seam project is well 
+    <a href="http://seamframework.org/Documentation"> documented</a> so we will not go into details 
+    here). Compile code with the explode profile, <code><strong style="white-space:nowrap;">
+    mvn compile -Pexplode</strong></code>, and verify that incremental hot deployment of WARs and 
+    EARs works. Check 
+    <a href="http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/gettingstarted.html#d0e2675">
+    Chapter 2.1</a> and 
+    <a href="http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/gettingstarted.html#gettingstarted-hotdeployment">
+    chapter 2.8</a> in the Seam reference documentation and the <a href="http://www.jboss.org/jbossas"> 
+    application server documentation</a> for hot deployment issues.
+  </li>
+  <li>
+    Remove or refactor example code, eg:
+    <ul>
+      <li>
+        Delete package <code>no.knowit.seam.example.action</code> from <code>ejb/src/test/java/no</code> directory. 
+      </li>
+      <li>
+        Delete package <code>no.knowit.seam.example.action</code> and <code>no.knowit.seam.example.model</code> 
+        from <code>ejb/src/main/java/no</code> directory. 
+      </li>
+      <li>
+        Refactor <code>no.knowit.seam.example.security.Authenticator</code>,
+        <code>no.knowit.seam.example.security.AuthenticatorBean</code> and
+        <code>no.knowit.seam.example.action.AuthenticatorTest</code>.
+      </li>
+      <li>
+        Remove or modify SQL code in <code>ejb/src/main/resources/import.sql</code>.
+      </li>
+      <li>
+        Delete or modify <code>ejb/testng.xml</code>.
+      </li>
+      <li>
+        Modify Shurefire plugin in <code>ejb/pom.xml</code> accordingly, e.g:
+        <pre>
+        
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+  <font color="blue" style=""><strike>&lt;configuration&gt;</strike>
+    <strike>&lt;suiteXmlFiles&gt;</strike>
+      <strike>&lt;suiteXmlFile&gt;</strike>
+        <strike>testng.xml</strike>
+      <strike>&lt;/suiteXmlFile&gt;</strike>
+    <strike>&lt;/suiteXmlFiles&gt;</strike>
+  <strike>&lt;/configuration&gt;</strike></font>
+&lt;/plugin&gt;
+        </pre>
+      </li>
+      <li>
+        Delete <code>war/src/main/webapp/view/example</code> directory.
+      </li>
+      <li>
+        From <code>war/src/main/webapp/layout/menu.xhtml</code> remove:
+        <font color="blue"><pre>
+        
+&lt;!-- @newMenuItem@ --&gt;
+&lt;s:link view=&quot;/view/example/MovieList.xhtml&quot;
+  value=&quot;Movie List&quot;
+  includePageParams=&quot;false&quot;
+  propagation=&quot;none&quot;/&gt;
+        </pre></font>
+      </li>
+      <li>
+        Add your own application title in <code>war/src/main/webapp/layout/template.xhtml</code>, 
+        eg:
+        <font color="blue"><pre>
+        
+&lt;title&gt;Seam Torial&lt;/title&gt;
+        </pre></font>
+      </li>
+      <li>
+        Apply your own entities and actions etc.
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="filters">Filters</h2>
+<p>Filters are Maven's way of externalizing property replacement into easily portable and 
+configurable properties files. The basic idea of filtering is that you set up a named properties 
+file and specify one or more filesets to apply the substitutions in the properties file. For example:
+</p>
+<pre>
+
+&lt;filters&gt;
+  &lt;filter&gt;src/main/filters/filter-${env}.properties&lt;/filter&gt;
+&lt;/filters&gt;</pre>
+
+<h3>The &quot;Problem&quot; with Filters</h3>
+<p>Maven filter properties are ony visible to resources and can not be accessed from the POM. 
+This is where the <strong><a href="http://mojo.codehaus.org/properties-maven-plugin/">Properties 
+Maven Plugin</a></strong> makes our life a little easier when dealing with properties that we need 
+to access inside our POM. It provides goals to read and write properties from and to files, and 
+also to set system properties. It's main use-case is loading properties	from files instead of 
+declaring them in pom.xml, something that comes in handy when dealing with different environments. 
+The plugin read properties during the	&quot;initialize&quot; phase and the properties are then accessible 
+from the pom. The Properties Maven Plugin is not inheritable from the parent POM and and you must 
+therefore configure it in each sub POM. For example:
+</p>
+<pre>
+  
+  &lt;plugin&gt;
+    &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+    &lt;artifactId&gt;properties-maven-plugin&lt;/artifactId&gt;
+    &lt;executions&gt;
+      &lt;execution&gt;
+        &lt;configuration&gt;
+          &lt;files&gt;
+            &lt;file&gt;../src/main/filters/filter-${env}.properties&lt;/file&gt;
+          &lt;/files&gt;
+        &lt;/configuration&gt;
+      &lt;/execution&gt;
+    &lt;/executions&gt;
+  &lt;/plugin&gt;</pre>
+  
+<p>The filter properties file has a variable portion <code>${env}</code>, which in 
+our case will come from the activated profile or from the default setting for ${env} in the parent 
+POM if no profile is specified. When resources are filtered, the project replaces 
+all matching property names with their corresponding values, taking the filter list into account. 
+The resources to be filtered are defined by the &quot;resources&quot; build element. For example: 
+</p>
+<pre>
+
+  &lt;resources&gt;
+    &lt;resource&gt;
+      &lt;directory&gt;src/main/resources&lt;/directory&gt;
+      &lt;filtering&gt;true&lt;/filtering&gt;
+    &lt;/resource&gt;
+  &lt;/resources&gt;</pre>
+  
+<h4>Filtering Example</h4>
+<p>The filtering take place during the process-resources phase and the filtered resource is then 
+copied to the target directory. 
+</p>
+
+<ol class="vspace">
+  <li>
+    Given that our property file has the following properties: 
+    <pre>
+  
+<font color="green">ds.jndi.name</font>     =<font color="blue">refimplDatabase</font>
+<font color="red">ds.database.name</font> =refimpl_db
+ds.server.name   =
+<font color="green">ds.driver.class  </font>=<font color="blue">org.hsqldb.jdbcDriver</font>
+<font color="green">ds.connection.url</font>=<font color="blue">jdbc:hsqldb:mem:</font><font color="red">${ds.database.name}</font>
+<font color="green">ds.user.name     </font>=<font color="blue">sa</font>
+<font color="green">ds.password      </font>=
+    </pre>
+  </li>
+  <li>
+    When the corresponding placeholders in our datasource file, 
+    <code>ear/src/main/resources/seam-tutorial-ds.xml</code>, are:
+    <pre>
+  
+&lt;datasources&gt;
+  &lt;local-tx-datasource&gt;
+    &lt;jndi-name&gt;<font color="green">${ds.jndi.name}</font>&lt;/jndi-name&gt;
+    &lt;use-java-context&gt;true&lt;/use-java-context&gt;
+    &lt;connection-url&gt;<font color="green">${ds.connection.url}</font>&lt;/connection-url&gt;
+    &lt;driver-class&gt;<font color="green">${ds.driver.class}</font>&lt;/driver-class&gt;
+    &lt;user-name&gt;<font color="green">${ds.user.name}</font>&lt;/user-name&gt;
+    &lt;password&gt;<font color="green">${ds.password}</font>&lt;/password&gt;
+  &lt;/local-tx-datasource&gt;
+&lt;/datasources&gt;
+    </pre>
+  </li>
+  <li>
+  Then, during the process-resources phase, the placeholders are replaced with the property values and 
+  we'll get the following result in 
+  <code>ear/target/seam-tutorial-ear-0.1-SNAPSHOT/seam-refimpl-ds.xml</code>:
+    <pre>
+  
+&lt;datasources&gt;
+  &lt;local-tx-datasource&gt;
+    &lt;jndi-name&gt;<font color="blue">refimplDatabase</font>&lt;/jndi-name&gt;
+    &lt;use-java-context&gt;true&lt;/use-java-context&gt;
+    &lt;connection-url&gt;<font color="blue">jdbc:hsqldb:mem:refimpl_db</font>&lt;/connection-url&gt;
+    &lt;driver-class&gt;<font color="blue">org.hsqldb.jdbcDriver</font>&lt;/driver-class&gt;
+    &lt;user-name&gt;<font color="blue">sa</font>&lt;/user-name&gt;
+    &lt;password&gt;&lt;/password&gt;
+  &lt;/local-tx-datasource&gt;
+&lt;/datasources&gt;
+    </pre>
+  </li>
+</ol>
+
+<h3>Filters Properties Reference</h3>
+<p>The filters properties file with reference to the resource files keeping the 
+corresponding placeholders:
+</p>
+<div class="code-frame">
+  <a href="">Show or Hide Code</a>
+  <iframe scrolling="auto" frameborder="0" style="min-height:30em;" src="./code-listings/property-reference.html"></iframe>
+</div>
+<p>The resource files, e.g. <code>persistence.xml</code>, are well documented, so we will not go 
+into details about the properties usage here.
+</p>
+
+<p>Alternative ways to organize properties can be found here:
+  <a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">
+    Maven: Introduction to Build Profiles
+  </a>, 
+  <a href="http://www.sonatype.com/books/mvnref-book/reference/resource-filtering.html">
+    Sonatype: Chapter 9. Properties and Resource Filtering
+  </a>
+</p>
+
+
+<h2>Testing</h2>
+
+<p>The area of development that has routinely slowed down Java EE (and Seam) developers most often 
+is testing.
+Before the embedded EJB container era you had to write teststs, redeploy your application, restart 
+the application server and then run your tests inside the application server. It's just slow and 
+boring to do it that way and as a result projects tend to end up with no automated (integration)tests 
+at all. Now, with the advent of embedded EJB3 containers - which boots super fast, need a minimum of 
+configuration and integrates nicely with Maven - there are noe excuses for not writing tests. 
+Writing tests are simply fun again.
+</p>
+<p>Due to problems booting the <a href="http://www.jboss.org/jbossmc">JBoss Micro Container</a> 
+with Maven, we have choosen to use the <a href="http://openejb.apache.org/">
+Apache OpenEJB</a> embedded container to test Seam (and EJB-3.x) components. The seam-refimpl 
+project template comes preconfigured with the Apache OpenEJB embedded container for running tests.
+The main inspiration for using Apace OpenEJB is the post, 
+<a href="http://seamframework.org/Community/UsingOpenEJBForIntegrationTesting">Using OpenEJB for 
+integration testing</a>, on <a href="http://seamframework.org/">SeamFramework.org</a>. A lot of
+code is copied from this post, so a zillion thanks to Stephan B and Oliver Thierry :-)
+</p>
+<p>
+The classic difference between integration and unit testing is that unit tests run in isolation, 
+or near-isolation. Integration tests, on the other hand, test the whole stack. With an embedded
+container at hand, another and maybe better way is to group tests by how fast they execute; 
+unit test runs fast and integration tests tend to run slowly. Unit tests are normally executed
+inside our favourite IDE and running as many tests as possible from IDE should definitively 
+increase our productivity.
+</p>
+<p>As programmers we want to have good code quality, which means good unit test test coverage.
+EJB 3 and Seam components are just annotated classes - so it is straight forward to unit-test them 
+the &quot;traditional&quot; way. However, you will have to &quot;emulate&quot; the Dependency Injection, boot the 
+EntityManager and manage transactions by yourself , someting that will cost you few additional 
+lines of boilerplate code. With <a href="http://openejb.apache.org/">Apache OpenEJB</a>, which 
+boots the entire container in less than one second, we can move a lot of our traditional 
+integration tests to unit tests and avoid the useless boilerplate code. The 
+<a href="http://openejb.apache.org/3.0/index.html">documentation</a> and the 
+<a href="http://openejb.apache.org/examples.html">examples</a> of OpenEJB are really neat and 
+enable an easy jump-start. All the Apache OpenEJB examples are automated tests that run with a 
+simple <code style="white-space:nobreak;">mvn clean install</code>. 
+</p>
+
+<h3>Bootstrapping the OpenEJB Embedded Container</h3>
+<p>OpenEJB provide an own JNDI-SPI implementation, and plugs so naturally as JNDI-provider. 
+The settings are factored out into the <code style="white-space:nowrap;">
+ejb/src/test/resources-openejb/jndi.properties</code> file. You will get from the lookup a 
+fully-featured EJB 3/3.1 container with injected dependencies and persistence. 
+</p>
+<p>The filter properties file has a section with properties dedicated to bootstrapping the
+OpenEJB embedded container:
+</p>
+<pre>
+  
+  <font color="green"># Properties for running tests</font>
+  ds.test                                           =h2
+  ds.database.name.test                             =refimpl_db
+  ds.server.name.test                               =
+  ds.driver.class.test                              =org.h2.Driver
+  ds.connection.url.test                            =jdbc:h2:mem:${ds.database.name.test}
+  ds.user.name.test                                 =sa
+  ds.password.test                                  =
+  ds.hibernate.dialect.test                         =org.hibernate.dialect.H2Dialect
+  pu.hibernate.dialect.test                         =${ds.hibernate.dialect.test}
+  pu.hibernate.hbm2ddl.auto.test                    =create-drop
+  pu.hibernate.default_batch_fetch_size.test        =16
+  pu.hibernate.show_sql.test                        =true
+  pu.hibernate.transaction.manager_lookup_class.test=org.apache.openejb.hibernate.TransactionManagerLookup
+  </pre>
+  
+<p>The <code>jndi.properties</code> file has the corresponding placeholders:</p>
+
+<div class="code-frame">
+  <a href="">Show or Hide Code</a>
+  <iframe scrolling="auto" frameborder="0" style="min-height:30em;" src="./code-listings/openejb-jndi.properties.html"></iframe>
+</div>
+
+<p> You can find more information about OpenEJB embedded configuration here:
+  <a href="http://openejb.apache.org/3.0/embedded-configuration.html">OpenEJB: Embedded Configuration</a>
+</p>
+
+<h4>Additional Resource Files Needed to Run Seam Tests</h4>
+<p>In addition to the <code>jndi.properties</code> file OpenEJB need it's own version of 
+<code>components.xml</code> and <code>web.xml</code>. These files are placed in the 
+<code>ejb/src/test/resources-openejb</code> directory. If you need to share the OpenEJB spesific 
+resource files between different modules, just move the <code>ejb/src/test/resources-openejb</code> 
+directory to the parent project and modify POMs accordingly, e.g:
+</p>
+<pre>
+  
+&lt;testResources&gt;                                                                                                     
+  &lt;testResource&gt;                                                                                                    
+    &lt;directory&gt;src/test/resources&lt;/directory&gt;                                                                 
+    &lt;filtering&gt;true&lt;/filtering&gt;                                                                               
+  &lt;/testResource&gt;
+  &lt;testResource&gt;                                                                                                    
+    <font color="blue">&lt;directory&gt;../src/test/resources-openejb&lt;/directory&gt;</font>
+    &lt;filtering&gt;true&lt;/filtering&gt;                                                                               
+  &lt;/testResource&gt;
+&lt;/testResources&gt;
+</pre>
+
+<h3>Test Examples</h3>
+<p>I you haven't done so yet, read trough <a href="http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/testing.html">
+Chapter 37. Testing Seam applications</a> in the Seam reference manual.
+</p>
+
+<h4>HelloEjbTest</h4>
+<p>If you only have EJB components to test you could inherit your test class from 
+<code>no.knowit.openejb.mock.OpenEjbTest</code> which provides Base OpenEJB test functionality for 
+TestNG tests. If you don't want to use TestNG then follow e.g. 
+these tutorials: <a href="http://www.adam-bien.com/roller/abien/entry/how_to_unit_test_ejb">
+How To Unit-Test EJB 3 ...in 0.8 Seconds [source code included]</a> and 
+<a href="http://magnus-k-karlsson.blogspot.com/2009_07_01_archive.html">
+Effective Unit Testing EJB 3.0 with OpenEJB</a>.
+</p>
+
+<div class="code-frame">
+  <a href="">Show or Hide Code</a>
+  <iframe scrolling='no' frameborder="0" src="./code-listings/HelloEjbTest.java.html"></iframe>
+</div>
+<div class="code-frame">
+  <iframe scrolling='no' frameborder="0" style="min-height:11.6em;" src="./code-listings/HelloEjb.java.html"></iframe>
+</div>
+<div class="code-frame">
+  <a href="">Show or Hide Code</a>
+  <iframe scrolling='no' frameborder="0" src="./code-listings/HelloEjbBean.java.html"></iframe>
+</div>
+
+<img src="img/mvn-test.png" longdesc="img/mvn-test.png" class="screenshot" style="width:500px;" />
+
+<h4>HelloSeamTest</h4>
+<p>Seam tests should inherit from <code>no.knowit.seam.openejb.mock.SeamOpenEjbTest</code> 
+which provides base Seam test functionality for TestNG tests running in the OpenEJB embedded 
+container. The class is a copy of the <code>org.jboss.seam.mock.SeamTest</code> - the only 
+difference is of cource that the <code>no.knowit.seam.openejb.mock.SeamOpenEjbTest</code> class 
+set up the fixture needed to boot the OpenEJB embedded container.
+</p>
+
+<div class="code-frame">
+  <a href="">Show or Hide Code</a>
+  <iframe scrolling='no' frameborder="0" style="max-height:70em;" 
+	src="./code-listings/HelloSeamTest.java.html"></iframe>
+</div>
+<div class="code-frame">
+  <iframe scrolling='no' frameborder="0" style="min-height:19em;" 
+	src="./code-listings/HelloSeam.java.html"></iframe>
+</div>
+<img src="img/mvn-test-helloseamtest.png"  longdesc="img/mvn-test-helloseamtest.png" 
+  class="screenshot" style="width:500px;" />
+
+<h4>Testing Seam Application User Interactions</h4>
+<p>The <code>SeamOpenEjbTest</code> (equivalent to <code>SeamTest</code>) class lets you write 
+scripted tests, in a simulated JSF environment. The role of a scripted test is to reproduce the 
+interaction between the view and the Seam components. In other words, you get to pretend you are 
+the JSF implementation! This approach tests everything except the view.
+</p>
+
+<div class="code-frame">
+  <a href="">Show or Hide Code</a>
+  <iframe scrolling='no' frameborder="0" style="max-height:600em;" src="./code-listings/MovieTest.java.html"></iframe>
+</div>
+
+<p>You'll find plenty of tests for the Seam example applications which demonstrate more complex 
+cases.
+</p>
+
+<h4>Configure TestNG</h4>
+<p>To configure TestNG refer to e.g.:</p>
+<ul>
+  <li>
+    <a href="http://wiki.cantara.no/display/smidigtonull/Maven+Test+FAQ">Maven Test FAQ</a>
+  </li>
+  <li>
+    <a href="http://in.relation.to/Bloggers/TestingEJB3AppsWithTestNG">Testing EJB3 apps with TestNG</a>
+  </li>
+  <li>
+    <a href="http://testng.org/doc/index.html">TestNG home</a>
+  </li>
+</ul>
+
+<h2>Remove the Project From the Application Server</h2>
+<p>To finish the basic steps of this tutorial we will clean the project and completly removed it 
+from the application server.
+</p>
+
+<h3>Use the <code>unexplode</code> Profile</h3>
+<p>The <code>unexplode</code> profile only works if you have activated the <code><strong>dev</strong>
+</code> profile.
+</p>
+<ol class="vspace">
+  <li>Shutdown JBossAS:<br/>
+    Navigate to <code>${JBOSS_HOME}/bin</code> using a command shell and type: <code>shutdown -S</code>
+    or press Ctrl+C from the command shell that started the server.
+  </li>
+  <li>
+    Open a command shell, navigate to your project directory and run: 
+    <code><strong>mvn clean -Penv-dev,unexplode</strong></code>
+  </li>
+</ol>
+
+<h3>Remove the Project Manually</h3>
+<ol class="vspace">
+  <li>Shutdown JBossAS:<br/>
+    Navigate to <code>${JBOSS_HOME}/bin</code> using a command shell and type: <code>shutdown -S</code>
+    or press Ctrl+C from the command shell that started the server.
+  </li>
+  <li>
+    In the projects command shell run: <code><strong>mvn clean</strong></code>
+  </li>
+  <li>
+    Delete the <code>seam-tutorial-ear.ear</code> directory (or file), from <code>${JBOSS_DEPLOY}</code>. 
+    Also delete the corresponding datasource file,<code>seam-tutorial-ds.xml</code>, form 
+    <code>${JBOSS_DEPLOY}</code> if you have deployed the datasource file as a
+    <a href="#deploy-ds-as-separate-service">separate service</a>.<br/>
+  </li>
+</ol>
+
+<p>This completes the getting started tutorial.</p>
+
+
+<h2>How To's</h2>
+<h3><a name="configure-database-connection">How to Configure Database Connection</a></h3>
+<p>At some point in time you will want to access data in a database other than the default Hypersonic
+  database provided with the JBoss Application Server and you will require some mechanism to do this. 
+  The <code>*-ds.xml</code> file located in <code>ear/src/main/resources</code> defines a data source, 
+  which is used to access data in a database. These steps explains how to use MySql5 as your data 
+  source.
+</p>
+<ol class="vspace">
+  <li>Download and install necessary software: 
+  <ul>
+    <li><a href="http://dev.mysql.com/downloads/">MySql5+</a></li>
+    <li><a href="http://dev.mysql.com/downloads/connector/j/5.0.html">MySql connector</a></li>
+  </ul>
+  </li>
+  <li>Copy mysql-connector-java-*-bin.jar to <code>${JBOSS_CONFIG}/lib</code> (delete any other 
+      mysql-connector-java-*-bin.jar file if exist).
+  </li>
+  <li>
+    Start the database server and create schema, e.g. <code>&quot;tutorial_db&quot;</code> using the MySql 
+    Administrator GUI.<br/>
+    Or, if you are a MySql macho, open a MySql console and type the following SQL DDL by hand:<br/><br/>
+    <code style="white-space:nowrap"><strong>
+      CREATE DATABASE tutorial_db CHARACTER SET utf8 COLLATE utf8_general_ci;
+    </strong></code><br/><br/>
+    Use UTF8 for i18n!
+  </li>
+  <li>
+    Edit the filter properties file, <code>filter-prod.properties</code> or 
+    <code>filter-dev.properties</code>, e.g.:
+    <pre><font color="green"># MySQL5</font>
+#ds                  =<font color="blue">mysql</font>
+#ds.jndi.name        =<font color="blue">tutorialDatabase</font>
+#ds.database.name    =<font color="blue">tutorial_db</font>
+#ds.server.name      =<font color="blue">localhost:3306</font>
+#ds.driver.class     =<font color="blue">com.mysql.jdbc.Driver</font>
+#ds.connection.url   =<font color="blue">jdbc:mysql://${ds.server.name}/${ds.database.name}?characterEncoding=UTF-8</font>
+#ds.user.name        =<font color="blue">root</font>
+#ds.password         =
+#ds.hibernate.dialect=<font color="blue">org.hibernate.dialect.MySQL5InnoDBDialect</font>
+#ds.xml              =${app.context}-ds.xml</pre>
+  </li>
+  <li>
+    Run: <code>mvn clean install -Pexplode</code><br/>
+    The new properties will be filtered into the <code>*-ds.xml</code> file during packaging of the 
+    project.
+  </li>  
+</ol>
+
+<h3 id="deploy-ds-as-separate-service">How to Deploy the *-ds.xml Datasource File as a Separate Service</h3>
+<p>
+  You can deploy the <code>*-ds.xml</code> data source file in two ways: <strong>embedded</strong> 
+  in the ear project or as  a <strong>separate</strong> service deployed to the 
+  <code>${JBOSS_DEPLOY}</code> directory. The default for this build is to embed the 
+  <code>*-ds.xml</code> data source in the ear project.<br/>
+  If you want to deploy the <code>*-ds.xml</code> data source as a separate service then open the 
+  ear pom and make the changes <font color="blue">emphasized in blue</font>.
+</p>
+<ol class="vspace">
+  <li>
+    Locate the explode profile:
+  <pre>
+&lt;profiles&gt;
+  &lt;profile&gt;
+    ..
+    &lt;id&gt;explode&lt;/id&gt;
+    ..
+    &lt;build&gt;
+      &lt;plugins&gt;
+        &lt;plugin&gt;
+          &lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;
+          &lt;executions&gt;
+            &lt;execution&gt;
+              &lt;id&gt;package&lt;/id&gt;
+              &lt;phase&gt;package&lt;/phase&gt;
+              &lt;configuration&gt;
+                &lt;tasks&gt;
+                &lt;property name=&quot;deploy-path&quot; value=&quot;${as.deploy}/${app.context}-ear.ear&quot; /&gt;
+                &lt;echo&gt;Exploding to ${deploy-path}&lt;/echo&gt;
+                &lt;delete	file=&quot;${deploy-path}&quot; quiet=&quot;true&quot; /&gt;
+                &lt;mkdir dir=&quot;${deploy-path}&quot; /&gt;
+                &lt;sync todir=&quot;${deploy-path}&quot; verbose=&quot;true&quot; &gt;
+                  &lt;fileset dir=&quot;${project.build.directory}/${project.build.finalName}&quot; /&gt;
+                &lt;/sync&gt;<font color="blue">
+                  &lt;!-- Uncomment if you want to deploy the *-ds.xml file to appserver deploy directory
+                   --&gt;
+                  &lt;copy todir=&quot;${as.deploy}&quot; file=&quot;${project.build.directory}/${app.ds.xml}&quot; verbose=&quot;true&quot; /&gt;
+                  </font>
+                &lt;/tasks&gt;
+              &lt;/configuration&gt;
+    ..
+  &lt;/profile&gt;
+    ..
+    ..
+&lt;/profiles&gt;</pre>
+    </li>
+    <li>
+      Locate the Maven resources plugin with execution id <code>copy-app-ds-xml</code>:
+      <pre>
+&lt;plugins&gt;
+  &lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
+    &lt;executions&gt;
+      &lt;execution&gt;
+        &lt;id&gt;copy-app-ds-xml&lt;/id&gt;
+        ..
+        &lt;configuration&gt;<font color="blue">
+          &lt;!-- Comment out this tag if you have deployed the *-ds.xml file to appserver deploy directory 
+          &lt;outputDirectory&gt;${project.build.directory}/${project.build.finalName}&lt;/outputDirectory&gt;
+          --&gt;
+          
+          &lt;!-- Uncomment this tag if you have deployed the *-ds.xml file to appserver deploy directory
+          --&gt;
+          &lt;outputDirectory&gt;${project.build.directory}&lt;/outputDirectory&gt;</font>
+          
+          &lt;resources&gt;
+            &lt;resource&gt;
+              &lt;directory&gt;src/main/resources&lt;/directory&gt;
+              &lt;filtering&gt;true&lt;/filtering&gt;
+              &lt;includes&gt;
+                &lt;include&gt;${app.ds.xml}&lt;/include&gt;
+              &lt;/includes&gt;
+            &lt;/resource&gt;
+          &lt;/resources&gt;
+        &lt;/configuration&gt;
+      &lt;/execution&gt;
+    &lt;/executions&gt;
+  &lt;/plugin&gt; 
+  ..</pre>
+    </li>
+    <li>
+        Locate the Maven EAR plugin:
+        <pre>
+..
+&lt;!-- Maven EAR plugin --&gt;
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-ear-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    ..
+    &lt;jboss&gt;
+      &lt;!--
+        To trigger the generation of the jboss-app.xml file you need to ...
+      --&gt;
+      &lt;version&gt;${as.version}&lt;/version&gt;
+
+      &lt;loader-repository&gt;
+        &lt;!--
+          seam.jboss.org is a Seam-specific scoped classloader. It acts as ...
+        --&gt;
+        seam.jboss.org:loader=${app.context}-ear
+      &lt;/loader-repository&gt;
+      <font color="blue">
+      &lt;!-- Comment out this tag if you have deployed the *-ds.xml file to appserver deploy directory 
+      &lt;data-sources&gt;
+        &lt;data-source&gt;${app.ds.xml}&lt;/data-source&gt;
+      &lt;/data-sources&gt;
+      --&gt;</font>
+    &lt;/jboss&gt;
+    ..
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+..</pre>
+  </li>
+</ol>
+
+<h3>How to Enable Logging in JBoss AS</h3>
+<p>For those who had a hard time configuring &quot;their own&quot; log4j.properties or log4j.xml within their 
+application on JBoss, see: 
+<a href="http://jaitechwriteups.blogspot.com/2008/04/how-do-i-use-my-own-log4j-properties-or.html">
+  My Wiki: How do i use my own log4j properties or xml file in JBoss</a> and 
+<a href="http://www.jboss.org/feeds/post/how_do_i_use_my_own_log4j_properties_or_xml_file_in_jboss">
+  JBoss Community: How do i use my own log4j properties or xml file in JBoss</a>.
+</p>
+
+<h3>Tips for Debugging</h3>
+<p>When your application starts up it will print all components being created (Seam and your own) 
+and the context they are placed in. Validate that your new component is displayed as well.
+</p>
+<p>
+Seam has a debug page showing useful information. To use it, add the following dependency to your war 
+<code>pom.xml</code>:
+</p>
+<pre>&lt;dependency&gt;
+  &lt;groupId&gt;org.jboss.seam&lt;/groupId&gt;
+  &lt;artifactId&gt;jboss-seam-debug&lt;/artifactId&gt;
+  &lt;version&gt;${jboss.seam.version}&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+<p>In <code>filter-dev.properties</code> make shure that the <code>jdk.debug</code> and 
+<code>jdk.debug</code> property values are <code>true</code>:</p>
+<pre>
+jdk.debug         =<font color="blue">true</font>
+jdk.optimize      =false
+jdk.source        =1.6
+jdk.target        =1.6
+app.debug         =<font color="blue">${jdk.debug}</font>
+app.unpack.modules=true
+</pre>
+
+<p>Open your browser and point to the following URL to see the debug page.
+  <a href="http://localhost:8080/seam-tutorial/debug.seam">http://localhost:8080/seam-tutorial/debug.seam</a>
+</p>
+
+<h2>Files To Add To Svn Ignore</h2>
+<p>Some files and directories, like user spesific settings, generated files and IDE settings should 
+not be under revision control. This are the files found so far using Eclipse with the m2eclipse and 
+JBoss Tools plugin. There will be more IDE spesific files to add as other IDEs are put to use. 
+IDE spesific files should be added to the global <strong>svn ignore</strong>!
+</p>
+
+<ul class="vspace">
+  <li>
+    In project root directory
+    <ul>
+      <li>appClientModule/</li>
+      <li>.classpath</li>
+      <li>.externalToolBuilders/</li>
+      <li>*.launch</li>
+      <li>.metadata/</li>
+      <li>profiles.xml</li>
+      <li>.project</li>
+      <li>.settings/</li>
+      <li>src/main/filters/filter-dev.properties</li>
+      <li>target/</li>
+    </ul>
+  </li>
+  <li>
+    In <strong>ear</strong> directory
+    <ul>
+      <li>src/main/application/META-INF/application.xml 
+      (see: <a href="https://issues.sonatype.org/browse/MNGECLIPSE-1541">MNGECLIPSE-1541</a> and
+      <a href="https://issues.sonatype.org/browse/MNGECLIPSE-2145">MNGECLIPSE-2145</a>)</li>
+      <li>.externalToolBuilders/</li>
+      <li>.settings/</li>
+      <li>target/</li>
+      <li>.classpath</li>
+      <li>.project</li>
+      <li>*.launch</li>
+    </ul>
+  </li>
+  <li>
+    In <strong>ejb</strong> directory
+    <ul>
+      <li>.checkstyle</li>
+      <li>.externalToolBuilders/</li>
+      <li>.settings/</li>
+      <li>target/</li>
+      <li>.classpath</li>
+      <li>.project</li>
+      <li>hibernate-console.properties</li>
+      <li>*.launch</li>
+    </ul>
+  </li>
+  <li>
+    In <strong>war</strong> directory
+    <ul>
+      <li>.checkstyle</li>
+      <li>.externalToolBuilders/</li>
+      <li>.settings/</li>
+      <li>target/</li>
+      <li>.classpath</li>
+      <li>.project</li>
+      <li>*.launch</li>
+      <li>src/main/webapp/WEB-INF/.pages.xml.spdia</li>
+      <li>src/main/webapp/WEB-INF/.faces-config.xml.jsfdia</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>Useful Links</h3>
+<ul>
+  <li>
+    <a href="http://www.sonatype.com/books/mvnref-book/reference/public-book.html">
+      Maven: The Complete Reference
+    </a>
+  </li>
+  <li>
+    <a href="http://www.maestrodev.com/better-build-maven">
+      Better Builds with Maven
+    </a>
+  </li>
+  <li>
+    <a href="http://sujitpal.blogspot.com/2006/07/maven2-step-by-step.html">
+      Maven2, Step by Step
+    </a>
+  </li>
+  <li>
+    <a href="http://docs.codehaus.org/display/MAVENUSER/Mini+Guides">
+      Codehaus: Maven Mini Guides
+    </a>
+  </li>
+  <li>
+    <a href="http://www.javaworld.com/javaworld/jw-12-2005/jw-1205-maven.html">
+      JavaWorld: An introduction to Maven 2
+    </a>
+  </li>
+  <li>
+    <a href="http://www.javaworld.com/javaworld/jw-02-2006/jw-0227-maven.html">
+      JavaWorld: Get the most out of Maven 2 site generation
+    </a>
+  </li>
+  <li>
+    <a href="http://www.javaworld.com/javaworld/jw-11-2008/jw-11-checkstyle1.html">
+      JavaWorld: Automated code reviews with Checkstyle. Part 1
+    </a>,
+    <a href="http://www.javaworld.com/javaworld/jw-11-2008/jw-11-checkstyle2.html">Part 2</a>
+  </li>
+  <li>
+    <a href="http://i-proving.ca/space/Technologies/Maven/Maven+Recipes">
+      Maven Recipes
+    </a>
+  </li>
+  <li>
+    <a href="http://apollo.ucalgary.ca/tlcprojectswiki/index.php/Public/Project_Versioning_-_Best_Practices">
+      Versioning - Best Practices
+    </a>
+  </li>
+  <li>
+    <a href="http://sujitpal.blogspot.com/2006/10/maven2-multi-environment-filter-setup.html">
+      A Maven2 multi-environment filter setup
+    </a>
+  </li>
+  <li>
+    <a href="http://www.waltercedric.com/java-j2ee-mainmenu-53/361-maven-build-system/1639-maven-project-filtering.html">
+      Maven project filtering
+    </a>
+  </li>
+  <li>
+    <a href="http://www.manydesigns.com/documentation/tutorials/using-maven-profiles-and-resource-filtering.html">
+      Using Maven profiles and resource filtering
+    </a>
+  </li>
+  <li>
+    <a href="http://mavenize.blogspot.com/2007/06/integration-testing-in-your-maven.html">
+      Integration Testing in your Maven Application
+    </a>  
+  </li>
+  <li>
+    <a href="http://docs.codehaus.org/display/MAVENUSER/Maven+and+Integration+Testing">
+      Codehaus: Maven and Integration Testing   
+    </a>  
+  </li>
+  <li>
+    <a href="http://wiki.cantara.no/display/smidigtonull/Maven+Test+FAQ">
+      Maven Test FAQ
+    </a>  
+  </li>
+  <li>
+    <a href="http://wakaleo-consulting.com/component/content/article/213">
+      Wakaleo Consulting: Unit tests are not integration tests
+    </a>  
+  </li>
+  <li>
+    <a href="http://wakaleo-consulting.com/component/content/article/213">
+      Wakaleo Consulting: Automated deployment with Cargo and Maven - a short primer
+    </a>  
+  </li>
+  <li>
+    <a href="http://www.seamframework.org/Documentation/SeamTestCoverageWithCobertura">
+      SeamTest Coverage with Cobertura
+    </a>  
+  </li>
+  <li>
+    <a href="http://in.relation.to/Bloggers/TestingEJB3AppsWithTestNG">
+      Testing EJB3 apps with TestNG
+    </a>  
+  </li>
+  <li>
+    <a href="http://blog.xebia.com/2009/06/06/configuring-a-seam-ejb-project-for-development-with-maven-and-jboss-tools/">
+      Configuring a Seam EJB project for development with Maven and JBoss Tools
+    </a>  
+  </li>
+  <li>
+    <a href="http://seamframework.org/Community/UsingOpenEJBForIntegrationTesting">
+      Using OpenEJB for integration testing
+    </a>  
+  </li>
+  <li>
+    <a href="http://magnus-k-karlsson.blogspot.com/2009_07_01_archive.html">
+      Effective Unit Testing EJB 3.0 with OpenEJB
+    </a>  
+  </li>
+  <li>
+    <a href="http://blog.jonasbandi.net/2009/06/restarting-embedded-openejb-container.html">
+      Restarting the embedded OpenEJB container between each test
+    </a>  
+  </li>
+  <li>
+    <a href="http://www.adam-bien.com/roller/abien/entry/how_to_unit_test_ejb">
+      How To Unit-Test EJB 3 ...in 0.8 Seconds [source code included]
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/">
+      OpenEJB: Home
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/examples.html">
+      OpenEJB: Examples
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/faq.html">
+      OpenEJB: FAQ 
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/injection-of-entitymanager-example.html">
+      OpenEJB: Injection of EntityManager Example
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/embedded-configuration.html">
+      OpenEJB: Embedded Configuration 
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/unit-testing-transactions.html">
+      OpenEJB: Unit Testing Transactions
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/configuring-logging-in-tests.html">
+      OpenEJB: Configuring Logging in Tests
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/configuring-persistenceunits-in-tests.html">
+      OpenEJB: Configuring PersistenceUnits in Tests 
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/jndi-names.html">
+      OpenEJB: JNDI Names 
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/hibernate.html">
+      OpenEJB: Hibernate 
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/embedded-configuration.html">
+      OpenEJB: Embedded Configuration
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/3.0/local-client-injection.html">
+      OpenEJB: Local Client Injection
+    </a>  
+  </li>
+  <li>
+    <a href="http://openejb.apache.org/functional-testing-with-openejb-jetty-and-selenium.html">
+      OpenEJB: Functional testing with OpenEJB, Jetty and Selenium
+    </a>  
+  </li>
+  <li>
+    <a href="http://www.andre-simon.de/doku/highlight/en/highlight.html">
+      Highlight
+    </a>  
+  </li>
+  <li>
+    <a href="http://www.addfullsize.com/">
+      Fullsize
+    </a>  
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+    
+  
+</div> <!-- #page -->
+</div> <!-- #page-wrapper -->
+
+<div id="footer">  
+<div class="footer">
+  <ul class="links" style="text-align: center;">
+    <li><a href="01-gettingstarted.html"><strong>Getting started</strong> tutorial</a></li>
+    <li><a href="02-eclipse.html"><strong>Eclipse 3.5</strong> tutorial</a></li>
+    <li><a href="03-intellij.html"><strong>IntelliJ</strong> tutorial</a></li>
+    <li><a href="04-netbeans.html"><strong>NetBeans</strong> tutorial</a></li>
+  </ul>
+</div>
+</div> <!-- #footer -->
+</div> <!-- #expander -->
+</div> <!-- #sizer -->
+
+<script type="text/javascript">/* <![CDATA[ */
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+/* ]]> */</script>
+<script type="text/javascript">/* <![CDATA[ */
+		try {
+				var pageTracker = _gat._getTracker("UA-9570909-1");
+				pageTracker._trackPageview();
+		} catch(err) {
+		}
+/* ]]> */</script>
+</body>
+</html>

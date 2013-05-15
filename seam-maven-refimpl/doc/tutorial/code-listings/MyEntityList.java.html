@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="../../styles/base/base.css" type="text/css" media="screen" />
+</head>
+<body style="background-color:#eeeeee;">
+<pre>
+<span style="color:#000000">   1 </span><span style="color:#7f0055; font-weight:bold">package</span> org<span style="color:#000000">.</span>domain<span style="color:#000000">.</span>seamtutorial<span style="color:#000000">.</span>session<span style="color:#000000">;</span>
+<span style="color:#000000">   2 </span>
+<span style="color:#000000">   3 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>jboss<span style="color:#000000">.</span>seam<span style="color:#000000">.</span>annotations<span style="color:#000000">.</span><span style="color:#7f0055; font-weight:bold">Name</span><span style="color:#000000">;</span>
+<span style="color:#000000">   4 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>jboss<span style="color:#000000">.</span>seam<span style="color:#000000">.</span>framework<span style="color:#000000">.</span>EntityQuery<span style="color:#000000">;</span>
+<span style="color:#000000">   5 </span><span style="color:#7f0055; font-weight:bold">import</span> org<span style="color:#000000">.</span>domain<span style="color:#000000">.</span>seamtutorial<span style="color:#000000">.</span>entity<span style="color:#000000">.</span>MyEntity<span style="color:#000000">;</span>
+<span style="color:#000000">   6 </span>
+<span style="color:#000000">   7 </span>&#64;<span style="color:#7f0055; font-weight:bold">Name</span><span style="color:#000000">(</span><span style="color:#0000ff">&quot;myEntityList&quot;</span><span style="color:#000000">)</span>
+<span style="color:#000000">   8 </span><span style="color:#7f0055; font-weight:bold">public class</span> MyEntityList <span style="color:#7f0055; font-weight:bold">extends</span> EntityQuery<span style="color:#000000">&lt;</span>MyEntity<span style="color:#000000">&gt;</span>
+<span style="color:#000000">   9 </span><span style="color:#000000">{</span>
+<span style="color:#000000">  10 </span>    <span style="color:#7f0055; font-weight:bold">public</span> <span style="color:#000000">MyEntityList</span><span style="color:#000000">()</span>
+<span style="color:#000000">  11 </span>    <span style="color:#000000">{</span>
+<span style="color:#000000">  12 </span>        <span style="color:#000000">setEjbql</span><span style="color:#000000">(</span><span style="color:#0000ff">&quot;select myEntity from MyEntity myEntity&quot;</span><span style="color:#000000">);</span>
+<span style="color:#000000">  13 </span>    <span style="color:#000000">}</span>
+<span style="color:#000000">  14 </span><span style="color:#000000">}</span>
+</pre>
+</body>
+</html>
