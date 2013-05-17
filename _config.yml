@@ -7,4 +7,4 @@ safe: true
 lsi: false
 pygments: true
 markdown: rdiscount
-exclude: ['master']
+exclude: ['master.ignore']
