@@ -48,31 +48,31 @@ So now it's just a matter of adding the dependencies we need, and writing some c
 Here's a snippet of the dependencies added to the pom.xml so far:
 
 [code lang="xml"]
-&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;commons-lang&lt;/groupId&gt;
-        &lt;artifactId&gt;commons-lang&lt;/artifactId&gt;
-        &lt;version&gt;2.5&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.activemq&lt;/groupId&gt;
-        &lt;artifactId&gt;activemq-core&lt;/artifactId&gt;
-        &lt;version&gt;5.3.0&lt;/version&gt;
-    &lt;/dependency&gt;
+<dependencies&gt;
+    <dependency&gt;
+        <groupId&gt;commons-lang</groupId&gt;
+        <artifactId&gt;commons-lang</artifactId&gt;
+        <version&gt;2.5</version&gt;
+    </dependency&gt;
+    <dependency&gt;
+        <groupId&gt;org.apache.activemq</groupId&gt;
+        <artifactId&gt;activemq-core</artifactId&gt;
+        <version&gt;5.3.0</version&gt;
+    </dependency&gt;
 
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.intellij&lt;/groupId&gt;
-        &lt;artifactId&gt;forms_rt&lt;/artifactId&gt;
-        &lt;version&gt;5.0&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- TEST SCOPE --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;junit&lt;/groupId&gt;
-        &lt;artifactId&gt;junit&lt;/artifactId&gt;
-        &lt;version&gt;4.7&lt;/version&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
+    <dependency&gt;
+        <groupId&gt;com.intellij</groupId&gt;
+        <artifactId&gt;forms_rt</artifactId&gt;
+        <version&gt;5.0</version&gt;
+    </dependency&gt;
+    <!-- TEST SCOPE --&gt;
+    <dependency&gt;
+        <groupId&gt;junit</groupId&gt;
+        <artifactId&gt;junit</artifactId&gt;
+        <version&gt;4.7</version&gt;
+        <scope&gt;test</scope&gt;
+    </dependency&gt;
+</dependencies&gt;
 [/code]
 
 Next step is writing some code and tests.
@@ -100,22 +100,22 @@ Our next step is to get this build running equally smooth in maven. Lets see wha
 </a>So we see that maven isn't happy with us. Let's fix it by adding the following to the pom:
 
 [code lang="xml"]
-&lt;build&gt;
-    &lt;finalName&gt;JMSUtil&lt;/finalName&gt;
-    &lt;plugins&gt;
+<build&gt;
+    <finalName&gt;JMSUtil</finalName&gt;
+    <plugins&gt;
 
-        &lt;plugin&gt;
-            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-            &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-            &lt;version&gt;2.0.2&lt;/version&gt;
-            &lt;configuration&gt;
-                &lt;sourcee&gt;1.6&lt;/sourcee&gt;
-                &lt;target&gt;1.6&lt;/target&gt;
-            &lt;/configuration&gt;
-        &lt;/plugin&gt;
+        <plugin&gt;
+            <groupId&gt;org.apache.maven.plugins</groupId&gt;
+            <artifactId&gt;maven-compiler-plugin</artifactId&gt;
+            <version&gt;2.0.2</version&gt;
+            <configuration&gt;
+                <sourcee&gt;1.6</sourcee&gt;
+                <target&gt;1.6</target&gt;
+            </configuration&gt;
+        </plugin&gt;
 
-    &lt;/plugins&gt;
-&lt;/build&gt;
+    </plugins&gt;
+</build&gt;
 [/code]
 
 Now we run the test again and get:
@@ -133,23 +133,23 @@ public JMSUtility() {
 The way we solve this is to import the <a href="http://mojo.codehaus.org/ideauidesigner-maven-plugin/">Maven 2 IDEA UI Designer Plugin</a> into the pom:
 
 [code lang="xml"]
-&lt;plugin&gt;
-    &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
-    &lt;artifactId&gt;ideauidesigner-maven-plugin&lt;/artifactId&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;javac2&lt;/goal&gt;
-            &lt;/goals&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
+<plugin&gt;
+    <groupId&gt;org.codehaus.mojo</groupId&gt;
+    <artifactId&gt;ideauidesigner-maven-plugin</artifactId&gt;
+    <executions&gt;
+        <execution&gt;
+            <goals&gt;
+                <goal&gt;javac2</goal&gt;
+            </goals&gt;
+        </execution&gt;
+    </executions&gt;
 
-    &lt;configuration&gt;
-        &lt;fork&gt;true&lt;/fork&gt;
-        &lt;debug&gt;true&lt;/debug&gt;
-        &lt;failOnError&gt;true&lt;/failOnError&gt;
-    &lt;/configuration&gt;
-&lt;/plugin&gt;
+    <configuration&gt;
+        <fork&gt;true</fork&gt;
+        <debug&gt;true</debug&gt;
+        <failOnError&gt;true</failOnError&gt;
+    </configuration&gt;
+</plugin&gt;
 [/code]
 
 Let's see what the maven build does now by running clean install
@@ -159,40 +159,40 @@ Let's see what the maven build does now by running clean install
 This means now that the plugin is working. The next and final step is to create an executable jar via maven for this project. For this we will use the maven-jar-plugin to get a jar with the correct manifest and the maven-archive-plugin to get a lib directory with the dependencies in it which the manifest will refer to.
 So, just add the following to the pom:
 [code lang="xml"]
-&lt;plugin&gt;
-    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-    &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;id&gt;copy-dependencies&lt;/id&gt;
-            &lt;phase&gt;package&lt;/phase&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;copy-dependencies&lt;/goal&gt;
-            &lt;/goals&gt;
-            &lt;configuration&gt;
-                &lt;outputDirectory&gt;${project.build.directory}/lib&lt;/outputDirectory&gt;
-                &lt;overWriteReleases&gt;false&lt;/overWriteReleases&gt;
-                &lt;overWriteSnapshots&gt;false&lt;/overWriteSnapshots&gt;
-                &lt;overWriteIfNewer&gt;true&lt;/overWriteIfNewer&gt;
-            &lt;/configuration&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-&lt;/plugin&gt;
+<plugin&gt;
+    <groupId&gt;org.apache.maven.plugins</groupId&gt;
+    <artifactId&gt;maven-dependency-plugin</artifactId&gt;
+    <executions&gt;
+        <execution&gt;
+            <id&gt;copy-dependencies</id&gt;
+            <phase&gt;package</phase&gt;
+            <goals&gt;
+                <goal&gt;copy-dependencies</goal&gt;
+            </goals&gt;
+            <configuration&gt;
+                <outputDirectory&gt;${project.build.directory}/lib</outputDirectory&gt;
+                <overWriteReleases&gt;false</overWriteReleases&gt;
+                <overWriteSnapshots&gt;false</overWriteSnapshots&gt;
+                <overWriteIfNewer&gt;true</overWriteIfNewer&gt;
+            </configuration&gt;
+        </execution&gt;
+    </executions&gt;
+</plugin&gt;
 
 
-&lt;plugin&gt;
-    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-    &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
-    &lt;configuration&gt;
-        &lt;archive&gt;
-            &lt;manifest&gt;
-                &lt;addClasspath&gt;true&lt;/addClasspath&gt;
-                &lt;classpathPrefix&gt;lib/&lt;/classpathPrefix&gt;
-                &lt;mainClass&gt;net.glxn.jmsutility.JMSUtility&lt;/mainClass&gt;
-            &lt;/manifest&gt;
-        &lt;/archive&gt;
-    &lt;/configuration&gt;
-&lt;/plugin&gt;
+<plugin&gt;
+    <groupId&gt;org.apache.maven.plugins</groupId&gt;
+    <artifactId&gt;maven-jar-plugin</artifactId&gt;
+    <configuration&gt;
+        <archive&gt;
+            <manifest&gt;
+                <addClasspath&gt;true</addClasspath&gt;
+                <classpathPrefix&gt;lib/</classpathPrefix&gt;
+                <mainClass&gt;net.glxn.jmsutility.JMSUtility</mainClass&gt;
+            </manifest&gt;
+        </archive&gt;
+    </configuration&gt;
+</plugin&gt;
 [/code]
 
 At this point you should have a pom that looks like this: <a href="http://github.com/kenglxn/JMSUtility/blob/b217473ab420550ac81f149c2de22497e3bef303/pom.xml">http://github.com/kenglxn/JMSUtility/blob/b217473ab420550ac81f149c2de22497e3bef303/pom.xml

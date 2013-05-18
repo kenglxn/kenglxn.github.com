@@ -56,12 +56,12 @@ Add distributionManagement section to the project pom.xml with the full path to 
  ~/dev/git/QRGen_pages (gh-pages) $ cd ../QRGen
  ~/dev/git/QRGen_pages (gh-pages) $ vi pom.xml
 
-    &lt;distributionManagement&gt;
-        &lt;repository&gt;
-            &lt;id&gt;gh-pages&lt;/id&gt;
-            &lt;url&gt;file:///${basedir}/../QRGen_pages/repository/&lt;/url&gt;
-        &lt;/repository&gt;
-    &lt;/distributionManagement&gt;
+    <distributionManagement&gt;
+        <repository&gt;
+            <id&gt;gh-pages</id&gt;
+            <url&gt;file:///${basedir}/../QRGen_pages/repository/</url&gt;
+        </repository&gt;
+    </distributionManagement&gt;
 [/code]
 
 At this point we can deploy the project with the following command
@@ -113,35 +113,35 @@ dependencies {
 
 Maven pom.xml
 [code lang="xml"]
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+<project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
   xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  <modelVersion&gt;4.0.0</modelVersion&gt;
 
-  &lt;groupId&gt;net.glxn&lt;/groupId&gt;
-  &lt;artifactId&gt;deptest&lt;/artifactId&gt;
-  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-  &lt;packaging&gt;jar&lt;/packaging&gt;
-  &lt;name&gt;qrgen-deptest&lt;/name&gt;
+  <groupId&gt;net.glxn</groupId&gt;
+  <artifactId&gt;deptest</artifactId&gt;
+  <version&gt;1.0-SNAPSHOT</version&gt;
+  <packaging&gt;jar</packaging&gt;
+  <name&gt;qrgen-deptest</name&gt;
 
-  &lt;properties&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-  &lt;/properties&gt;
+  <properties&gt;
+    <project.build.sourceEncoding&gt;UTF-8</project.build.sourceEncoding&gt;
+  </properties&gt;
 
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;net.glxn&lt;/groupId&gt;
-      &lt;artifactId&gt;qrgen&lt;/artifactId&gt;
-      &lt;version&gt;1.0&lt;/version&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
+  <dependencies&gt;
+    <dependency&gt;
+      <groupId&gt;net.glxn</groupId&gt;
+      <artifactId&gt;qrgen</artifactId&gt;
+      <version&gt;1.0</version&gt;
+    </dependency&gt;
+  </dependencies&gt;
 
-  &lt;repositories&gt;
-    &lt;repository&gt;
-      &lt;id&gt;QRGen&lt;/id&gt;
-      &lt;name&gt;QRGen Repo&lt;/name&gt;
-      &lt;url&gt;http://kenglxn.github.com/QRGen/repository&lt;/url&gt;
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
-&lt;/project&gt;
+  <repositories&gt;
+    <repository&gt;
+      <id&gt;QRGen</id&gt;
+      <name&gt;QRGen Repo</name&gt;
+      <url&gt;http://kenglxn.github.com/QRGen/repository</url&gt;
+    </repository&gt;
+  </repositories&gt;
+</project&gt;
 
 [/code]
