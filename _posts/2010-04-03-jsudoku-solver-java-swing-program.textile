@@ -1,44 +1,38 @@
 ---
 layout: post
 title: Solving Sudoku using java swing and junit
-tags:
-- Java
-- sudoku
-- swing
-status: publish
-type: post
-published: true
-meta:
-  _edit_last: '1'
-  _syntaxhighlighter_encoded: '1'
 ---
+
+h2. {{ page.title }}
+
 Was working on sudoku puzzles during easter holiday. Became bored, and being the nerd I am decided to practice my swing and created a tool to help solve it.
  Keep in mind that this is a "quickie" job, created in couple days work.
-Just extract and run:
-[code lang="java"]
-java -jar jSudoku.jar
-[/code]
-Comes with one predefined sample. 
-<a href="http://www.glxn.net/wp-content/uploads/2010/04/jSudokuSolver.zip">jSudokuSolver.zip</a>
+Just extract "jSudokuSolver.zip":http://www.glxn.net/wp-content/uploads/2010/04/jSudokuSolver.zip and run:
 
-Or you can run the app with <strong>Java Web Start</strong> by clicking this link: <strong><a href="http://www.glxn.net/apps/jsudoku.php" target="_blank">jsudoku</a></strong> (should open with java, won't work on chrome ref: <a href="http://code.google.com/p/chromium/issues/detail?id=10877">http://code.google.com/p/chromium/issues/detail?id=10877</a>)
+{% highlight bash %}
+java -jar jSudoku.jar
+{% endhighlight %}
+
+Comes with one predefined sample.
 
 Feel free to use the source for whatever you wish.
-If you want you can clone my git repo <a href="http://github.com/kenglxn/JSudoku">http://github.com/kenglxn/JSudoku</a>:
-[code lang="java"]
+If you want you can clone the git repo "http://github.com/kenglxn/JSudoku":http://github.com/kenglxn/JSudoku:
+
+{% highlight bash %}
 git clone git://github.com/kenglxn/JSudoku.git
-[/code]
+{% endhighlight %}
 
-I based my implementation on a sudoku puzzle found in a magazine. I picked a puzzle from the magazine and made this the sample. Then i wrote a test to confirm the solver worked for the two axis, and the sub-grid. Then the last test to confirm the solver get's the expected solution. Code for the test is pasted below. 
+I based my implementation on a sudoku puzzle found in a magazine. I picked a puzzle from the magazine and made this the sample. Then i wrote a test to confirm the solver worked for the two axis, and the sub-grid. Then the last test to confirm the solver get's the expected solution. Code for the test is pasted below.
 
-Heres the sample (click for larger image):
-<a href="http://www.glxn.net/wp-content/uploads/2010/04/sample2.png"><img src="http://www.glxn.net/wp-content/uploads/2010/04/sample2-150x150.png" alt="" title="sample" width="150" height="150" class="alignleft size-thumbnail wp-image-244" /></a>
+Heres the sample:
+!/attachments/sample2-150x150.png!:/attachments/sample2.png
 
-And here's the sample solved (click for larger image):
-<a href="http://www.glxn.net/wp-content/uploads/2010/04/sample-solved.png"><img src="http://www.glxn.net/wp-content/uploads/2010/04/sample-solved-150x150.png" alt="" title="sample-solved" width="150" height="150" class="alignleft size-thumbnail wp-image-240" /></a>
+And here's the sample solved:
+!/attachments/sample-solved-150x150.png!:/attachments/sample-solved.png
 
 This is the recursive method that does all the work:
-[code lang="java"]
+
+{% highlight java %}
 void solvePuzzle(Integer numberOfEmptyCellsBefore) {
 	createWorkingSetOfShallowCopyCells();
 	calculatePossibleValuesAndSetCellValues();
@@ -49,11 +43,11 @@ void solvePuzzle(Integer numberOfEmptyCellsBefore) {
 		solvePuzzle(numberOfEmptyCells);
 	}
 }
-[/code]
+{% endhighlight %}
 
-Heres a paste of the junit test that i used to build the logic: 
-<em>(ignore the closing xml tags at the bottom, google code formatter plugin generates these due to unclosed tags in the java code...)</em>
-[code lang="java"]
+Heres a paste of the junit test that i used to build the logic:
+
+{% highlight java %}
 package net.glxn.sudoku;
 
 import org.junit.Assert;
@@ -65,12 +59,12 @@ import java.util.Arrays;
 public class JSudokuTestCase {
     @Test
     public void shouldSolveforXSibling() {
-        String expected = &quot;9&quot;;
+        String expected = "9";
 
         JSudoku jSudoku = new JSudoku();
-        ArrayList&lt;Cell&gt; xSiblings = jSudoku.textField9.xSiblings;
-        ArrayList&lt;String&gt; stringList = new ArrayList&lt;String&gt;();
-        stringList.addAll(Arrays.asList(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;));
+        ArrayList<Cell> xSiblings = jSudoku.textField9.xSiblings;
+        ArrayList<String> stringList = new ArrayList<String>();
+        stringList.addAll(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8"));
 
         for (Cell xSib : xSiblings) {
             xSib.setText(stringList.get(0));
@@ -84,12 +78,12 @@ public class JSudokuTestCase {
 
     @Test
     public void shouldSolveforYSibling() {
-        String expected = &quot;9&quot;;
+        String expected = "9";
 
         JSudoku jSudoku = new JSudoku();
-        ArrayList&lt;Cell&gt; ysiblings = jSudoku.textField9.ySiblings;
-        ArrayList&lt;String&gt; stringList = new ArrayList&lt;String&gt;();
-        stringList.addAll(Arrays.asList(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;));
+        ArrayList<Cell> ysiblings = jSudoku.textField9.ySiblings;
+        ArrayList<String> stringList = new ArrayList<String>();
+        stringList.addAll(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8"));
 
         for (Cell ySib : ysiblings) {
             ySib.setText(stringList.get(0));
@@ -103,12 +97,12 @@ public class JSudokuTestCase {
 
     @Test
     public void shouldSolveforSubGridSibling() {
-        String expected = &quot;9&quot;;
+        String expected = "9";
 
         JSudoku jSudoku = new JSudoku();
-        ArrayList&lt;Cell&gt; ysiblings = jSudoku.textField9.subGridSiblings;
-        ArrayList&lt;String&gt; stringList = new ArrayList&lt;String&gt;();
-        stringList.addAll(Arrays.asList(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;));
+        ArrayList<Cell> ysiblings = jSudoku.textField9.subGridSiblings;
+        ArrayList<String> stringList = new ArrayList<String>();
+        stringList.addAll(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8"));
 
         for (Cell ySib : ysiblings) {
             ySib.setText(stringList.get(0));
@@ -262,7 +256,6 @@ public class JSudokuTestCase {
     }
 
     private void confirmExpectedValueAtCoord(JSudoku jSudoku, int x, int y, Integer expected) {
-        Assert.assertEquals(&quot;Confirm [&quot;+x+&quot;,&quot;+y+&quot;] = &quot;+ expected, expected, jSudoku.getCellAtCoord(x, y, jSudoku.allCells).getIntValue());
+        Assert.assertEquals("Confirm ["+x+","+y+"] = "+ expected, expected, jSudoku.getCellAtCoord(x, y, jSudoku.allCells).getIntValue());
     }
-}
-[/code]
+{% endhighlight %}

@@ -2,6 +2,7 @@
 layout: post
 title: Implementing @RequestParam in CDI/WELD using Qualifier and InjectionPoint as @HttpParam
 ---
+
 h2. {{ page.title }}
 
 Implementing @RequestParam as @HttpParam is quite easy. This is the example discussed in the "Weld Reference Documentation":http://docs.jboss.org/weld/reference/1.0.1-Final/en-US/html_single/#d0e1622. What we do is set up a "Qualifier":http://docs.jboss.org/weld/reference/1.0.1-Final/en-US/html_single/#d0e1212 like this:

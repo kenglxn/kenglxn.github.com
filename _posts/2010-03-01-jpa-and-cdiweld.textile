@@ -2,6 +2,7 @@
 layout: post
 title: Simple CDI/WELD login example
 ---
+
 h2. {{ page.title }}
 
 !http://www.gliffy.com/pubdoc/2016929/L.jpg!:http://www.gliffy.com/pubdoc/2016929/L.jpg
