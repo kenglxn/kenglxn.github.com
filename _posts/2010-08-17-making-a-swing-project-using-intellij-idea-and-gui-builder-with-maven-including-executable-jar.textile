@@ -210,7 +210,7 @@ Feel free to clone the code and do whatever you like with it, just dont blame me
 
 The distribution zip with jar and lib can be downloaded directly "here":http://github.com/kenglxn/JMSUtility/raw/master/dist/JMSUtility.zip
 
-h3. RESOURCES:
+h5. RESOURCES:
 * "Maven Archiver":http://maven.apache.org/shared/maven-archiver/index.html
 * "Maven 2 IDEA UI Designer Plugin":http://mojo.codehaus.org/ideauidesigner-maven-plugin/
 * "Maven Dependency Plugin":http://maven.apache.org/plugins/maven-dependency-plugin/examples/copying-project-dependencies.html

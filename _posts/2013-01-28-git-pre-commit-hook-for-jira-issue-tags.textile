@@ -1,12 +1,9 @@
 ---
 layout: post
 title: Git pre commit hook for JIRA issue tags
-tags: []
-status: draft
-type: post
 published: false
-meta:
-  _jd_tweet_this: 'yes'
-  _edit_last: '1'
 ---
+
+h2. {{ page.title }}
+
 this hook will autotag commit message with jira tag if on branch
