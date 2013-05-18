@@ -153,15 +153,15 @@ Just remember that this is a test running against a remote jboss container, so j
 
 We see the test runs green:
 
-!/attachments/arquillian-greentestrun-300x140.png!:/attachments/arquillian-greentestrun.png
+!/attachments/arquillian-greentestrun.png!:/attachments/arquillian-greentestrun.png
 
 And that the server has the expected output in the log:
 
-!/attachments/arquillian-serverlog-300x150.png!:/attachments/arquillian-serverlog.png
+!/attachments/arquillian-serverlog.png!:/attachments/arquillian-serverlog.png
 
 Just for kicks, let's break the test by changing the input to "yo":
 
-!/attachments/arquillian-redtestrun-300x146.png!:/attachments/arquillian-redtestrun.png
+!/attachments/arquillian-redtestrun.png!:/attachments/arquillian-redtestrun.png
 
 *TIP:* If you want to debug your test, you have to remember that your code is running in the remote container. Running the test in debug mode will not work. You will have to start the container in debug mode to do this.
 
