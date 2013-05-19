@@ -3,8 +3,6 @@ layout: post
 title: Making a swing project using IntelliJ IDEA GUI builder with maven, Including executable jar
 ---
 
-h2. {{ page.title }}
-
 In this post I'll quickly show how to get a maven project under Idea running with the GUI builder, and show you the config you need to build an executable jar for it as well.
 
 IntelliJ IDEA has a great built in tool for making swing projects called "GUI Builder":http://www.jetbrains.com/idea/features/gui_builder.html, here's a nice "live demo":http://www.jetbrains.com/idea/training/demos/GUI_Designer/GUI_Designer.html.

@@ -4,6 +4,4 @@ title: Git pre commit hook for JIRA issue tags
 published: false
 ---
 
-h2. {{ page.title }}
-
 this hook will autotag commit message with jira tag if on branch

@@ -3,8 +3,6 @@ layout: post
 title: Using Arquillian to test against a remote jboss container from within IDEA
 ---
 
-h2. {{ page.title }}
-
 I recently got introduced to "Arquillian":http://community.jboss.org/docs/DOC-14376?uniqueTitle=false. Arquillian is a JBoss project for providing better testing to the java ee stack.
 Arquillian utilizes "ShrinkWrap":http://community.jboss.org/docs/DOC-14138, another great project, for creating virtual archives as deployments to the container.
 It's all pretty damn slick :)

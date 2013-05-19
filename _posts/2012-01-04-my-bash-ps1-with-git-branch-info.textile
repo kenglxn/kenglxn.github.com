@@ -3,8 +3,6 @@ layout: post
 title: My Bash PS1 with git branch info
 ---
 
-h2. {{ page.title }}
-
 I spent an hour playing around with my bash PS1 setting.
 I wanted some useful information about which git branch I am on, and some colors.
 

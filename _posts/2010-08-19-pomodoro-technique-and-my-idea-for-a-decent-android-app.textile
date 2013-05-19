@@ -3,8 +3,6 @@ layout: post
 title: Pomodoro Technique and my idea for a decent android app
 ---
 
-h2. {{ page.title }}
-
 I'm a big fan of the "pomodoro technique":http://www.pomodorotechnique.com/
 The pomodoro technique is basically working for a set amount of time, then taking small breaks before returning to work.
 

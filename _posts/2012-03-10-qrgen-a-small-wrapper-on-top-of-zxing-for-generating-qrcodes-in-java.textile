@@ -3,8 +3,6 @@ layout: post
 title: QRGen, a small wrapper on top of ZXING for generating QRCodes in java
 ---
 
-h2. {{ page.title }}
-
 A couple of months ago I was looking at creating QR codes in java, and found "ZXING":http://code.google.com/p/zxing/, which is pretty awesome, you should check it out.
 
 For convenience I made "a simple wrapper API":http://kenglxn.github.io/QRGen/ on top of zxing.
