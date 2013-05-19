@@ -1,6 +1,6 @@
 url: http://www.glxn.net
 name: 42 cents
-description: random stuff
+description: glxn.net
 
 permalink: /:year/:month/:day/:title
 safe: true
