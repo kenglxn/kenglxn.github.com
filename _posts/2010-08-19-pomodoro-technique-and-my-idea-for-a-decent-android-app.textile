@@ -16,7 +16,7 @@ A couple of the reasons i like it are:
 
 There are probably more things that I have forgotten right now, but my main point is that I think it is a good way to work.
 
-I currently use "ChromoDoro":https://chrome.google.com/extensions/detail/edhkjecdcakijjmlelnjjiohjmlaikhb, a great plugin, except for one thing: It's a plugin. I don't want my break to be spent in front of the computer, but rather on a walk to the watering hole or similar, and taking the computer with me is not an option.
+I currently use "ChromoDoro":https://chrome.google.com/extensions/detail/edhkjecdcakijjmlelnjjiohjmlaikhb, a great plugin, except for one thing: It's a plugin. I don't want my break to be spent in front of the computer, but rather on a walk to the watering hole or similar, and taking the computer with me is not an option.
 
 So how about a nice pomodoro plugin for android, there are some out there which can be downloaded, but i figure "Hey, what a great opportunity to get introduced to android application development " :)
 

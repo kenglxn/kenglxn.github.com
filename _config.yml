@@ -1,5 +1,5 @@
 url: http://www.glxn.net
-name: forty-two cents
+name: 42 cents
 description: random stuff
 
 permalink: /:year/:month/:day/:title
@@ -7,4 +7,3 @@ safe: true
 lsi: false
 pygments: true
 markdown: rdiscount
-exclude: ['master.ignore']
