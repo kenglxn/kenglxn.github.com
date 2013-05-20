@@ -1,3 +1,3 @@
 42cents
 =======
-glxn.net site
+http://glxn.net site
