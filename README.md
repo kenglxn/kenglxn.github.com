@@ -1,3 +1,2 @@
-42cents
-=======
-http://glxn.net site
+http://glxn.net
+===
