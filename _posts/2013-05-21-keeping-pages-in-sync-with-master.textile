@@ -3,7 +3,7 @@ layout: post
 title: Keeping gh-pages branch in sync with master
 ---
 
-For github project pages that are simply websites hosted on github pages like "this one":https://github.com/kenglxn/42cents I have found it a bit annoying to constantly merge master with gh-pages branch. I simply stay on the gh-pages branch ignoring master, but I really prefer to work on master. Guess It's a small OCD tendency I have..
+For github project pages that are simply websites hosted on github pages like "this one":https://github.com/kenglxn/42cents I have found it a bit annoying to constantly merge master with gh-pages branch. I could simply stay on the gh-pages branch ignoring master, but I really prefer to work on master. Guess It's a small OCD tendency I have..
 
 h2. git shove
 
