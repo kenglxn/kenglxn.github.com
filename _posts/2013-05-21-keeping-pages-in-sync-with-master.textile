@@ -1,0 +1,33 @@
+---
+layout: post
+title: Keeping gh-pages branch in sync with master
+---
+
+For github project pages that are simply websites hosted on github pages like "this one":https://github.com/kenglxn/42cents I have found it a bit annoying to constantly merge master with gh-pages branch. I simply stay on the gh-pages branch ignoring master, but I really prefer to work on master. Guess It's a small OCD tendency I have..
+
+h2. git shove
+
+There are a number of ways to solve this. Like a git commit hook that merges, followed by a push --all. But I prefer setting an alias for it:
+
+{% highlight bash %}
+[alias]
+    shove = !git push origin master && git push origin master:gh-pages
+{% endhighlight %}
+
+Now all I have to to to push both master and gh-pages while keeping them in sync is just to do a normal commit followed by git shove:
+{% highlight bash %}
+   (master) $ git ci -m "updated post"
+[master b6806c3] updated post
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+   (master) $ git shove
+Counting objects: 7, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 822 bytes, done.
+Total 4 (delta 2), reused 0 (delta 0)
+To git@github.com:kenglxn/42cents.git
+   e570bf9..b6806c3  master -> master
+Total 0 (delta 0), reused 0 (delta 0)
+To git@github.com:kenglxn/42cents.git
+   e570bf9..b6806c3  master -> gh-pages
+{% endhighlight %}
