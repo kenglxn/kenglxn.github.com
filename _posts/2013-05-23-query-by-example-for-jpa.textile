@@ -8,6 +8,7 @@ A while back I implemented a little "Query By Example API for JPA 2":http://keng
 h2. Summarized API Doc
 
 Start by using "QBE.java":https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBE.java
+
 {% highlight java %}
 // instantiates the QBE API with the supplied entityManager
 qbe = QBE.using(entityManager)
@@ -17,24 +18,30 @@ query = qbe.query(Entity.class)
 {% endhighlight %}
 
 Then you have a "QBEQuery":https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEQuery.java
+
 {% highlight java %}
 // set the example criteria, an JPA entity or a POJO with matching field names
 example = query.by(entityManager)
 {% endhighlight %}
 
-And then you have a "QBEExample":https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEExample.java
+From which you get a "QBEExample":https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEExample.java
+
 {% highlight java %}
 // Use exact match, i.e. equals
 example = example.use(Matching.EXACT)
+
 // Match the start of a string. i.e. XXXX%
 example = example.use(Matching.START)
+
 // Match the middle of a string. i.e. %XXXX%
 example = example.use(Matching.MIDDLE)
+
 // Match the end of a string. i.e. XXXX%
 example = example.use(Matching.END)
 
 // conjunction i.e. AND
 example = example.use(Junction.UNION)
+
 // disjunction i.e. OR
 example = example.use(Junction.INTERSECTION)
 
@@ -42,8 +49,11 @@ example = example.use(Junction.INTERSECTION)
 // (you can use either java object field name or name of @Column annotation)
 // multiple orderings are supported
 example = example.orderBy("fieldName", Order.ASCENDING)
+example = example.orderBy("columnName", Order.ASCENDING)
+
 // order descending
 example = example.orderBy("fieldName", Order.DESCENDING)
+example = example.orderBy("columnName", Order.DESCENDING)
 
 // execute query and fetch the result list
 List<Entity> results = example.list()
