@@ -27,3 +27,11 @@ git config --global core.editor "subl --wait"
 {% endhighlight %}
 
 Now Sublime will pop up when you do a git commit without a message. After writing the commit message, just save and quit sublime.
+
+Additionally, if you install the "git plugin":https://github.com/kemayo/sublime-text-2-git/wiki you will be able to get the diff view in the commit message by supplying -v
+
+{% highlight bash %}
+git commit -v
+{% endhighlight %}
+
+!/attachments/git-diff-ci.png!:/attachments/git-diff-ci.png
