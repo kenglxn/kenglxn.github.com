@@ -5,8 +5,6 @@ title: Migrated to jekyll and github pages
 
 I finally got around to migrating my site to github, and I thought I'd write a small post on how it all went down.
 
-Here is "The config":https://github.com/kenglxn/kenglxn.github.com/blob/master/_config.yml
-
 h5. Porting the content
 
 I followed the standard 'export to xml' followed by jekyll-import as mentioned in the "migrations":http://jekyllrb.com/docs/migrations/ section in the jekyll docs.
