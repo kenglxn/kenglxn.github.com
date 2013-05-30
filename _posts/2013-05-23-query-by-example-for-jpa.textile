@@ -21,7 +21,7 @@ Then you have a "QBEQuery":https://github.com/kenglxn/QueryByExample/blob/master
 
 {% highlight java %}
 // set the example criteria, an JPA entity or a POJO with matching field names
-example = query.by(entity)
+example = query.by(example)
 {% endhighlight %}
 
 From which you get a "QBEExample":https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEExample.java
