@@ -46,7 +46,7 @@ example = example.use(Junction.UNION)
 example = example.use(Junction.INTERSECTION)
 
 // order ascending by field with name
-// (you can use either java object field name or name of @Column annotation)
+// (you can use either supply a java object field name or name of @Column annotation)
 // multiple orderings are supported
 example = example.orderBy("fieldName", Order.ASCENDING)
 example = example.orderBy("columnName", Order.ASCENDING)
