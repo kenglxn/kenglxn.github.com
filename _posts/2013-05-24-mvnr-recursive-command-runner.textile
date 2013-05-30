@@ -21,5 +21,3 @@ mvnr clean install
 h2. caveat
 
 since mvnr uses 'mvn -f', which some plugins unfortunately do not respect, you may have pom configurations which have plugins using relative paths which assume cwd. This will not work very well.
-* This has been proven to be true with the "protostuff maven plugin":https://code.google.com/p/protostuff/
-in these cases it would be better if mvnr did a cd to the pom.xml  path, but I have decided not to do it like this, as -f really should be respected.
