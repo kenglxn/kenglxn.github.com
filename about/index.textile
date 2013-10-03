@@ -1,0 +1,13 @@
+---
+layout: default
+title: About The Author
+---
+
+!</attachments/kenglxn.png!
+
+&nbsp;&raquo; "twitter":https://twitter.com/kenglxn
+&nbsp;&raquo; "github":https://github.com/kenglxn
+&nbsp;&raquo; "linkedin":http://no.linkedin.com/in/kengullaksen
+&nbsp;&raquo; "coderwall":https://coderwall.com/kenglxn
+&nbsp;&raquo; "geeklist":https://geekli.st/kenglxn
+&nbsp;&raquo; "osrc":http://osrc.dfm.io/kenglxn
