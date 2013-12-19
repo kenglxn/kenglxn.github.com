@@ -1,6 +1,6 @@
 ---
 layout: default
-title: About The Author
+title: Ken Gullaksen
 ---
 
 !</attachments/kenglxn.png!
