@@ -5,7 +5,7 @@ title: Solving Sudoku using java swing and junit
 
 Was working on sudoku puzzles during easter holiday. Became bored, and being the nerd I am decided to practice my swing and created a tool to help solve it.
  Keep in mind that this is a "quickie" job, created in couple days work.
-Just extract "jSudokuSolver.zip":http://www.glxn.net/wp-content/uploads/2010/04/jSudokuSolver.zip and run:
+Just extract "jSudokuSolver.zip":https://github.com/kenglxn/JSudoku/raw/master/dist/jSudokuSolver.zip and run:
 
 {% highlight bash %}
 java -jar jSudoku.jar
