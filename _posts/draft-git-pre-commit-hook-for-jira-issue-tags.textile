@@ -1,7 +1,0 @@
----
-layout: post
-title: Git pre commit hook for JIRA issue tags
-published: false
----
-
-this hook will autotag commit message with jira tag if on branch
