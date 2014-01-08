@@ -1,6 +1,6 @@
 ---
 layout: post
-title: civu, a CLI for cloning git repositories from a view on jenkins
+title: civu, a CLI for cloning git repositories from jenkins views
 ---
 
 The other day I was starting work on a project that had a large code base spread across many git repositories. 
