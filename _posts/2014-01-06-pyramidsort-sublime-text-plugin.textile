@@ -7,6 +7,6 @@ I like my code to be neat. When I look at a bit of code, it is not just the nami
 
 h2. Enter PyramidSort
 
-Because of this, I found the need for a sorting plugin for my favorite text editor "Sublime Text":http://www.sublimetext.com. The "PyramidSort":https://github.com/kenglxn/PyramidSortSublimeTextPlugin plugin sorts the selected text by length ascending while removing blank lines. The plugin is easy to install and use. Just follow the "instructions on the github page":https://github.com/kenglxn/PyramidSortSublimeTextPlugin
+Because of this, I found the need for a sorting plugin for my favorite text editor "Sublime Text":http://www.sublimetext.com. The "PyramidSort":https://github.com/kenglxn/PyramidSortSublimeTextPlugin plugin sorts the selected text by length ascending while removing blank lines. The plugin is easy to install and use. Just follow the "instructions on the github page":https://github.com/kenglxn/PyramidSortSublimeTextPlugin#installing
 
 !https://github.com/kenglxn/PyramidSortSublimeTextPlugin/raw/master/demo.gif!
