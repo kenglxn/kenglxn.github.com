@@ -36,4 +36,4 @@ Best Regards,
 /kenglxn
 
 P.S:
-If you wish to know more details about my job history, take a look at my "linkedin profile"https://www.linkedin.com/in/kengullaksen. I try to keep it as informative and up-to-date as possible
+If you wish to know more details about my job history, take a look at my "linkedin profile":https://www.linkedin.com/in/kengullaksen. I try to keep it as informative and up-to-date as possible
