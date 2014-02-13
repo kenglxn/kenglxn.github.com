@@ -5,9 +5,33 @@ title: Ken Gullaksen
 
 !</attachments/kenglxn.png!
 
+&nbsp;&raquo; "g+":https://plus.google.com/+KenGullaksen
+&nbsp;&raquo; "facebook":https://www.facebook.com/kenglxn
 &nbsp;&raquo; "twitter":https://twitter.com/kenglxn
-&nbsp;&raquo; "github":https://github.com/kenglxn
 &nbsp;&raquo; "linkedin":http://no.linkedin.com/in/kengullaksen
+&nbsp;&raquo; "github":https://github.com/kenglxn
 &nbsp;&raquo; "coderwall":https://coderwall.com/kenglxn
-&nbsp;&raquo; "geeklist":https://geekli.st/kenglxn
-&nbsp;&raquo; "osrc":http://osrc.dfm.io/kenglxn
+
+Who am I? 
+
+If I only knew that I guess I would have found my centre, and could easily sit to rest in a dewy meadow while letting my rambling mind run wild. Unfortunately I am too young and restless to know anything of true value, although I continually try to gain more knowledge and depth through my journeys and interactions with other entities such as yourself. 
+
+Looking past the metaphysical, I am a code addict, a self diagnosed obsessive code craftsman, and nerd. I love programming languages of all kinds, but most of all I love making useful and valuable things using code. 
+
+I got my programming career startet the final year of finishing my Bacelors degree in IT and Information Systems at University of Agder in Kristiansand. Before that I was a headless chicken running around somewhere in Texas U.S.A. 
+
+My career started when I applied to an ad in the school paper, and subsequently had an interview with "Tommy Johannessen":http://no.linkedin.com/pub/tommy-johannessen/0/62b/21, who at that time was owner and director of "Community Reborn AS":http://www.communityr.com. I joined a small team of highly skilled enthusiasts, who where just as eager as me to be a part of the early wave of Social Media technologies. Facebook had just popped onto the grid, and just before that other social media solutions had been on and off the grid. This was back around 2006, and we got started on developing a Social Media Platform using the bleeding edge of technologies. I worked closely with a highly skilled developer and craftsman named "Leif Olsen":https://plus.google.com/114776971033248904400/posts. For this I am very thankful. He showed me a kind of discipline and resourcefullness that would stick with me in my career. I was also lucky to be accompanied by one of my classmates "Jon Vassb&oslash;":http://www.knowit.no/Kontakt-oss/Oslo/Medarbeidere/Jon-vassbo/. Working together with Jon taght me many things about shared learning, and pair programming from early on, and these learnings have been soldered to my core. A cooperation where inquisition and innovation is in focus, and there is no room for ego. I wish every collaboration was as fruitful as that which we had. 
+
+We based our product on Java technologies. The Core was developed with "Seam 1.2.1":http://seamframework.org/, "EJB 3":http://www.oracle.com/technetwork/topics/ejb30-093870.html, "JPA 1.0":http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html, with "MySQL":http://www.mysql.com/. For the frontend we made use of "JSF":http://www.oracle.com/technetwork/java/javaee/javaserverfaces-139869.html, "Facelets":http://docs.oracle.com/javaee/7/tutorial/doc/jsf-facelets.htm, "Richfaces":http://www.jboss.org/richfaces, along with "prototype.js":http://prototypejs.org/. We learned alot and had a lot of fun in the process. The Social Media Platform we build was cutting edge, and highly scalable. We used the early APIs made available by "Amazon AWS":http://aws.amazon.com/, such as "EC2":http://aws.amazon.com/ec2/, "S3":http://aws.amazon.com/s3/, and early version of "EBS":http://aws.amazon.com/ebs/ and "CloudFront":http://aws.amazon.com/cloudfront/ to create highly scalable clustered environments which could be started on demand. We used "Varninsh":https://www.varnish-cache.org/, "HAProxy":http://haproxy.1wt.eu/, "nginx":http://nginx.org/, "JBossAS":http://www.jboss.org/jbossas with "mod_cluster":https://www.jboss.org/mod_cluster, and "MySQL":http://www.mysql.com/ with "replication":https://dev.mysql.com/doc/refman/5.1/en/mysql-cluster-replication-multi-master.html and HA configurations all deployed on-demand cost efficiently in the cloud. We also used the cloud for rigging on-demand load testing environments using "JMeter":https://jmeter.apache.org/ and "Cacti":http://www.cacti.net/ and "Munin":http://munin-monitoring.org/ for monitoring.
+
+Time ran according to the suns orbit and the environment shifted. We landed our projects, but for some reason everybody did not line up to be part of our customer base. This showed me that it does not matter how great a product you have, or how much time and energy you have invested. The marked does what the marked does. Sometimes the pieces fall where they should, other times they fall where they may.
+
+It was a great first job, and I consider myself truly lucky to have been part of it. 
+
+Today, many years later, I can look back at a great time having been part of the starting wave of Social Media, followed by a some happy-go-lucky years as a consultant, followed by some years as a telepresence software engineer at Tandberg and subsequently Cisco, and finally today an engineer in the Energy sector working on the next generation of "Automated Meter Reading":http://en.wikipedia.org/wiki/Automatic_meter_reading Systems for "Embriq AS":http://www.embriq.no/.
+
+So, thanks for reading my small tale, and hope we can do sometinhg useful together.
+
+Best Regards,
+/kenglxn
+
