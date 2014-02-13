@@ -13,7 +13,7 @@ title: Ken Gullaksen
 &nbsp;&raquo; "linkedin":http://no.linkedin.com/in/kengullaksen
 &nbsp;&raquo; "github":https://github.com/kenglxn
 &nbsp;&raquo; "coderwall":https://coderwall.com/kenglxn
-&nbsp;&raquo; "open source report card":http://osrc.dfm.io/kenglxn
+&nbsp;&raquo; "osrc":http://osrc.dfm.io/kenglxn
 <br/>
 
 Who am I? 
