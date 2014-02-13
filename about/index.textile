@@ -30,7 +30,7 @@ It was a great first job, and I consider myself truly lucky to have been part of
 
 Today, many years later, I can look back at a great time having been part of the starting wave of Social Media, followed by a some happy-go-lucky years as a consultant, followed by some years as a telepresence software engineer at Tandberg and subsequently Cisco, and finally today an engineer in the Energy sector working on the next generation of "Automated Meter Reading":http://en.wikipedia.org/wiki/Automatic_meter_reading Systems for "Embriq AS":http://www.embriq.no/.
 
-So, thanks for reading my small tale, and hope we can do sometinhg useful together.
+So, thanks for reading my small tale, and hope we can do something useful together.
 
 Best Regards,
 /kenglxn
