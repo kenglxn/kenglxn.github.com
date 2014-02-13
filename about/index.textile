@@ -3,7 +3,9 @@ layout: default
 title: Ken Gullaksen
 ---
 
-!</attachments/kenglxn.png!
+<div style="float:left">
+<iframe src="https://githubbadge.appspot.com/kenglxn?s=1" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder="0"></iframe>
+</div>
 
 &nbsp;&raquo; "g+":https://plus.google.com/+KenGullaksen
 &nbsp;&raquo; "facebook":https://www.facebook.com/kenglxn
@@ -11,6 +13,8 @@ title: Ken Gullaksen
 &nbsp;&raquo; "linkedin":http://no.linkedin.com/in/kengullaksen
 &nbsp;&raquo; "github":https://github.com/kenglxn
 &nbsp;&raquo; "coderwall":https://coderwall.com/kenglxn
+&nbsp;&raquo; "open source report card":http://osrc.dfm.io/kenglxn
+<br/>
 
 Who am I? 
 
@@ -33,7 +37,7 @@ Today, many years later, I can look back at a great time having been part of the
 So, thanks for reading my small tale, and hope we can do something useful together.
 
 Best Regards,
-/kenglxn
+"/kenglxn":https://twitter.com/kenglxn
 
 P.S:
 If you wish to know more details about my job history, take a look at my "linkedin profile":https://www.linkedin.com/in/kengullaksen. I try to keep it as informative and up-to-date as possible
