@@ -16,7 +16,7 @@ example maven pom.xml
   <dependency>
     <groupId>net.glxn</groupId>
     <artifactId>qrgen</artifactId>
-    <version>1.2</version>
+    <version>1.4</version>
   </dependency>
 </dependencies>
 {% endhighlight %}
@@ -25,7 +25,7 @@ example build.gradle:
 
 {% highlight groovy %}
 dependencies {
-  compile ("net.glxn:qrgen:1.2")
+  compile ("net.glxn:qrgen:1.4")
 }
 {% endhighlight %}
 
