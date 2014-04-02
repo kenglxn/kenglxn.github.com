@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Migrated to jekyll and github pages
+title: Migrated from wordpress to jekyll and github pages
 ---
 
-I finally got around to migrating my site to github, and I thought I'd write a small post on how it all went down.
+I finally got around to migrating my site from wordpress to github, and I thought I'd write a small post on how it all went down.
 
 h5. Porting the content
 
