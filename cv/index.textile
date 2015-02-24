@@ -143,7 +143,7 @@ h2. Relevant Experience
   {% for exp in page.experience %}
   <dt><strong>{{ exp.from }} - {{ exp.to }}</strong></dt>
   <dd>
-    <strong>{{ exp.position }},</strong> {{ exp.employer }}
+    <strong>{{ exp.position }},</strong> {{ exp.company }}
     {% for desc in exp.desc %}
     <p>{{ desc }}</p>
     {% endfor %}
