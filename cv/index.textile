@@ -126,7 +126,7 @@ references:
 h2. Education
 
 <hr />
-<dl class="dl-horizontal">
+<dl>
   {% for ed in page.education %}
   <dt><strong>{{ ed.from }} - {{ ed.to }}</strong></dt>
   <dd>
@@ -139,7 +139,7 @@ h2. Education
 h2. Relevant Experience
 
 <hr />
-<dl class="dl-horizontal">
+<dl>
   {% for exp in page.experience %}
   <dt><strong>{{ exp.from }} - {{ exp.to }}</strong></dt>
   <dd>
@@ -155,7 +155,7 @@ h2. Relevant Experience
 h2. Certifications
 
 <hr />
-<dl class="dl-horizontal">
+<dl>
   {% for cert in page.certifications %}
   <dt><strong>{{ cert.date }}</strong></dt>
   <dd>
@@ -167,7 +167,7 @@ h2. Certifications
 h2. Open Source Contributions
 
 <hr />
-<dl class="dl-horizontal">
+<dl>
   {% for contrib in page.open-source %}
   <dt><strong>{{ contrib.name }}</strong></dt>
   <dd>
@@ -180,7 +180,7 @@ h2. Open Source Contributions
 h2. References
 
 <hr />
-<dl class="dl-horizontal">
+<dl>
   {% for ref in page.references %}
   <dt><strong>{{ ref.name }}</strong></dt>
   <dd>
