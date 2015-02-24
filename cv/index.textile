@@ -15,7 +15,7 @@ experience:
    from: October 2012
    to: Present
    desc: 
-   - Core developer on the Quant Platform. Quant is the most modern solution in the marked for efficient and cost efficient operation monitoring related to AMR and Smart Metering infrastructure and data. 
+   - Core developer on the Quant Platform. Quant is the most modern solution in the marked for efficient and low cost operation monitoring related to AMR and Smart Metering infrastructure and data. 
    more: "Core technologies: Java, Spring, JPA, JMS, WS, JavaScript"
  - company: Cisco Systems
    position: Software Engineer II
@@ -42,12 +42,12 @@ experience:
     - Created a JavaScript framework built upon prototype.js for inclusion of dynamic content into static pages, so as to enable caching of portal pages, while serving dynamic fragments as portlets. The framework handles requests logically based on cookies and destination, and includes a callback facility to enable customization of the resulting fragment upon request completion.
     - Set up advanced server architecture aimed at extremely high load and availability. The architectures included apache http w/ mod_proxy and php, HAProxy, nginx, JBoss AS, MySQL with multiple-master replication, amazon ec2, s3 and cloudfront.
 certifications:
- - date: January 2011
-   title: Certified Professional, Java SE 6 Programmer
-   org: Oracle
  - date: September 2014
    title: Certified Scrum Product Owner
    org: Scrum Alliance
+ - date: January 2011
+   title: Certified Professional, Java SE 6 Programmer
+   org: Oracle
 references:
  - name: Stig Murberg
    title: Technical Lead
