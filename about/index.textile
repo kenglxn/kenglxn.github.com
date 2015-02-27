@@ -12,6 +12,4 @@ title: Ken Gullaksen
 &nbsp;&raquo; "twitter":https://twitter.com/kenglxn
 &nbsp;&raquo; "linkedin":http://no.linkedin.com/in/kengullaksen
 &nbsp;&raquo; "github":https://github.com/kenglxn
-&nbsp;&raquo; "coderwall":https://coderwall.com/kenglxn
-&nbsp;&raquo; "osrc":http://osrc.dfm.io/kenglxn
 <br/>
