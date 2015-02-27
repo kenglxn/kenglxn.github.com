@@ -144,6 +144,7 @@ h2. Certifications
   <dt><strong>{{ cert.date }}</strong></dt>
   <dd>
     <strong>{{ cert.title }},</strong> {{ cert.org }}
+    <p></p>
   </dd>
   {% endfor %}
 </dl>
