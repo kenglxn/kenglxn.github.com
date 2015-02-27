@@ -31,7 +31,7 @@ experience:
    desc: 
     - Created the Seam Maven Refimpl project hosted on google. This project is the officially sanctioned initiative for Seam 2 + Maven project template. 
     - Core developer on the http://www.yellowrate.no project. Mainly contributing to the server side data analytics logic, application framework layout, and infrastructure setup for high scalability with dependable and cost efficient use of cloud services including AWS EC2, S3, EBS, EIP. 
-    - Core developer and maintainer of SkatteFUNN project at The Research Council of Norway. This project is a system for distributing funds via tax relief. The system includes an ESB, an outer and inner sone of web servers. Transports via JMS using ActiveMQ. Web interface built with struts. A swing client.
+    - Core developer and maintainer of SkatteFUNN project at The Research Council of Norway. This project is a system for distributing funds via tax relief. The system includes an ESB, an outer and inner zone of web servers. Transports via JMS using ActiveMQ. Web interface built with struts. A swing client.
  - company: Community Reborn AS
    position: System Developer
    from: 2006
@@ -136,6 +136,18 @@ h2. Education
   {% endfor %}
 </dl>
 
+h2. Certifications
+
+<hr />
+<dl>
+  {% for cert in page.certifications %}
+  <dt><strong>{{ cert.date }}</strong></dt>
+  <dd>
+    <strong>{{ cert.title }},</strong> {{ cert.org }}
+  </dd>
+  {% endfor %}
+</dl>
+
 h2. Relevant Experience
 
 <hr />
@@ -148,18 +160,6 @@ h2. Relevant Experience
     <p>{{ desc }}</p>
     {% endfor %}
     <p>{{ exp.more }}</p>
-  </dd>
-  {% endfor %}
-</dl>
-
-h2. Certifications
-
-<hr />
-<dl>
-  {% for cert in page.certifications %}
-  <dt><strong>{{ cert.date }}</strong></dt>
-  <dd>
-    <strong>{{ cert.title }},</strong> {{ cert.org }}
   </dd>
   {% endfor %}
 </dl>
