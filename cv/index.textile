@@ -149,7 +149,7 @@ h2. Certifications
   {% endfor %}
 </dl>
 
-h2. Relevant Experience
+h2. Experience
 
 <hr />
 <dl>
