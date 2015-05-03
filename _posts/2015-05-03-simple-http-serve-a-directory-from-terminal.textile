@@ -14,7 +14,7 @@ npm install http-server -g
 
 Then run it:
 {% highlight bash %}
-$ http-server . -c-1
+http-server . -c-1
 {% endhighlight %}
 The -c-1 arg busts the cache (cache =-1)
 
@@ -29,7 +29,7 @@ end
 So when I want to serve something I just do:
 
 {% highlight bash %}
-$ serve .
-Starting up http-server, serving . on: http://0.0.0.0:8080
-Hit CTRL-C to stop the server
+serve .
+ Starting up http-server, serving . on: http://0.0.0.0:8080
+ Hit CTRL-C to stop the server
 {% endhighlight %}
