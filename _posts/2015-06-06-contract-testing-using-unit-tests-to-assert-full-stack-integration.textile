@@ -1,0 +1,30 @@
+---
+layout: post
+title: JSON Contract testing using unit tests to assert full stack integration across REST services.
+---
+
+A while back I was faced with an interesting problem. The project I joined had an old-school web application consisting of JSP, tiles, Spring MVC, and a messy cluster of JavaScript. The functionality was all tested with Selenium. This kind of setup really makes me cringe. First off the JSP files often contain lots of logic, and are difficult to read, test, and debug. Secondly, there is often session state in the backend, which creates all sorts of headaches.
+
+h2. The cleanup
+
+The main goal for me was to separate the frontend completely from the backend, and get the majority of tests running at as low a level as possible. This was achieved through the following steps.
+
+h3. Throw away JSP
+
+No JSP files with logic, but instead a simple javascript app start hook which includes needed html through a templating system (e.g. _.template or knockout). This cleanly separated the markup from logic, and completely removes the need for rusty JSP files.
+
+h3. Ditch Spring MVC for REST
+
+Remove all session state nastyness and set up new clean REST service endpoints. Now the
+
+h3. Move client logic into a structured javascript app
+
+The possibilities here are pretty much endless. And the choice of which framework to use or even vanilla approach is up to you. I would focus on testability as one of the important factors in the decision.
+
+I ended up with a mix of namespaced vanilla "singleton pattern":http://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript for the legacy stuff, and "KnockoutJS":http://knockoutjs.com/ for the newer stuff.
+
+For testing I made use of "Karma":http://karma-runner.github.io/0.12/index.html with "Jasmine":http://jasmine.github.io/, which at the time was named Testacular. I can understand the renaming as googling for testacular often yielded results for something else completely.
+
+h2. Moving from selenium to contract unit tests
+
+Now that the test framework was in place, and the logic was being tested in unit tests in Javascript and Java. I needed a way to guarantee that the frontend code would work with the backend code. The result was something I like to call contract tests. It is fairly simple to do. Simply create a set of JSON files and include them in your unit test suites. On the backend/Java side the contract is placed on the classpath, and unit tests assert that the objects serialize to and deserialize from the contract. On the client/javascript side the JSON files are included in the test suite using "karma-html2js-preprocessor":https://github.com/karma-runner/karma-html2js-preprocessor and tests assert that the view models and relevant javascript functions consume and produce according to the JSON contracts.
