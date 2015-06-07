@@ -1,6 +1,6 @@
 ---
 layout: post
-title: JSON Contract testing using unit tests to assert full stack integration across REST services.
+title: JSON Contract testing using unit tests to assert full stack integration across REST services
 ---
 
 A while back I was faced with an interesting problem. The project I joined had an old-school web application consisting of JSP, tiles, Spring MVC, and a messy cluster of JavaScript. The functionality was all tested with Selenium. This kind of setup really makes me cringe. First off the JSP files often contain lots of logic, and are difficult to read, test, and debug. Secondly, there is often session state in the backend, which creates all sorts of headaches.
