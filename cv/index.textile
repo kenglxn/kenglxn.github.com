@@ -2,7 +2,7 @@
 layout: bare
 title: Curriculum Vitae
 education:
- - org: University of Agder (UiA) 
+ - org: University of Agder (UiA)
    from: 2003
    to: 2006
    desc: Bachelor's degree in Information Technology and Information Systems
@@ -14,31 +14,31 @@ experience:
    position: System Developer
    from: October 2012
    to: Present
-   desc: 
-   - Core developer on the Quant Platform. Quant is the most modern solution in the marked for efficient and low cost operation monitoring related to AMR and Smart Metering infrastructure and data. 
+   desc:
+   - Core developer on the Quant Platform. Quant is the most modern solution in the marked for efficient and low cost operation monitoring related to AMR and Smart Metering infrastructure and data.
    more: "Core technologies: Java, Spring, JPA, JMS, WS, JavaScript"
  - company: Cisco Systems
    position: Software Engineer II
    from: October 2010
    to: September 2012
-   desc: 
+   desc:
    - Core developer on TMS Provisioning Extension. Focus areas include architecture and API design, scalability and user experience.
    more: "Core technologies: Java, Spring, Jersey, Ruby, CoffeeScript"
  - company: Know IT Objectnet AS
    position: Consultant
    from: August 2008
    to: October 2010
-   desc: 
-    - Created the Seam Maven Refimpl project hosted on google. This project is the officially sanctioned initiative for Seam 2 + Maven project template. 
-    - Core developer on the http://www.yellowrate.no project. Mainly contributing to the server side data analytics logic, application framework layout, and infrastructure setup for high scalability with dependable and cost efficient use of cloud services including AWS EC2, S3, EBS, EIP. 
+   desc:
+    - Created the Seam Maven Refimpl project hosted on google. This project is the officially sanctioned initiative for Seam 2 + Maven project template.
+    - Core developer on the http://www.yellowrate.no project. Mainly contributing to the server side data analytics logic, application framework layout, and infrastructure setup for high scalability with dependable and cost efficient use of cloud services including AWS EC2, S3, EBS, EIP.
     - Core developer and maintainer of SkatteFUNN project at The Research Council of Norway. This project is a system for distributing funds via tax relief. The system includes an ESB, an outer and inner zone of web servers. Transports via JMS using ActiveMQ. Web interface built with struts. A swing client.
  - company: Community Reborn AS
    position: System Developer
    from: 2006
    to: July 2008
-   desc: 
+   desc:
     - Core developer on the CommunityR platform, with focus on scalability and performance including advanced server configurations, user web interface, data modelling, build systems and testing. The platform is a social networking platform built using Seam, EJB3, JPA, and JSF w/ facelets.
-    - Set up performance testing and monitoring using Amazon EC2, enabling a cost effective testing framework that could be set up in a short amount of time. This setup used a set of JMeter servers hitting JSF web interfaces with variable high load and measuring the performance of all aspects of the architecture using Cacti. 
+    - Set up performance testing and monitoring using Amazon EC2, enabling a cost effective testing framework that could be set up in a short amount of time. This setup used a set of JMeter servers hitting JSF web interfaces with variable high load and measuring the performance of all aspects of the architecture using Cacti.
     - Created a JavaScript framework built upon prototype.js for inclusion of dynamic content into static pages, so as to enable caching of portal pages, while serving dynamic fragments as portlets. The framework handles requests logically based on cookies and destination, and includes a callback facility to enable customization of the resulting fragment upon request completion.
     - Set up advanced server architecture aimed at extremely high load and availability. The architectures included apache http w/ mod_proxy and php, HAProxy, nginx, JBoss AS, MySQL with multiple-master replication, amazon ec2, s3 and cloudfront.
 certifications:
@@ -89,6 +89,10 @@ references:
    title: Senior Consultant
    company: Know IT Objectnet
    phone: 91 81 18 73
+ - name: Ole - André Johansen
+   title: Founder and CEO
+   company: Nisau
+   recommendation: "After working with product development for the first time with Ken, I can honestly say he is one of the most enthusiastic technology personas I have worked with. Thoroughly engaged and devoted to software craftsmanship and quality. Ken always seeks the future proof, sound solution and pushes to understand the underlying business scenario of the software that is beeing built.  As a person I know Ken as an intelligent, honest and proactive person, and I give him my best recommandation."
  - name: Parthiv Malani
    title: Senior Member of Technical Staff
    company: VMware
@@ -102,7 +106,7 @@ references:
    company: Cisco
    recommendation: "Ken brought great energy, focus, and coding skills to the Telepresence team in Oslo. He quickly established himself as a leader on the development team and was always willing to help others when needed. Ken played a vital role during our scrums and helped our team implement an agile process during the product's development lifecycle. Working alongside Ken was a great experience and I am definitely working forward to interacting with him professionally in the future."
  - name: Tor Eric Sandvik
-   title: Co-founder 
+   title: Co-founder
    company: Scelto AS
    recommendation: "I have known Ken for 2 years. We worked together on Yellowrate project and Java, Joomla, Seam framework. Ken brought amazing knowledge of Seam, Amazon EC2, intelliJ and Java to the team. He is one of the most knowledgeable persons I have met in this area. Ken is always positive and enthusiastic in his work. I would love to work with Ken again!"
  - name: Syver Enstad
@@ -172,7 +176,7 @@ h2. Open Source Contributions
   {% for contrib in page.open-source %}
   <dt><strong>{{ contrib.name }}</strong></dt>
   <dd>
-    <strong>{{ contrib.url }}</strong> 
+    <strong>{{ contrib.url }}</strong>
     <p>{{ contrib.desc }}</p>
   </dd>
   {% endfor %}
@@ -185,16 +189,16 @@ h2. References
   {% for ref in page.references %}
   <dt><strong>{{ ref.name }}</strong></dt>
   <dd>
-    {% if ref.recommendation %}    
+    {% if ref.recommendation %}
     <blockquote class="blockquote-reverse">
       <p>{{ ref.recommendation }}</p>
       <footer>{{ ref.name }} {{ ref.title }} @ <cite>{{ ref.company }}</cite></footer>
     </blockquote>
     {% else %}
-    {{ ref.title }}, {{ ref.company }}, {{ ref.phone }}  
+    {{ ref.title }}, {{ ref.company }}, {{ ref.phone }}
     {% endif %}
   </dd>
   <br>
   {% endfor %}
-  
+
 </dl>
