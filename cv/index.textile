@@ -80,15 +80,11 @@ references:
  - name: Stig Murberg
    title: Technical Lead
    company: Cisco Systems
-   phone: 45 25 07 40
- - name: Tommy Johannessen
-   title: Founder
-   company: Community Reborn AS
-   phone: 91 81 98 60
- - name: Leif Olsen
-   title: Senior Consultant
-   company: Know IT Objectnet
-   phone: 91 81 18 73
+   recommendation: "I had the pleasure of working closely with Ken for 2 years in Cisco. I can simply say he is a true craftsman when it comes to software development. He is already extremely knowledgable and he has a inquisitive mind to always dig deeper and truly understand the technology at hand. Simply solving a problem is never good enough for Ken, he will always go the extra mile to ensure the problem is solved elegantly and in the best possible way. Having pair programmed with Ken for 3 months straight, I can simply say he has a calm and gentle personality and is a joy to work with. And he knows karate. So for anyone looking for a software developer ahead of the herd, I truly recommend Ken."
+ - name: Marius Gravdal
+   title: CTO and Founder
+   company: Nisau
+   recommendation: "Ken is highly dedicated and effective and I enjoyed immensely working with him. We worked together on several projects in Embriq, ranging from front-end, batch processing for migration, back-end systems, CI environment and even "reworking" our agile process. Ken is an excellent developer, architect, scrum master and an overall awesome devops guy. In addition to these qualities, he's very good at communicating with both technical and non-technical people. Ken is also very knowledgeable about past and current technologies, and he is always interested in learning new technologies, which means he's the go-to guy when you want to learn about some emerging technology. I would highly recommend Ken to any position in the tech sector, and I sincerely hope to work with him again."
  - name: Ole - André Johansen
    title: Founder and CEO
    company: Nisau
@@ -117,6 +113,10 @@ references:
    title: Front-end developer
    company: Lesson Nine GmbH
    recommendation: "Ken is a social and good colleague. He is determined and not afraid of be clear and dives into any problem. Ken learns quickly and has a lot of competence he is easy to reach out to for help and work together with (especially when it comes to pair programming)"
+ - name: Tommy Johannessen
+   title: Founder
+   company: Community Reborn AS
+   recommendation: "Ken is a talented developer dedicated to his work. I can always trust Ken in doing the work assigned to him and I give him my best recommendations. In addition to his development skills Ken is also good to report the work he does and has a good understanding of the customer's needs."
 ---
 
 <address class="text-center">
