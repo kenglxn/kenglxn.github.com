@@ -85,7 +85,7 @@ references:
    title: CTO and Founder
    company: Nisau
    recommendation: "Ken is highly dedicated and effective and I enjoyed immensely working with him. We worked together on several projects in Embriq, ranging from front-end, batch processing for migration, back-end systems, CI environment and even 'reworking' our agile process. Ken is an excellent developer, architect, scrum master and an overall awesome devops guy. In addition to these qualities, he's very good at communicating with both technical and non-technical people. Ken is also very knowledgeable about past and current technologies, and he is always interested in learning new technologies, which means he's the go-to guy when you want to learn about some emerging technology. I would highly recommend Ken to any position in the tech sector, and I sincerely hope to work with him again."
- - name: Ole - André Johansen
+ - name: Ole - Andre Johansen
    title: Founder and CEO
    company: Nisau
    recommendation: "After working with product development for the first time with Ken, I can honestly say he is one of the most enthusiastic technology personas I have worked with. Thoroughly engaged and devoted to software craftsmanship and quality. Ken always seeks the future proof, sound solution and pushes to understand the underlying business scenario of the software that is beeing built.  As a person I know Ken as an intelligent, honest and proactive person, and I give him my best recommandation."
