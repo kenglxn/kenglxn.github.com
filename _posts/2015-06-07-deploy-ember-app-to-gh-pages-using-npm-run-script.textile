@@ -36,7 +36,7 @@ And make the deploy-gh.sh:
 #!/bin/bash
 
 set -e
-git checkout -B gh-pages
+git checkout gh-pages
 git merge master -m "merge master and prepare to deploy"
 ember build --environment production
 git add dist --force
@@ -48,7 +48,10 @@ git checkout master
 also remember:
 
 {% highlight bash %}
+# make file executable
 chmod +x deploy-gh.sh
+# create the gh-pages branch if not already existing
+git checkout -b gh-pages
 {% endhighlight %}
 
 At this point just commit changes on master and with a clean working tree do:
