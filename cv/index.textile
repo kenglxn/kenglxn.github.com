@@ -11,11 +11,11 @@ education:
    to: 2000
 experience:
 - company: Skalar AS
-  position: Developer
-  from: October 2015
-  to: Present
-  desc:
-  - Full stack developer working on app and api design, coding in ruby and javascript. Key technologies include ruby, javascript, node, hanami.rb, ember.js, CQRS w/ Event Sourcing, docker, heroku, AWS. 
+   position: Developer
+   from: October 2015
+   to: Present
+   desc:
+   - Full stack developer working on app and api design, coding in ruby and javascript. Key technologies include ruby, javascript, node, hanami.rb, ember.js, CQRS w/ Event Sourcing, docker, heroku, AWS. 
  - company: Embriq AS
    position: System Developer
    from: October 2012
