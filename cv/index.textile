@@ -56,30 +56,39 @@ certifications:
    org: Oracle
 open-source:
  - name: Shrinkwrap & Arquillian
+   role: Contributor
    desc: Arquillian is an innovative and highly extensible testing platform for the JVM that enables developers to easily create automated integration, functional and acceptance tests for Java middleware.
    url: http://arquillian.org
  - name: Jersey
+   role: Contributor
    desc: Jersey RESTful Web Services framework is open source, production quality, framework for developing RESTful Web Services in Java that provides support for JAX-RS APIs and serves as a JAX-RS (JSR 311 & JSR 339) Reference Implementation.
    url: http://jersey.java.net/
  - name: Constretto
+   role: Contributor
    desc: Constretto is as configuration management framework for Java applications. It allows you to “tag” configuration values, so that Constretto could choose the correct value at runtime.
    url: https://github.com/constretto/constretto-core
  - name: Testem
+   role: Contributor
    desc: Unit testing in Javascript can be tedious and painful, but Testem makes it so easy that you will actually want to write tests.
    url: https://github.com/airportyh/testem
  - name: gitr
+   role: Creator
    desc: recursive git command line tool
    url: https://github.com/kenglxn/gitr
  - name: mvnr
+   role: Creator
    desc: recursive maven command line tool
    url: https://github.com/kenglxn/mvnr
  - name: QRGen
+   role: Creator
    desc: a simple QRCode generation api for java built on top ZXING
    url: https://github.com/kenglxn/QRGen
  - name: QBE
+   role: Creator
    desc: Flexible JPA entity querying using example objects.
    url: https://github.com/kenglxn/QueryByExample
  - name: Civu
+   role: Creator
    desc: a simple ruby CLI for cloning git repos from jenkins views
    url: https://github.com/kenglxn/civu
 references:
@@ -180,7 +189,7 @@ h2. Open Source Contributions
 <hr />
 <dl>
   {% for contrib in page.open-source %}
-  <dt><strong>{{ contrib.name }}</strong></dt>
+  <dt><strong>{{ contrib.name }}</strong> {{ contrib.role }}</dt>
   <dd>
     <strong>{{ contrib.url }}</strong>
     <p>{{ contrib.desc }}</p>
