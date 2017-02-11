@@ -10,10 +10,16 @@ education:
    from: 1997
    to: 2000
 experience:
+- company: Skalar AS
+  position: Developer
+  from: October 2015
+  to: Present
+  desc:
+  - Full stack developer working on app and api design, coding in ruby and javascript. Key technologies include ruby, javascript, node, hanami.rb, ember.js, CQRS w/ Event Sourcing, docker, heroku, AWS. 
  - company: Embriq AS
    position: System Developer
    from: October 2012
-   to: Present
+   to: September 2015
    desc:
    - Core developer on the Quant Platform. Quant is the most modern solution in the marked for efficient and low cost operation monitoring related to AMR and Smart Metering infrastructure and data.
    more: "Core technologies: Java, Spring, JPA, JMS, WS, JavaScript"
