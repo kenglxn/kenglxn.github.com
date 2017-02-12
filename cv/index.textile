@@ -189,7 +189,7 @@ h2. Open Source Contributions
 <hr />
 <dl>
   {% for contrib in page.open-source %}
-  <dt><strong>{{ contrib.name }}</strong> {{ contrib.role }}</dt>
+  <dt><strong>{{ contrib.name }}: </strong> ({{ contrib.role }})</dt>
   <dd>
     <strong>{{ contrib.url }}</strong>
     <p>{{ contrib.desc }}</p>
