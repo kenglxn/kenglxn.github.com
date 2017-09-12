@@ -8,14 +8,8 @@ title: WELD/CDI lightningtalk from Know IT 2010 annual conference
 <a href="http://www.slideshare.net/kenglxn/wled-lightningtalk-know-it-iceland-2010" title="Weld lightningtalk - Know IT Iceland 2010">Weld lightningtalk - Know IT Iceland 2010</a>
 </strong>
 
-<object width="425" height="355">
-<param name="movie" value="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=spotiweld-100311033912-phpapp01&stripped_title=wled-lightningtalk-know-it-iceland-2010" />
-<param name="allowFullScreen" value="true"/>
-<param name="allowScriptAccess" value="always"/>
+<iframe src="https://www.slideshare.net/kenglxn/slideshelf" width="615px" height="470px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
 
-<embed src="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=spotiweld-100311033912-phpapp01&stripped\_title=wled-lightningtalk-know-it-iceland-2010" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="355"></embed>
-
-</object>
 <div style="padding:5px 0 12px">
 View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/kenglxn">kenglxn</a>.
 
