@@ -12,7 +12,8 @@ title: WELD/CDI lightningtalk from Know IT 2010 annual conference
 <param name="movie" value="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=spotiweld-100311033912-phpapp01&stripped_title=wled-lightningtalk-know-it-iceland-2010" />
 <param name="allowFullScreen" value="true"/>
 <param name="allowScriptAccess" value="always"/>
-&lt;embed src="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=spotiweld-100311033912-phpapp01&stripped\_title=wled-lightningtalk-know-it-iceland-2010" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="355"&gt;</embed>
+
+<embed src="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=spotiweld-100311033912-phpapp01&stripped\_title=wled-lightningtalk-know-it-iceland-2010" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="355"></embed>
 
 </object>
 <div style="padding:5px 0 12px">
