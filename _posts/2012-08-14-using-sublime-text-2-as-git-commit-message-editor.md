@@ -34,4 +34,4 @@ Additionally, if you install the [git plugin](https://github.com/kemayo/sublime-
 git commit -v
 {% endhighlight %}
 
-![](/attachments/git-diff-ci.png):/attachments/git-diff-ci.png
+![](/attachments/git-diff-ci.png)

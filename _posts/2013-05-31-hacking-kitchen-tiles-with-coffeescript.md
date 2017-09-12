@@ -14,7 +14,7 @@ The result
 
 I was rather pleased with the end result, but better than that is that my wife ended up loving it. When I told her that I had encoded a message in the tiles, she said "you're such a nerd" with a smile :)
 
-![](/attachments/coffee-kitchen.png):/attachments/coffee-kitchen.png
+![](/attachments/coffee-kitchen.png)
 
 The Code
 --------

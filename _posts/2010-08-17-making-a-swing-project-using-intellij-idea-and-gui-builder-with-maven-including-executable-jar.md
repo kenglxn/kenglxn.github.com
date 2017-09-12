@@ -15,19 +15,19 @@ So lets get started by setting up the project:
 
 Start IDEA and create a new project. Choose to create from scratch.
 
-![](/attachments/newproject.png):/attachments/newproject.png
+![](/attachments/newproject.png)
 
 In the module section choose maven module and give it a name
 
-![](/attachments/Screenshot-New-Project-Maven-Module.png):/attachments/Screenshot-New-Project-Maven-Module.png
+![](/attachments/Screenshot-New-Project-Maven-Module.png)
 
 In the next screen you can set maven artifact properties and if you wish choose an archetype, we'll be creating from scratch, so skip the archetype and click the finish button
 
-![](/attachments/Screenshot-New-Project-Finish.png):/attachments/Screenshot-New-Project-Finish.png
+![](/attachments/Screenshot-New-Project-Finish.png)
 
 Great, now we have a fresh maven project that we can work with
 
-![](/attachments/Screenshot-JMSUtility.png):/attachments/Screenshot-JMSUtility.png
+![](/attachments/Screenshot-JMSUtility.png)
 
 So now it's just a matter of adding the dependencies we need, and writing some code. We'll add some dependencies for tests, string manipulation and JMS.
 Here's a snippet of the dependencies added to the pom.xml so far:
@@ -66,31 +66,31 @@ We'll start off by making the UI using the built in [GUI Builder](http://www.jet
 
 create a new package, again I like to use alt+insert hotkey while the target directory is active. I chose net.glxn.jmsutility as the name for my package
 
-![](/attachments/newpackage.png):/attachments/newpackage.png
-![](/attachments/packagename.png):/attachments/packagename.png
+![](/attachments/newpackage.png)
+![](/attachments/packagename.png)
 
 Next we create a new GUI Form in the newly added package and give the form a name. Here I chose GridLayoutManager by IntelliJ, this will need to be added to the pom.
 
-![](/attachments/newguiform.png):/attachments/newguiform.png
-![](/attachments/newguiformname.png):/attachments/newguiformname.png
+![](/attachments/newguiform.png)
+![](/attachments/newguiformname.png)
 
 IDEA now kindly shows us the fresh GUI builder view, here we add our components from the palette. Take a look at the [live demo](http://www.jetbrains.com/idea/training/demos/GUI_Designer/GUI_Designer.html) of the GUI Builder to get started yourself.
 
-![](/attachments/guibuilder.png):/attachments/guibuilder.png
-![](/attachments/guibuilderitemsadded.png):/attachments/guibuilderitemsadded.png
+![](/attachments/guibuilder.png)
+![](/attachments/guibuilderitemsadded.png)
 
 We now have enough code to run the application: [4164296182c8efc3f0c97be8f5be1a7a1f2cdeb3](http://github.com/kenglxn/JMSUtility/commit/4164296182c8efc3f0c97be8f5be1a7a1f2cdeb3)
 
-![](/attachments/runclient.png):/attachments/runclient.png
-![](/attachments/runclient2.png):/attachments/runclient2.png
+![](/attachments/runclient.png)
+![](/attachments/runclient2.png)
 
 So now IDEA is able to run the GUI, and tests
 
-![](/attachments/testrun-idea.png):/attachments/testrun-idea.png
+![](/attachments/testrun-idea.png)
 
 That's it for the GUI building.
 Our next step is to get this build running equally smooth in maven. Lets see what the output is with the current code ([http://github.com/kenglxn/JMSUtility/tree/130462ca99bc7f05980fd129674d41ef975a5e92](http://github.com/kenglxn/JMSUtility/tree/130462ca99bc7f05980fd129674d41ef975a5e92))
-![](/attachments/maven-build-fail1.png):/attachments/maven-build-fail1.png
+![](/attachments/maven-build-fail1.png)
 So we see that maven isn't happy with us. Let's fix it by adding the following to the pom:
 
 {% highlight xml %}
@@ -114,12 +114,12 @@ So we see that maven isn't happy with us. Let's fix it by adding the following t
 
 Now we run the test again and get:
 
-![](/attachments/maven-build-fail2.png):/attachments/maven-build-fail2.png
+![](/attachments/maven-build-fail2.png)
 
 Here we see that the build is ok, but the tests fail. This is what I was talking about earlier in regards to the idea forms not being built with maven.
 Lets look at the surefire report and see what it says. I'm going to use the "analyze stacktrace" functionality in IDEA to get a pretty view of the content of the surefire report. To do this go to the Analyze menu and at the bottom select "Analyze stacktrace", and in the dialog paste in your stacktrace and click ok:
 
-![](/attachments/stacktrace-surefire.png):/attachments/stacktrace-surefire.png
+![](/attachments/stacktrace-surefire.png)
 
 This tells us that the helpButton field is null when it tries to attach an ActionListener in the constructor
 
@@ -152,7 +152,7 @@ The way we solve this is to import the [Maven 2 IDEA UI Designer Plugin](http://
 
 Let's see what the maven build does now by running clean install
 
-![](/attachments/maven-build-success.png):/attachments/maven-build-success.png
+![](/attachments/maven-build-success.png)
 
 How about that? The sweet taste of build success :)
 
@@ -200,7 +200,7 @@ At this point you should have a pom that looks like this: <http://github.com/ken
 
 Now let's run the executable jar by going to the target folder and running 'java -jar JMSUtil.jar'
 
-![](/attachments/run-executable-jar.png):/attachments/run-executable-jar.png
+![](/attachments/run-executable-jar.png)
 
 And that's it. You now have a maven build with tests and automatic building of the executable jar.
 

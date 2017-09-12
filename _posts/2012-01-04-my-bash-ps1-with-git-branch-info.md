@@ -8,7 +8,7 @@ I wanted some useful information about which git branch I am on, and some colors
 
 After reading a couple of articles on it like [this one](http://www.wiredrevolution.com/bash-programming/customize-the-bash-ps1-command-prompt) and [this one](http://www.thegeekstuff.com/2008/09/bash-shell-ps1-10-examples-to-make-your-linux-prompt-like-angelina-jolie/) I tried it a bit myself and ended up with this:
 
-![](/attachments/ps11.png):/attachments/ps11.png
+![](/attachments/ps11.png)
 
 Here is the PS1 code:
 

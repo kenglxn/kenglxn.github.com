@@ -23,10 +23,10 @@ git clone git://github.com/kenglxn/JSudoku.git
 I based my implementation on a sudoku puzzle found in a magazine. I picked a puzzle from the magazine and made this the sample. Then i wrote a test to confirm the solver worked for the two axis, and the sub-grid. Then the last test to confirm the solver get's the expected solution. Code for the test is pasted below.
 
 Heres the sample:
-![](/attachments/sample2.png):/attachments/sample2.png
+![](/attachments/sample2.png)
 
 And here's the sample solved:
-![](/attachments/sample-solved.png):/attachments/sample-solved.png
+![](/attachments/sample-solved.png)
 
 This is the recursive method that does all the work:
 
