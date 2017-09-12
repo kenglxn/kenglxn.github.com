@@ -1,0 +1,61 @@
+---
+layout: post
+title: Deploy an Ember app to gh-pages using npm run-script
+---
+
+I just recently started playing around with an app using [Ember.js](http://emberjs.com/). If you are not familiar with Ember.js you should check it out, it is a pretty awesome stack.
+
+My app does not have its own backend, but makes use of publicly available APIs. Because of this I can host it on gh-pages while I get it up and running.
+
+NOTE: This should not be used for production usage, as it may be in conflict with the github TOS.
+
+Anyway, the setup is pretty simple.
+
+First make the production configuration use basePath that the repo will be hosted under. In environment.js:
+
+{% highlight javascript %}
+if (environment === 'production') {
+  ENV.baseURL = '/repository_name/';
+}
+{% endhighlight %}
+
+Then add a deploy-gh to package.json scripts:
+
+{% highlight javascript %}
+"scripts": {
+  "start": "ember server",
+  "build": "ember build",
+  "test": "ember test",
+  "deploy-gh": "./deploy-gh.sh"
+},
+{% endhighlight %}
+
+And make the deploy-gh.sh:
+
+{% highlight bash %}
+#!/bin/bash
+
+set -e
+git checkout gh-pages
+git merge master -m "merge master and prepare to deploy"
+ember build --environment production
+git add dist --force
+git commit -m "deploy to gh-pages"
+git subtree push --prefix dist origin gh-pages
+git checkout master
+{% endhighlight %}
+
+also remember:
+
+{% highlight bash %}
+# make file executable
+chmod +x deploy-gh.sh
+# create the gh-pages branch if not already existing
+git checkout -b gh-pages
+{% endhighlight %}
+
+At this point just commit changes on master and with a clean working tree do:
+
+{% highlight bash %}
+npm run-script deploy-gh
+{% endhighlight %}

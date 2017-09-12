@@ -1,0 +1,173 @@
+---
+layout: post
+title: Query By Example for JPA
+---
+
+A while back I implemented a little [Query By Example API for JPA 2](http://kenglxn.github.io/QueryByExample/). The API is a quite simple to use and very flexible abstraction on top of the [Hibernate Criteria API](http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/querycriteria.html). The basic idea is that you build an example object and pass it in to the QBE API. The example could be a JPA Entity or a simple POJO. In case where example object is another type than the entity being queried the example object must have fields matching the same names as the fields you want to match on the entity class. There are some sensible defaults to the query that is built, but you can override many aspects like matching, junction and multiple ordering semantics. The javadoc on the source should be pretty extensive, but I have summarized the important stuff below.
+
+Summarized API Doc
+------------------
+
+Start by using [QBE.java](https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBE.java)
+
+{% highlight java %}
+// instantiates the QBE API with the supplied entityManager
+qbe = QBE.using(entityManager)
+
+// sets the target JPA entity to query
+query = qbe.query(Entity.class)
+{% endhighlight %}
+
+Then you have a [QBEQuery](https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEQuery.java)
+
+{% highlight java %}
+// set the example criteria, an JPA entity or a POJO with matching field names
+example = query.by(pojoOrEntityExample)
+{% endhighlight %}
+
+From which you get a [QBEExample](https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEExample.java)
+
+{% highlight java %}
+// Use exact match, i.e. equals
+example = example.use(Matching.EXACT)
+
+// Match the start of a string. i.e. XXXX%
+example = example.use(Matching.START)
+
+// Match the middle of a string. i.e. %XXXX%
+example = example.use(Matching.MIDDLE)
+
+// Match the end of a string. i.e. XXXX%
+example = example.use(Matching.END)
+
+// conjunction i.e. AND
+example = example.use(Junction.UNION)
+
+// disjunction i.e. OR
+example = example.use(Junction.INTERSECTION)
+
+// order ascending by field with name
+// (you can use either supply a java object field name or name of @Column annotation)
+// multiple orderings are supported
+example = example.orderBy("fieldName", Order.ASCENDING)
+example = example.orderBy("columnName", Order.ASCENDING)
+
+// order descending
+example = example.orderBy("fieldName", Order.DESCENDING)
+example = example.orderBy("columnName", Order.DESCENDING)
+
+// execute query and fetch the result list
+List<Entity> results = example.list()
+
+// execute query and fetch a unique result
+Entity result = example.item()
+
+// get the underlying JPA TypedQuery object (for pagination etc)
+TypedQuery<Entity> typedQuery = getQuery()
+{% endhighlight %}
+
+Examples
+--------
+
+Below are more example usages:
+
+{% highlight java %}
+// get a list of entities using an arbitrary pojo as example input
+List<Entity> resultList =
+    QBE.using(entityManager)
+        .query(Entity.class)
+        .by(new Pojo("foo"))
+        .list();
+
+// get a single result using an arbitrary pojo as example input
+Entity item =
+    QBE.using(entityManager)
+        .query(Entity.class)
+        .by(new Pojo("foo"))
+        .item();
+
+// get and work with the underlying TypedQuery object (useful e.g. for paging)
+TypedQuery<Entity> query =
+    QBE.using(entityManager)
+        .query(Entity.class)
+        .by(new Pojo("foo"))
+        .getQuery();
+List<Entity> resultList =
+    query
+        .setFirstResult(0)
+        .setMaxResults(10)
+        .getResultList();
+
+// override the Matching logic (defaults to EXACT)
+QBE.using(entityManager)
+    .query(Entity.class)
+    .by(new Pojo("foo"))
+    .use(Matching.EXACT);
+QBE.using(entityManager)
+    .query(Entity.class)
+    .by(new Pojo("foo"))
+    .use(Matching.START);
+QBE.using(entityManager)
+    .query(Entity.class)
+    .by(new Pojo("foo"))
+    .use(Matching.MIDDLE);
+QBE.using(entityManager)
+    .query(Entity.class)]
+    .by(new Pojo("foo"))
+    .use(Matching.END);
+
+// override the Junction for multiple fields (defaults to UNION)
+List<Entity> resultList =
+    QBE.using(entityManager)
+        .query(Entity.class)
+        .by(example)
+        .use(Junction.INTERSECTION)
+        .list();
+
+// define the ordering of the result
+List<Entity> resultList =
+    QBE.using(entityManager)
+        .query(Entity.class)
+        .by(new Pojo("foo"))
+        .use(Matching.START)
+        .orderBy(fieldToOrderBy, Order.ASCENDING)
+        .list();
+
+// define multiple fields for ordering semantics
+List<Entity> resultList =
+    QBE.using(entityManager)
+        .query(Entity.class)
+        .by(new Pojo("foo"))
+        .use(Matching.START)
+        .orderBy("firstName", Order.DESCENDING)
+        .orderBy("lastName", Order.ASCENDING)
+        .list();
+{% endhighlight %}
+
+Get it
+------
+
+To get started using QBE, just clone and build the project:
+
+{% highlight bash %}
+git clone git://github.com/kenglxn/QueryByExample.git
+cd QueryByExample/
+mvn clean install
+and then add QBE as a dependency in your project
+{% endhighlight %}
+
+{% highlight xml %}
+<dependency>
+    <groupId>net.glxn</groupId>
+    <artifactId>qbe</artifactId>
+    <version>1.2</version>
+</dependency>
+{% endhighlight %}
+
+If you don't want to clone and build yourself, simply grab the jars from [here](https://github.com/kenglxn/QueryByExample/tree/master/dist)
+
+Then just run maven to install them into your local repo:
+
+{% highlight bash %}
+mvn install:install-file -Dfile=qbe-1.2.jar -DgroupId=net.glxn -DartifactId=qbe -Dversion=1.2 -Dpackaging=jar -DgeneratePom=true
+{% endhighlight %}

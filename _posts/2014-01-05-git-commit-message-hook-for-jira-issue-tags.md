@@ -1,0 +1,20 @@
+---
+layout: post
+title: Git commit-message hook for JIRA issue tags
+---
+
+Several of the projects I have been a part of the last couple of years used [JIRA](https://www.atlassian.com/JIRA) as an issue tracker. Additionally these projects also shared the notion that all commits made to the version control system should contain a tag telling other and future developers what issue the commit relates to. This also enables JIRA to show commits as part of the issue view, enabling for better visibility of code changes across the team.
+
+It would on occasion happen that I forgot to add the JIRA tag in the commit message. I decided to set up a commit-message hook that would automatically prepend my JIRA issue number to any commit message made given that I am on a branch that follows the JIRA pattern syntax.
+
+<script src="https://gist.github.com/kenglxn/8295565.js">
+</script>
+To install this hook simply save it with the name 'commit-message' in the '.git/hooks' directory of your local repo and make sure it is executable.
+
+The when you start work on an issue create a [feature branch]()
+
+{% highlight bash %}
+$ git checkout -b JIRA-42
+{% endhighlight %}
+
+Any commits on this branch will automatically prepend "\[JIRA-42\] " to that commits message if it is missing. It will also abort the commit if a JIRA tag is missing.

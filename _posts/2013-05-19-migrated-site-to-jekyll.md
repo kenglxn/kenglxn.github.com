@@ -1,0 +1,65 @@
+---
+layout: post
+title: Migrated from wordpress to jekyll and github pages
+---
+
+I finally got around to migrating my site from wordpress to github, and I thought I'd write a small post on how it all went down.
+
+##### Porting the content
+
+I followed the standard 'export to xml' followed by jekyll-import as mentioned in the [migrations](http://jekyllrb.com/docs/migrations/) section in the jekyll docs.
+It was pretty straightforward, but I did get a nasty error when I first tried to start jekyll:
+
+{% highlight bash %}
+Configuration file: /Users/ken/dev/git/42cents/_config.yml
+            Source: /Users/ken/dev/git/42cents
+       Destination: /Users/ken/dev/git/42cents/_site
+      Generating... Error reading file /Users/ken/dev/git/42cents/_posts/2010-08-19-pomodoro-technique-and-my-idea-for-a-decent-android-app.textile: invalid byte sequence in US-ASCII
+  Liquid Exception: invalid byte sequence in US-ASCII in 2010-08-19-pomodoro-technique-and-my-idea-for-a-decent-android-app.textile
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/liquid-2.5.0/lib/liquid/template.rb:141:in `split'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/liquid-2.5.0/lib/liquid/template.rb:141:in `tokenize'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/liquid-2.5.0/lib/liquid/template.rb:58:in `parse'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/liquid-2.5.0/lib/liquid/template.rb:46:in `parse'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/convertible.rb:77:in `render_liquid'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/convertible.rb:128:in `do_layout'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/post.rb:285:in `render'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/site.rb:230:in `block in render'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/site.rb:229:in `each'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/site.rb:229:in `render'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/site.rb:44:in `process'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/command.rb:18:in `process_site'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/commands/build.rb:23:in `build'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/commands/build.rb:7:in `process'
+/Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/bin/jekyll:83:in `block (2 levels) in <top (required)>'
+{% endhighlight %}
+
+Turns out there was some derpy characters in some of the posts. Not surprising really, but finding them was a bit tricky.
+First step to finding the garbled data was to get jekyll to start regardless of the non US-ASCII characters by setting this property in my shell:
+{% highlight bash %}
+export LANG=en_US.UTF-8
+{% endhighlight %}
+
+Then i started browsing the pages and looking for derpy characters in the posts. Although probably not the most efficient way of doing this, I figure it was a one time deal, so manually fixing these characters was OK; It did not end up taking more than 5 minutes anyway.
+After I removed the derpy characters I simply launched a new shell session to see that jekyll was able to generate the site.
+
+Then it was just to make a layout and port the posts from html to textile.
+
+##### preserving nappy old wordpress permlinks
+
+One thing that was a bit annoying was that I could not figure out how to get jekyll to host posts under the old permalinks with the style ('?p=123') at the same time as using a new pretty permalink scheme. Additionally the site is hosted on Github, and 301 redirect does not seem to be an option. I ended up just hacking it with some javascript. The hack is basically just a check for if the query part of the url contains a p= and if so redirect to the new url for the old post. See:
+
+<script src="https://gist.github.com/kenglxn/5607639.js">
+</script>
+Although suboptimal, the hack works. If you have a better suggestion, I welcome it. I would love it if I could get a 301 sent from my github pages for those old permalinks.
+
+##### hosting subdirectories with static content
+
+I also had a subdirectory with a bunch of [seam related stuff](http://www.glxn.net/seam-maven-refimpl/doc/tutorial/01-gettingstarted.html) I wanted to ensure survived the migration. This was easy as cheese. I just placed the same directory at the root of my site, and pushed them to the repository. Worked out-of-the box.
+
+##### routing glxn.net to kenglxn.github.com
+
+In two simple steps I was able to deprecate the old webhotell and use github pages instead.
+
+First I followed the [instructions on github](https://help.github.com/articles/setting-up-a-custom-domain-with-pages) and added a [CNAME](https://github.com/kenglxn/kenglxn.github.com/blob/master/CNAME) file with glxn.net as its content to the root of my repository.
+
+Next I went to my registrar and updated the DNS settings. First I moved the webhotell A record to a backup domain. Then I added two A records pointing to the github pages server IP. One for glxn.net and one for www.glxn.net ensuring that www &lt;=&gt; TLD redirects will work.
