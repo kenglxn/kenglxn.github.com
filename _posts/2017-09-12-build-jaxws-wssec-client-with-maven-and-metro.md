@@ -68,6 +68,7 @@ they are found to be non standard.
                   <wsdlFiles>
                       <wsdlFile>TheService.wsdl</wsdlFile>
                   </wsdlFiles>
+                  <wsdlLocation>/wsdl/TheService.wsdl</wsdlLocation>
               </configuration>
           </execution>
       </executions>
