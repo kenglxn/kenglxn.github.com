@@ -5,7 +5,7 @@ title: hacking kitchen tiles with coffeescript
 
 It was finally time to spruce up ye' ole' kichen. I had bought the tiles in shades of brown and white. The area to tile was about 50cm tall and 250cm wide. The tiles were 10cm x 10cm with 3mm spacers for the grout. Now all that remained was to find a pattern. I tried with pen and grid paper, but could not seem to find a pattern I liked. Then the idea struck me that this would be a great opportunity to hack a bit. I decided I wanted to encode something as binary ascii in the tiles, while making a tile pattern I found appealing. I ended up using this awesome [Boilerplate project using CS, AMD, Mocha and Testem](http://smuco.de/2013/04/25/coffeescript-amd-mocha-testem.html) by [@smucode](https://twitter.com/smucode) to create a small app that takes some input and converts it to binary ascii before rendering some tiles with a bit of border.
 
-![](/attachments/bin-ascii-tiles.png):https://github.com/kenglxn/bin-ascii-tiles
+![](/attachments/bin-ascii-tiles.png)https://github.com/kenglxn/bin-ascii-tiles
 
 Please keep in mind that the whole thing was thrown together in an evening, so don't expect the world. The [code is on github](https://github.com/kenglxn/bin-ascii-tiles), and [running live here](http://kenglxn.github.io/bin-ascii-tiles/)
 
@@ -21,7 +21,7 @@ The Code
 
 The whole app is just 33 lines of coffee, and looks like this:
 
-{% highlight coffeescript %}
+```coffeescript
 define ['underscore', 'jquery'], (_, $) ->
   class App
     init: =>
@@ -54,11 +54,11 @@ define ['underscore', 'jquery'], (_, $) ->
         if b then gcdFn(b, a % b) else a
       gcd = gcdFn num, denom
       [num / gcd, denom / gcd]
-{% endhighlight %}
+```
 
 Driven forth by a test suite about equal in size:
 
-{% highlight coffeescript %}
+```coffeescript
 define ['cs!src/coffee/app'], (App) ->
   describe 'App', ->
 
@@ -90,4 +90,4 @@ define ['cs!src/coffee/app'], (App) ->
       app = new App
       reduced = app.reduce 8, 16
       reduced.should.eql [1, 2]
-{% endhighlight %}
+```
