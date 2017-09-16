@@ -11,7 +11,7 @@ To put it to use just add the dependency to your project, and you will be able t
 
 example maven pom.xml
 
-{% highlight xml %}
+```xml
 <dependencies>
   <dependency>
     <groupId>net.glxn</groupId>
@@ -19,19 +19,19 @@ example maven pom.xml
     <version>1.4</version>
   </dependency>
 </dependencies>
-{% endhighlight %}
+```
 
 example build.gradle:
 
-{% highlight groovy %}
+```groovy
 dependencies {
   compile ("net.glxn:qrgen:1.4")
 }
-{% endhighlight %}
+```
 
 After that you can put it to use in your project:
 
-{% highlight java %}
+```java
 // get QR file from text using defaults
 File file = QRCode.from("Hello World").file();
 // get QR stream from text using defaults
@@ -51,12 +51,12 @@ QRCode.from("Hello World").to(ImageType.GIF).withSize(250, 250).stream();
 
 // supply own outputstream
 QRCode.from("Hello World").to(ImageType.PNG).writeTo(outputStream);
-{% endhighlight %}
+```
 
 See the github page for more info: <http://kenglxn.github.io/QRGen/>
 
 If you'd rather use [ZXING](http://code.google.com/p/zxing/) directly, you will be able to since it is a transitive dependency of QRGen, but you could also just add the ZXING repository definition and dependency to your project:
-{% highlight xml %}
+```xml
     <dependencies>
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -75,4 +75,4 @@ If you'd rather use [ZXING](http://code.google.com/p/zxing/) directly, you will 
             <url>https://oss.sonatype.org/content/repositories/releases</url>
         </repository>
     </repositories>
-{% endhighlight %}
+```
