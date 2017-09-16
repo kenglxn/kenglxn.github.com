@@ -10,24 +10,24 @@ Summarized API Doc
 
 Start by using [QBE.java](https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBE.java)
 
-{% highlight java %}
+```java
 // instantiates the QBE API with the supplied entityManager
 qbe = QBE.using(entityManager)
 
 // sets the target JPA entity to query
 query = qbe.query(Entity.class)
-{% endhighlight %}
+```
 
 Then you have a [QBEQuery](https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEQuery.java)
 
-{% highlight java %}
+```java
 // set the example criteria, an JPA entity or a POJO with matching field names
 example = query.by(pojoOrEntityExample)
-{% endhighlight %}
+```
 
 From which you get a [QBEExample](https://github.com/kenglxn/QueryByExample/blob/master/src/main/java/net/glxn/qbe/QBEExample.java)
 
-{% highlight java %}
+```java
 // Use exact match, i.e. equals
 example = example.use(Matching.EXACT)
 
@@ -64,14 +64,14 @@ Entity result = example.item()
 
 // get the underlying JPA TypedQuery object (for pagination etc)
 TypedQuery<Entity> typedQuery = getQuery()
-{% endhighlight %}
+```
 
 Examples
 --------
 
 Below are more example usages:
 
-{% highlight java %}
+```java
 // get a list of entities using an arbitrary pojo as example input
 List<Entity> resultList =
     QBE.using(entityManager)
@@ -142,32 +142,32 @@ List<Entity> resultList =
         .orderBy("firstName", Order.DESCENDING)
         .orderBy("lastName", Order.ASCENDING)
         .list();
-{% endhighlight %}
+```
 
 Get it
 ------
 
 To get started using QBE, just clone and build the project:
 
-{% highlight bash %}
+```bash
 git clone git://github.com/kenglxn/QueryByExample.git
 cd QueryByExample/
 mvn clean install
 and then add QBE as a dependency in your project
-{% endhighlight %}
+```
 
-{% highlight xml %}
+```xml
 <dependency>
     <groupId>net.glxn</groupId>
     <artifactId>qbe</artifactId>
     <version>1.2</version>
 </dependency>
-{% endhighlight %}
+```
 
 If you don't want to clone and build yourself, simply grab the jars from [here](https://github.com/kenglxn/QueryByExample/tree/master/dist)
 
 Then just run maven to install them into your local repo:
 
-{% highlight bash %}
+```bash
 mvn install:install-file -Dfile=qbe-1.2.jar -DgroupId=net.glxn -DartifactId=qbe -Dversion=1.2 -Dpackaging=jar -DgeneratePom=true
-{% endhighlight %}
+```
