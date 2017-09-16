@@ -17,7 +17,7 @@ IDEA will then take a couple of minutes setting things up.
 
 For Arquillian magic to work, we need to add junit (or you could use testng if you prefer), and the arquillian dependency to the pom.
 
-{% highlight xml %}
+```xml
 <dependency>
 	<groupId>junit</groupId>
 	<artifactId>junit</artifactId>
@@ -31,11 +31,11 @@ For Arquillian magic to work, we need to add junit (or you could use testng if y
 	<version>1.0.0-SNAPSHOT</version>
 	<scope>test</scope>
 </dependency>
-{% endhighlight %}
+```
 
 Then we add a profile to the pom for running the tests against the remote jboss container.
 
-{% highlight xml %}
+```xml
 <profiles>
 	<profile>
 		<id>jbossas-remote-60</id>
@@ -49,7 +49,7 @@ Then we add a profile to the pom for running the tests against the remote jboss 
 		</dependencies>
 	</profile>
 </profiles>
-{% endhighlight %}
+```
 
 Notice that I have set the scope on the profile to test.
 The reason for this is that i use IDEA to deploy the project to the server (not maven), and I don't want to toggle the profile in maven plugin all the time.
@@ -59,7 +59,7 @@ So, let's have some fun.
 
 For my test case I have created a very simple Bean:
 
-{% highlight java %}
+```java
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -91,11 +91,11 @@ public class HelloAction {
         this.input = input;
     }
 }
-{% endhighlight %}
+```
 
 I want to deploy this bean to the container, and test it. The Following test case does the trick:
 
-{% highlight java %}
+```java
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePaths;
@@ -131,7 +131,7 @@ public class HelloTestCase {
        Assert.assertEquals("You said: hello", helloAction.getOutput());
    }
 }
-{% endhighlight %}
+```
 
 The @Deployment method describes the virtual archive I want deployed to the container.
 Here I create a simple archive and add the class I want to test.
@@ -140,11 +140,11 @@ For CDI beans to work you will have to add the beans.xml to the archive.
 We also need to add jndi.properties file to the project. This is needed for Arquillian to be able to connect to the remote container. Make sure that **java.naming.provider.url** reflects the IP of your remote server instance.
 Place jndi.properties file under src/test/resources:
 
-{% highlight java %}
+```java
 java.naming.factory.initial=org.jnp.interfaces.NamingContextFactory
 java.naming.factory.url.pkgs=org.jboss.naming:org.jnp.interfaces
 java.naming.provider.url=jnp://localhost:1099
-{% endhighlight %}
+```
 
 Now we simply run the test from within IDEA using **right click &gt; run test**, or **ctrl+shift+f10**.
 Just remember that this is a test running against a remote jboss container, so jboss needs to be running ;)
