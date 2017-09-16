@@ -13,26 +13,26 @@ Anyway, the setup is pretty simple.
 
 First make the production configuration use basePath that the repo will be hosted under. In environment.js:
 
-{% highlight javascript %}
+```javascript
 if (environment === 'production') {
   ENV.baseURL = '/repository_name/';
 }
-{% endhighlight %}
+```
 
 Then add a deploy-gh to package.json scripts:
 
-{% highlight javascript %}
+```javascript
 "scripts": {
   "start": "ember server",
   "build": "ember build",
   "test": "ember test",
   "deploy-gh": "./deploy-gh.sh"
 },
-{% endhighlight %}
+```
 
 And make the deploy-gh.sh:
 
-{% highlight bash %}
+```bash
 #!/bin/bash
 
 set -e
@@ -43,19 +43,19 @@ git add dist --force
 git commit -m "deploy to gh-pages"
 git subtree push --prefix dist origin gh-pages
 git checkout master
-{% endhighlight %}
+```
 
 also remember:
 
-{% highlight bash %}
+```bash
 # make file executable
 chmod +x deploy-gh.sh
 # create the gh-pages branch if not already existing
 git checkout -b gh-pages
-{% endhighlight %}
+```
 
 At this point just commit changes on master and with a clean working tree do:
 
-{% highlight bash %}
+```bash
 npm run-script deploy-gh
-{% endhighlight %}
+```
