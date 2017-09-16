@@ -13,8 +13,8 @@ To install this hook simply save it with the name 'commit-message' in the '.git/
 
 The when you start work on an issue create a [feature branch]()
 
-{% highlight bash %}
+```bash
 $ git checkout -b JIRA-42
-{% endhighlight %}
+```
 
 Any commits on this branch will automatically prepend "\[JIRA-42\] " to that commits message if it is missing. It will also abort the commit if a JIRA tag is missing.
