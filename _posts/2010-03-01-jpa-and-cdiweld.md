@@ -7,7 +7,7 @@ title: Simple CDI/WELD login example
 
 **View**
 
-{% highlight html %}
+```html
 <h:form id="spotifylogin" class="loginform spotifyform">
     <h2>Spotify login</h2>
     <p>Please log in to your spotify account</p>
@@ -22,11 +22,11 @@ title: Simple CDI/WELD login example
 
     <h:commandButton id="login" action="#{spotifyWeb.login}" value="Log in!"></h:commandButton>
 </h:form>
-{% endhighlight %}
+```
 
 **Entity**
 
-{% highlight java %}
+```java
 @Entity
 public class SpotiWelder implements Serializable {
 
@@ -71,11 +71,11 @@ public class SpotiWelder implements Serializable {
         this.password = password;
     }
 }
-{% endhighlight %}
+```
 
 **Action Bean**
 
-{% highlight java %}
+```java
 @SessionScoped
 @Named
 public class SpotifyWeb implements Serializable {
@@ -111,7 +111,7 @@ public class SpotifyWeb implements Serializable {
         return spotiWelder;
     }
 }
-{% endhighlight %}
+```
 
 -   Remember to add an empty constructor to your entity when using via `Producer methods. If not you might get the dreaded "java.lang.IllegalArgumentException: Object: foo is not a known entity type."
     * Remeber to add `GeneratedValue to @Id field on Entity.
