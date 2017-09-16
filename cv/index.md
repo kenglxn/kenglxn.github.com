@@ -142,7 +142,7 @@ references:
 </address>
 
 
-h2. Education
+## Education
 
 <hr />
 <dl>
@@ -155,7 +155,7 @@ h2. Education
   {% endfor %}
 </dl>
 
-h2. Certifications
+## Certifications
 
 <hr />
 <dl>
@@ -168,7 +168,7 @@ h2. Certifications
   {% endfor %}
 </dl>
 
-h2. Experience
+## Experience
 
 <hr />
 <dl>
@@ -184,7 +184,7 @@ h2. Experience
   {% endfor %}
 </dl>
 
-h2. Open Source Contributions
+## Open Source Contributions
 
 <hr />
 <dl>
@@ -197,7 +197,7 @@ h2. Open Source Contributions
   {% endfor %}
 </dl>
 
-h2. References
+## References
 
 <hr />
 <dl>
