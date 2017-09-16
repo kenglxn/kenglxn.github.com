@@ -10,13 +10,13 @@ git shove
 
 There are a number of ways to solve this. Like a git commit hook that merges, followed by a push --all. But I prefer setting an alias for it:
 
-{% highlight bash %}
+```bash
 [alias]
     shove = !git push origin master && git push origin master:gh-pages
-{% endhighlight %}
+```
 
 Now all I have to to to push both master and gh-pages while keeping them in sync is just to do a normal commit followed by git shove:
-{% highlight bash %}
+```bash
    (master) $ git ci -m "updated post"
 [master b6806c3] updated post
  1 file changed, 18 insertions(+), 1 deletion(-)
@@ -31,4 +31,4 @@ To git@github.com:kenglxn/42cents.git
 Total 0 (delta 0), reused 0 (delta 0)
 To git@github.com:kenglxn/42cents.git
    e570bf9..b6806c3  master -> gh-pages
-{% endhighlight %}
+```
