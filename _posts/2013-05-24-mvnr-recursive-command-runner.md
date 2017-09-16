@@ -10,14 +10,14 @@ mvnr
 
 [mvnr](http://kenglxn.github.io/mvnr/) is available from [npm](https://npmjs.org/package/mvnr) by issuing the following command:
 
-{% highlight bash %}
+```bash
 npm install -g mvnr
-{% endhighlight %}
+```
 
 After this you can run maven commands as you normally would by issuing the 'mvnr' command, and mvnr will figure out what directories it needs to run them on.
-{% highlight bash %}
+```bash
 mvnr clean install
-{% endhighlight %}
+```
 
 caveat
 ------
