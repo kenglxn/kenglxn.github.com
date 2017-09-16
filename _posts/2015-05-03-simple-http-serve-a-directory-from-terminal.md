@@ -8,28 +8,28 @@ For this I use [http-server](https://www.npmjs.com/package/http-server). It is a
 
 Just install it with npm:
 
-{% highlight bash %}
+```bash
 npm install http-server -g
-{% endhighlight %}
+```
 
 Then run it:
-{% highlight bash %}
+```bash
 http-server . -c-1
-{% endhighlight %}
+```
 The -c-1 arg busts the cache (cache =-1)
 
 For convenience I have a small [fish](http://fishshell.com/) function for it:
 
-{% highlight bash %}
+```bash
 function serve
   http-server $argv -c-1
 end
-{% endhighlight %}
+```
 
 So when I want to serve something I just do:
 
-{% highlight bash %}
+```bash
 serve .
  Starting up http-server, serving . on: http://0.0.0.0:8080
  Hit CTRL-C to stop the server
-{% endhighlight %}
+```
