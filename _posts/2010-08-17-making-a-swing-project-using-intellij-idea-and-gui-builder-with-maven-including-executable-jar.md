@@ -32,7 +32,7 @@ Great, now we have a fresh maven project that we can work with
 So now it's just a matter of adding the dependencies we need, and writing some code. We'll add some dependencies for tests, string manipulation and JMS.
 Here's a snippet of the dependencies added to the pom.xml so far:
 
-{% highlight xml %}
+```xml
 <dependencies>
     <dependency>
         <groupId>commons-lang</groupId>
@@ -58,7 +58,7 @@ Here's a snippet of the dependencies added to the pom.xml so far:
         <scope>test</scope>
     </dependency>
 </dependencies>
-{% endhighlight %}
+```
 
 Next step is writing some code and tests.
 
@@ -93,7 +93,7 @@ Our next step is to get this build running equally smooth in maven. Lets see wha
 ![](/attachments/maven-build-fail1.png)
 So we see that maven isn't happy with us. Let's fix it by adding the following to the pom:
 
-{% highlight xml %}
+```xml
 <build>
     <finalName>JMSUtil</finalName>
     <plugins>
@@ -110,7 +110,7 @@ So we see that maven isn't happy with us. Let's fix it by adding the following t
 
     </plugins>
 </build>
-{% endhighlight %}
+```
 
 Now we run the test again and get:
 
@@ -123,14 +123,14 @@ Lets look at the surefire report and see what it says. I'm going to use the "ana
 
 This tells us that the helpButton field is null when it tries to attach an ActionListener in the constructor
 
-{% highlight java %}
+```java
 public JMSUtility() {
     helpButton.addActionListener(new ActionListener() { ... }
-{% endhighlight %}
+```
 
 The way we solve this is to import the [Maven 2 IDEA UI Designer Plugin](http://mojo.codehaus.org/ideauidesigner-maven-plugin/) into the pom:
 
-{% highlight xml %}
+```xml
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>ideauidesigner-maven-plugin</artifactId>
@@ -148,7 +148,7 @@ The way we solve this is to import the [Maven 2 IDEA UI Designer Plugin](http://
         <failOnError>true</failOnError>
     </configuration>
 </plugin>
-{% endhighlight %}
+```
 
 Let's see what the maven build does now by running clean install
 
@@ -159,7 +159,7 @@ How about that? The sweet taste of build success :)
 This means now that the plugin is working. The next and final step is to create an executable jar via maven for this project. For this we will use the maven-jar-plugin to get a jar with the correct manifest and the maven-archive-plugin to get a lib directory with the dependencies in it which the manifest will refer to.
 So, just add the following to the pom:
 
-{% highlight xml %}
+```xml
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-dependency-plugin</artifactId>
@@ -194,7 +194,7 @@ So, just add the following to the pom:
         </archive>
     </configuration>
 </plugin>
-{% endhighlight %}
+```
 
 At this point you should have a pom that looks like this: <http://github.com/kenglxn/JMSUtility/blob/b217473ab420550ac81f149c2de22497e3bef303/pom.xml>
 
