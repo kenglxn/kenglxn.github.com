@@ -20,9 +20,9 @@ I wanted a simple CLI that would let me point at a jenkins and tell it which vie
 After a couple of days of hacking civu was born. [CIVU](https://github.com/kenglxn/civu) is available through [rubygems](http://rubygems.org/gems/civu).
 Just install with gem and run it.
 
-{% highlight bash %}
+```bash
 $ gem install civu
 $ civu --help 
 $ civu list viewname
 $ civu clone viewname
-{% endhighlight %}
+```
