@@ -17,21 +17,21 @@ What follows is a step by step for creating an executable jar with bundled metro
 
 Create new project using maven quickstart archetype:
 
-{% highlight bash %}
+```bash
 mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
-{% endhighlight %}
+```
 
 ### Step 2
 
 Add Metro dependency:
 
-{% highlight xml %}
+```xml
 <dependency>
   <groupId>org.glassfish.metro</groupId>
   <artifactId>webservices-rt</artifactId>
   <version>2.3.1</version>
 </dependency>
-{% endhighlight %}
+```
 
 ### Step 3
 
@@ -39,7 +39,7 @@ Download wsdl and place it in src/main/resources/wsdl and wsimport via jaxws-mav
 Make note of the extension=true configuration option. Without this some classes may be skipped if
 they are found to be non standard.
 
-{% highlight xml %}
+```xml
 <plugins>
   <plugin>
       <groupId>org.codehaus.mojo</groupId>
@@ -75,7 +75,7 @@ they are found to be non standard.
   </plugin>
   ...
 </plugins>
-{% endhighlight %}
+```
 
 ### Step 4
 
@@ -83,7 +83,7 @@ At this point we can create the main client class, and setup authentication and 
 In my case I want to consume stdin, but you could also pass a file as argument or even the payload itself.
 Using stdin is a nice way to separate payload from options to the program among other things.
 
-{% highlight java %}
+```java
 public class WsClient {
     private static final String SERVICE_ENDPOINT_TEMPLATE = "https://%s/WS/TheService";
 
@@ -144,7 +144,7 @@ public class WsClient {
         }
     }
 }
-{% endhighlight %}
+```
 
 ### Step 5
 
@@ -154,7 +154,7 @@ but for this use case I prefer to bundle the dependencies inside the client jar 
 
 Configure the maven-assembly-plugin to build a single distributable jar:
 
-{% highlight xml %}
+```xml
 <plugins>
   <finalName>${project.artifactId}-nodeps</finalName>
   ...
@@ -184,7 +184,7 @@ Configure the maven-assembly-plugin to build a single distributable jar:
     </configuration>
   </plugin>
 </plugins>
-{% endhighlight %}
+```
 
 ### Step 6, run it
 
@@ -192,6 +192,6 @@ With this we now have the executable jar \`${project.artifactId}.jar\`.
 
 Example usage:
 
-{% highlight bash %}
+```bash
 cat somepayload.xml | java -jar the-client.jar
-{% endhighlight %}
+```
