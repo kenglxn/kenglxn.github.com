@@ -10,7 +10,7 @@ I finally got around to migrating my site from wordpress to github, and I though
 I followed the standard 'export to xml' followed by jekyll-import as mentioned in the [migrations](http://jekyllrb.com/docs/migrations/) section in the jekyll docs.
 It was pretty straightforward, but I did get a nasty error when I first tried to start jekyll:
 
-{% highlight bash %}
+```bash
 Configuration file: /Users/ken/dev/git/42cents/_config.yml
             Source: /Users/ken/dev/git/42cents
        Destination: /Users/ken/dev/git/42cents/_site
@@ -31,13 +31,13 @@ Configuration file: /Users/ken/dev/git/42cents/_config.yml
 /Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/commands/build.rb:23:in `build'
 /Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/lib/jekyll/commands/build.rb:7:in `process'
 /Users/ken/.rvm/gems/ruby-2.0.0-p0@42c/gems/jekyll-1.0.2/bin/jekyll:83:in `block (2 levels) in <top (required)>'
-{% endhighlight %}
+```
 
 Turns out there was some derpy characters in some of the posts. Not surprising really, but finding them was a bit tricky.
 First step to finding the garbled data was to get jekyll to start regardless of the non US-ASCII characters by setting this property in my shell:
-{% highlight bash %}
+```bash
 export LANG=en_US.UTF-8
-{% endhighlight %}
+```
 
 Then i started browsing the pages and looking for derpy characters in the posts. Although probably not the most efficient way of doing this, I figure it was a one time deal, so manually fixing these characters was OK; It did not end up taking more than 5 minutes anyway.
 After I removed the derpy characters I simply launched a new shell session to see that jekyll was able to generate the site.
