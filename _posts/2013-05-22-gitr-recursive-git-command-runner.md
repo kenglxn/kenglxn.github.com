@@ -10,13 +10,13 @@ gitr
 
 [gitr](http://kenglxn.github.io/gitr/) is available from [npm](https://npmjs.org/package/gitr) by issuing the following command:
 
-{% highlight bash %}
+```bash
 npm install -g gitr
-{% endhighlight %}
+```
 
 After this you can run git commands as you normally would by issuing the 'gitr' command, and gitr will figure out what directories it needs to run them on.
-{% highlight bash %}
+```bash
 gitr status
 gitr pull
 gitr "log --since '1 day ago' --oneline --pretty=format:'%s'"
-{% endhighlight %}
+```
