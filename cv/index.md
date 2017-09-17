@@ -143,7 +143,7 @@ references:
 
 ## About Me
 
-https://user-images.githubusercontent.com/189395/30523828-d359aea2-9be8-11e7-8a21-d4818db37e14.png Technology enthusiast and code craftsman with a passion for user experience.
+![profileimg42c](https://user-images.githubusercontent.com/189395/30523828-d359aea2-9be8-11e7-8a21-d4818db37e14.png) Technology enthusiast and code craftsman with a passion for user experience.
 Father of two wonderful girls, karate practitioner and homebrewer. 
 
 Many years experience working in large agile projects. I consider myself pragmatic and thorough. I enjoy getting to know new business domains, and am comfortable with technical responsibility for large projects with many demands. I enjoy domain modelling, and uncovering the clients needs that often hide below the surface in a specification. I also enjoy working closely with a client to find the best solution that yields most value for the effort.
