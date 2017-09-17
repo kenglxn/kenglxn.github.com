@@ -155,6 +155,8 @@ references:
   {% endfor %}
 </dl>
 
+
+
 ## Certifications
 
 <hr />
@@ -167,6 +169,8 @@ references:
   </dd>
   {% endfor %}
 </dl>
+
+
 
 ## Experience
 
@@ -184,6 +188,8 @@ references:
   {% endfor %}
 </dl>
 
+
+
 ## Open Source Contributions
 
 <hr />
@@ -196,6 +202,8 @@ references:
   </dd>
   {% endfor %}
 </dl>
+
+
 
 ## References
 
