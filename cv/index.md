@@ -141,6 +141,7 @@ references:
   ken@glxn.net
 </address>
 
+
 ## About Me
 
 Technology enthusiast and code craftsman with a passion for user experience.
