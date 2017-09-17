@@ -12,7 +12,7 @@ experience:
    from: October 2015
    to: Present
    desc:
-   - Full stack developer working on app and api design, coding in ruby and javascript. Key technologies include ruby, javascript, node, hanami.rb, ember.js, CQRS w/ Event Sourcing, docker, heroku, AWS.
+   - Full stack developer working on app and api design, coding in ruby and javascript. Key technologies include ruby, javascript, node, hanami.rb, ember.js, CQRS w/ Event Sourcing, elasticsearch, docker, heroku, AWS.
  - company: Embriq AS
    position: System Developer
    from: October 2012
@@ -25,7 +25,7 @@ experience:
    from: October 2010
    to: September 2012
    desc:
-   - Core developer on TMS Provisioning Extension. Focus areas include architecture and API design, scalability and user experience.
+   - Core developer on TMS Provisioning Extension. TMS is a tele conferencing solution for on-premise high resolution b2b. Focus areas include architecture and API design, scalability and user experience.
    more: "Core technologies: Java, Spring, Jersey, Ruby, CoffeeScript"
  - company: Know IT Objectnet AS
    position: Consultant
@@ -45,6 +45,9 @@ experience:
     - Created a JavaScript framework built upon prototype.js for inclusion of dynamic content into static pages, so as to enable caching of portal pages, while serving dynamic fragments as portlets. The framework handles requests logically based on cookies and destination, and includes a callback facility to enable customization of the resulting fragment upon request completion.
     - Set up advanced server architecture aimed at extremely high load and availability. The architectures included apache http w/ mod_proxy and php, HAProxy, nginx, JBoss AS, MySQL with multiple-master replication, amazon ec2, s3 and cloudfront.
 certifications:
+ - date: March 2015
+   title: Elasticsearch Developer I
+   org: elastic.co
  - date: September 2014
    title: Certified Scrum Product Owner
    org: Scrum Alliance
@@ -137,6 +140,14 @@ references:
   (+47) 47 23 90 82<br>
   ken@glxn.net
 </address>
+
+## About Me
+
+https://user-images.githubusercontent.com/189395/30523828-d359aea2-9be8-11e7-8a21-d4818db37e14.png Technology enthusiast and code craftsman with a passion for user experience.
+Father of two wonderful girls, karate practitioner and homebrewer. 
+
+Many years experience working in large agile projects. I consider myself pragmatic and thorough. I enjoy getting to know new business domains, and am comfortable with technical responsibility for large projects with many demands. I enjoy domain modelling, and uncovering the clients needs that often hide below the surface in a specification. I also enjoy working closely with a client to find the best solution that yields most value for the effort.
+
 
 
 ## Education
