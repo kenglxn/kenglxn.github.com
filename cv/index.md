@@ -3,12 +3,9 @@ layout: bare
 title: Curriculum Vitae
 education:
  - org: University of Agder (UiA)
-   from: 2003
-   to: 2006
+   from: 2004
+   to: 2007
    desc: Bachelor's degree in Information Technology and Information Systems
- - org: Stephen F. Austin High School
-   from: 1997
-   to: 2000
 experience:
  - company: Skalar AS
    position: Developer
