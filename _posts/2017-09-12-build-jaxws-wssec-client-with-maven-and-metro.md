@@ -37,7 +37,8 @@ Add Metro dependency:
 
 Download wsdl and place it in src/main/resources/wsdl and wsimport via jaxws-maven-plugin:
 Make note of the extension=true configuration option. Without this some classes may be skipped if
-they are found to be non standard.
+they are found to be non standard. Also note the options to fetch external DTD and schema. In my case
+the wsdl has external references, and without these options the client code is a mismatch.
 
 ```xml
 <plugins>
@@ -63,6 +64,11 @@ they are found to be non standard.
                   <goal>wsimport</goal>
               </goals>
               <configuration>
+                  <vmArgs>
+                    <vmArg>-Djavax.xml.accessExternalDTD=all</vmArg>
+                    <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+                  </vmArgs>
+                  <xadditionalHeaders>true</xadditionalHeaders>
                   <extension>true</extension>
                   <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
                   <wsdlFiles>
