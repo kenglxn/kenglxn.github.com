@@ -5,5 +5,4 @@ description: glxn.net
 permalink: /:year/:month/:day/:title
 safe: true
 lsi: false
-pygments: true
 markdown: kramdown
