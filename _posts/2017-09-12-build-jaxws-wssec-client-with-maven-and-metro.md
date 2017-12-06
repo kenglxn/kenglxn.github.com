@@ -3,8 +3,8 @@ layout: post
 title: Building an executable WS client using maven and metro
 ---
 
-It's been a while since I meddled in Java, but just recently I was forced to integrate with a WS Security enabled endpoint using [Secure Conversations](http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/ws-secureconversation-1.3-os.html).
-At present I spend my time programming mostly in Ruby and Javascript, but after spending a couple of days trying to integrate
+Recently I was forced to integrate with a WS Security enabled endpoint using [Secure Conversations](http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/ws-secureconversation-1.3-os.html).
+The project in question was written in Ruby and Javascript, but after spending a couple of days trying to integrate
 with the WebService I had to throw in the towel. I spent some time using [Savon](https://github.com/savonrb/savon) and [Signer](https://github.com/ebeigarts/signer/)
 combined with my own implementation of p\_sha1, but that is food for a whole nother blog post.
 
